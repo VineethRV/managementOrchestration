@@ -1,0 +1,238 @@
+
+======================================================================
+CREATING REACT FRONTEND PROJECT
+======================================================================
+Timestamp: 20251127_174746
+Project name: frontend
+Log file: logs\react_project_generation_20251127_174746.log
+Total pages to create: 15
+
+[1/5] Creating React app 'frontend'...
+  This may take a few minutes...
+  Command: npx create-react-app frontend
+  Executing command...
+  Return code: 0
+  stdout: 
+Creating a new React app in C:\Users\ASUS\Desktop\Codes\POME\Top down\frontend.
+
+Installing packages. This might take a couple of minutes.
+Installing react, react-dom, and react-scripts with cra-template...
+
+
+added 1305 packages in 2m
+
+264 packages are looking for funding
+  run `npm fund` for details
+
+Installing template dependencies using npm...
+
+added 17 packages, and changed 1 package in 11s
+
+264 packages are looking for funding
+  run `npm fund` for details
+Removing template package using np...
+  stderr: npm notice
+npm notice New major version of npm available! 10.9.0 -> 11.6.4
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.6.4
+npm notice To update run: npm install -g npm@11.6.4
+npm notice
+...
+✓ React app created successfully
+
+[2/5] Installing dependencies (react-router-dom, axios)...
+  Working directory: C:\Users\ASUS\Desktop\Codes\POME\Top down\frontend
+  Command: npm install react-router-dom axios
+  Executing npm install...
+  Return code: 0
+  stdout: 
+added 7 packages, and audited 1329 packages in 12s
+
+265 packages are looking for funding
+  run `npm fund` for details
+
+9 vulnerabilities (3 moderate, 6 high)
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force
+
+Run `npm audit` for details.
+
+✓ Dependencies installed successfully
+
+[3/5] Creating page components...
+  Creating pages directory: frontend\src\pages
+  ✓ Pages directory created
+
+  [1/15] Creating component: Home Page
+    Component name: HomePage
+    Requirements: 10
+    Endpoints: 10
+    Writing component file: frontend\src\pages\HomePage.js
+    ✓ Component file created (2791 bytes)
+    Writing CSS file: frontend\src\pages\HomePage.css
+    ✓ CSS file created (476 bytes)
+  ✓ Created HomePage.js and HomePage.css
+
+  [2/15] Creating component: Menu Page
+    Component name: MenuPage
+    Requirements: 9
+    Endpoints: 10
+    Writing component file: frontend\src\pages\MenuPage.js
+    ✓ Component file created (2457 bytes)
+    Writing CSS file: frontend\src\pages\MenuPage.css
+    ✓ CSS file created (476 bytes)
+  ✓ Created MenuPage.js and MenuPage.css
+
+  [3/15] Creating component: Cake Customization Page
+    Component name: CakeCustomizationPage
+    Requirements: 15
+    Endpoints: 14
+    Writing component file: frontend\src\pages\CakeCustomizationPage.js
+    ✓ Component file created (3053 bytes)
+    Writing CSS file: frontend\src\pages\CakeCustomizationPage.css
+    ✓ CSS file created (515 bytes)
+  ✓ Created CakeCustomizationPage.js and CakeCustomizationPage.css
+
+  [4/15] Creating component: Cart Page
+    Component name: CartPage
+    Requirements: 10
+    Endpoints: 10
+    Writing component file: frontend\src\pages\CartPage.js
+    ✓ Component file created (2766 bytes)
+    Writing CSS file: frontend\src\pages\CartPage.css
+    ✓ CSS file created (476 bytes)
+  ✓ Created CartPage.js and CartPage.css
+
+  [5/15] Creating component: Checkout Page
+    Component name: CheckoutPage
+    Requirements: 11
+    Endpoints: 11
+    Writing component file: frontend\src\pages\CheckoutPage.js
+    ✓ Component file created (3006 bytes)
+    Writing CSS file: frontend\src\pages\CheckoutPage.css
+    ✓ CSS file created (488 bytes)
+  ✓ Created CheckoutPage.js and CheckoutPage.css
+
+  [6/15] Creating component: Payment Page
+    Component name: PaymentPage
+    Requirements: 9
+    Endpoints: 7
+    Writing component file: frontend\src\pages\PaymentPage.js
+    ✓ Component file created (2500 bytes)
+    Writing CSS file: frontend\src\pages\PaymentPage.css
+    ✓ CSS file created (485 bytes)
+  ✓ Created PaymentPage.js and PaymentPage.css
+
+  [7/15] Creating component: Order Confirmation Page
+    Component name: OrderConfirmationPage
+    Requirements: 10
+    Endpoints: 8
+    Writing component file: frontend\src\pages\OrderConfirmationPage.js
+    ✓ Component file created (2748 bytes)
+    Writing CSS file: frontend\src\pages\OrderConfirmationPage.css
+    ✓ CSS file created (515 bytes)
+  ✓ Created OrderConfirmationPage.js and OrderConfirmationPage.css
+
+  [8/15] Creating component: Login Page
+    Component name: LoginPage
+    Requirements: 12
+    Endpoints: 6
+    Writing component file: frontend\src\pages\LoginPage.js
+    ✓ Component file created (1904 bytes)
+    Writing CSS file: frontend\src\pages\LoginPage.css
+    ✓ CSS file created (479 bytes)
+  ✓ Created LoginPage.js and LoginPage.css
+
+  [9/15] Creating component: Registration Page
+    Component name: RegistrationPage
+    Requirements: 9
+    Endpoints: 7
+    Writing component file: frontend\src\pages\RegistrationPage.js
+    ✓ Component file created (2597 bytes)
+    Writing CSS file: frontend\src\pages\RegistrationPage.css
+    ✓ CSS file created (500 bytes)
+  ✓ Created RegistrationPage.js and RegistrationPage.css
+
+  [10/15] Creating component: Account Dashboard
+    Component name: AccountDashboard
+    Requirements: 9
+    Endpoints: 10
+    Writing component file: frontend\src\pages\AccountDashboard.js
+    ✓ Component file created (2837 bytes)
+    Writing CSS file: frontend\src\pages\AccountDashboard.css
+    ✓ CSS file created (500 bytes)
+  ✓ Created AccountDashboard.js and AccountDashboard.css
+
+  [11/15] Creating component: Order History Page
+    Component name: OrderHistoryPage
+    Requirements: 10
+    Endpoints: 5
+    Writing component file: frontend\src\pages\OrderHistoryPage.js
+    ✓ Component file created (2582 bytes)
+    Writing CSS file: frontend\src\pages\OrderHistoryPage.css
+    ✓ CSS file created (500 bytes)
+  ✓ Created OrderHistoryPage.js and OrderHistoryPage.css
+
+  [12/15] Creating component: Admin Dashboard
+    Component name: AdminDashboard
+    Requirements: 11
+    Endpoints: 16
+    Writing component file: frontend\src\pages\AdminDashboard.js
+    ✓ Component file created (3225 bytes)
+    Writing CSS file: frontend\src\pages\AdminDashboard.css
+    ✓ CSS file created (494 bytes)
+  ✓ Created AdminDashboard.js and AdminDashboard.css
+
+  [13/15] Creating component: POS Integration Page
+    Component name: PosIntegrationPage
+    Requirements: 9
+    Endpoints: 10
+    Writing component file: frontend\src\pages\PosIntegrationPage.js
+    ✓ Component file created (2682 bytes)
+    Writing CSS file: frontend\src\pages\PosIntegrationPage.css
+    ✓ CSS file created (506 bytes)
+  ✓ Created PosIntegrationPage.js and PosIntegrationPage.css
+
+  [14/15] Creating component: Inventory Management Page
+    Component name: InventoryManagementPage
+    Requirements: 11
+    Endpoints: 13
+    Writing component file: frontend\src\pages\InventoryManagementPage.js
+    ✓ Component file created (2886 bytes)
+    Writing CSS file: frontend\src\pages\InventoryManagementPage.css
+    ✓ CSS file created (521 bytes)
+  ✓ Created InventoryManagementPage.js and InventoryManagementPage.css
+
+  [15/15] Creating component: Contact Page
+    Component name: ContactPage
+    Requirements: 10
+    Endpoints: 7
+    Writing component file: frontend\src\pages\ContactPage.js
+    ✓ Component file created (2292 bytes)
+    Writing CSS file: frontend\src\pages\ContactPage.css
+    ✓ CSS file created (485 bytes)
+  ✓ Created ContactPage.js and ContactPage.css
+
+[4/5] Setting up routing in App.js...
+  Generating imports for 15 pages
+  Writing App.js: frontend\src\App.js
+  App.js size: 3582 bytes
+✓ Routing configured with 15 routes
+
+[5/5] Updating styles...
+  Creating App.css
+  Writing App.css: frontend\src\App.css
+  App.css size: 586 bytes
+✓ Styles updated
+
+[Finalization] Creating README...
+  Writing README: frontend\FRONTEND_README.md
+  README size: 2132 bytes
+✓ README created
+
+======================================================================
+✓ REACT PROJECT CREATED: ./frontend
+✓ 15 page components created
+✓ Routing configured
+✓ Log file saved: logs\react_project_generation_20251127_174746.log
+======================================================================

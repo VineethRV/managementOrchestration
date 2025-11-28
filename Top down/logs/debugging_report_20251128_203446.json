@@ -1,0 +1,17 @@
+{
+  "timestamp": "20251128_203446",
+  "frontend": {
+    "project_path": "C:\\Users\\ASUS\\Desktop\\Codes\\POME\\Top down\\frontend",
+    "running": false,
+    "errors_found": 2,
+    "fixes_applied": 2,
+    "log_file": "logs\\frontend_debugger_20251128_203327.log"
+  },
+  "backend": {
+    "project_path": "C:\\Users\\ASUS\\Desktop\\Codes\\POME\\Top down\\backend",
+    "running": false,
+    "errors_found": 1,
+    "fixes_applied": 1,
+    "log_file": "logs\\backend_debugger_20251128_203329.log"
+  }
+}

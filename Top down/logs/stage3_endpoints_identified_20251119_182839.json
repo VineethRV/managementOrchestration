@@ -1,0 +1,1145 @@
+{
+  "stage": "Stage 3: Endpoints Identified",
+  "timestamp": "20251119_182839",
+  "pages_with_endpoints": [
+    {
+      "page_name": "Home Page",
+      "description": "Introduction to the online cake ordering platform",
+      "requirements": [
+        "Display a prominent call-to-action to encourage users to start ordering",
+        "Provide a visually appealing showcase of available cakes with images and descriptions",
+        "Include a search bar or filter options to help users find specific types of cakes",
+        "Offer a clear and easy-to-use cake customization interface for flavors, designs, and messages",
+        "Display pickup and delivery options with associated costs and estimated times",
+        "Implement a secure and user-friendly online payment system with a dummy payment gateway",
+        "Provide options for users to create an account or login to view order history",
+        "Ensure a responsive design that adapts to various screen sizes and devices",
+        "Include a link to view order history for logged-in users",
+        "Display a prominent display of restaurant's logo and contact information"
+      ],
+      "backend_endpoints": [
+        {
+          "endpoint_name": "Get Cakes",
+          "description": "Retrieve a list of available cakes with images and descriptions",
+          "method": "GET",
+          "path": "/api/cakes"
+        },
+        {
+          "endpoint_name": "Search Cakes",
+          "description": "Search for cakes based on user input",
+          "method": "GET",
+          "path": "/api/cakes/search"
+        },
+        {
+          "endpoint_name": "Get Cake Details",
+          "description": "Retrieve detailed information about a specific cake",
+          "method": "GET",
+          "path": "/api/cakes/{cakeId}"
+        },
+        {
+          "endpoint_name": "Create Order",
+          "description": "Create a new order with cake customization options",
+          "method": "POST",
+          "path": "/api/orders"
+        },
+        {
+          "endpoint_name": "Get Pickup and Delivery Options",
+          "description": "Retrieve available pickup and delivery options with associated costs and estimated times",
+          "method": "GET",
+          "path": "/api/orders/options"
+        },
+        {
+          "endpoint_name": "Process Payment",
+          "description": "Process payment for an order using a dummy payment gateway",
+          "method": "POST",
+          "path": "/api/orders/{orderId}/payment"
+        },
+        {
+          "endpoint_name": "Create Account",
+          "description": "Create a new user account",
+          "method": "POST",
+          "path": "/api/users"
+        },
+        {
+          "endpoint_name": "Login",
+          "description": "Login to an existing user account",
+          "method": "POST",
+          "path": "/api/users/login"
+        },
+        {
+          "endpoint_name": "Get Order History",
+          "description": "Retrieve a list of orders for a logged-in user",
+          "method": "GET",
+          "path": "/api/users/{userId}/orders"
+        },
+        {
+          "endpoint_name": "Get Restaurant Info",
+          "description": "Retrieve restaurant logo and contact information",
+          "method": "GET",
+          "path": "/api/restaurant/info"
+        }
+      ]
+    },
+    {
+      "page_name": "Menu Page",
+      "description": "Browse available cakes with descriptions and prices",
+      "requirements": [
+        "Display a list or grid of available cakes with images",
+        "Show cake name, description, and price for each cake",
+        "Provide a filter or sorting option for cakes by price, flavor, or popularity",
+        "Include a 'View Details' or 'Customize' button for each cake",
+        "Display a 'Add to Cart' or 'Order Now' button for each cake",
+        "Show a search bar to search for specific cakes",
+        "Display a category or sub-category menu for cakes (e.g. birthday cakes, wedding cakes, etc.)",
+        "Include a pagination or load more button for handling a large number of cakes",
+        "Display a call-to-action (CTA) to encourage users to create an account or login"
+      ],
+      "backend_endpoints": [
+        {
+          "endpoint_name": "Get Cakes",
+          "description": "Retrieve a list of available cakes with images, names, descriptions, and prices",
+          "method": "GET",
+          "path": "/api/cakes"
+        },
+        {
+          "endpoint_name": "Get Cake Details",
+          "description": "Retrieve detailed information about a specific cake",
+          "method": "GET",
+          "path": "/api/cakes/{cakeId}"
+        },
+        {
+          "endpoint_name": "Filter Cakes",
+          "description": "Filter cakes by price, flavor, or popularity",
+          "method": "GET",
+          "path": "/api/cakes/filter"
+        },
+        {
+          "endpoint_name": "Search Cakes",
+          "description": "Search for specific cakes by name or description",
+          "method": "GET",
+          "path": "/api/cakes/search"
+        },
+        {
+          "endpoint_name": "Get Cake Categories",
+          "description": "Retrieve a list of cake categories or sub-categories",
+          "method": "GET",
+          "path": "/api/cake-categories"
+        },
+        {
+          "endpoint_name": "Add Cake to Cart",
+          "description": "Add a cake to the user's cart",
+          "method": "POST",
+          "path": "/api/cart"
+        },
+        {
+          "endpoint_name": "Get Cart",
+          "description": "Retrieve the user's cart contents",
+          "method": "GET",
+          "path": "/api/cart"
+        },
+        {
+          "endpoint_name": "Create Account",
+          "description": "Create a new user account",
+          "method": "POST",
+          "path": "/api/accounts"
+        },
+        {
+          "endpoint_name": "Login",
+          "description": "Login to an existing user account",
+          "method": "POST",
+          "path": "/api/login"
+        },
+        {
+          "endpoint_name": "Get Paginated Cakes",
+          "description": "Retrieve a paginated list of cakes",
+          "method": "GET",
+          "path": "/api/cakes/page/{pageNumber}"
+        }
+      ]
+    },
+    {
+      "page_name": "Cake Customization Page",
+      "description": "Customize cake with flavors, designs, and messages",
+      "requirements": [
+        "Display a list of available cake options with images and descriptions",
+        "Provide a dropdown or selection menu for choosing cake flavors",
+        "Provide a dropdown or selection menu for choosing cake designs",
+        "Allow users to input custom messages for the cake",
+        "Display a preview of the customized cake",
+        "Include a section for users to select pickup or delivery options",
+        "Include a section for users to input their address for delivery",
+        "Display the total cost of the customized cake",
+        "Provide a button to add the customized cake to the cart",
+        "Provide a button to proceed to payment",
+        "Integrate with payment gateway to process payments",
+        "Validate user input for custom messages and addresses",
+        "Ensure responsive design for various screen sizes and devices",
+        "Display error messages for invalid input or failed payments",
+        "Allow users to create an account or login to view order history"
+      ],
+      "backend_endpoints": [
+        {
+          "endpoint_name": "Get Cake Options",
+          "description": "Retrieve a list of available cake options with images and descriptions",
+          "method": "GET",
+          "path": "/api/cake-options"
+        },
+        {
+          "endpoint_name": "Get Cake Flavors",
+          "description": "Retrieve a list of available cake flavors",
+          "method": "GET",
+          "path": "/api/cake-flavors"
+        },
+        {
+          "endpoint_name": "Get Cake Designs",
+          "description": "Retrieve a list of available cake designs",
+          "method": "GET",
+          "path": "/api/cake-designs"
+        },
+        {
+          "endpoint_name": "Create Custom Cake",
+          "description": "Create a customized cake with chosen options",
+          "method": "POST",
+          "path": "/api/custom-cake"
+        },
+        {
+          "endpoint_name": "Get Pickup Options",
+          "description": "Retrieve a list of available pickup options",
+          "method": "GET",
+          "path": "/api/pickup-options"
+        },
+        {
+          "endpoint_name": "Get Delivery Options",
+          "description": "Retrieve a list of available delivery options",
+          "method": "GET",
+          "path": "/api/delivery-options"
+        },
+        {
+          "endpoint_name": "Validate Address",
+          "description": "Validate a user's input address for delivery",
+          "method": "POST",
+          "path": "/api/validate-address"
+        },
+        {
+          "endpoint_name": "Calculate Total Cost",
+          "description": "Calculate the total cost of the customized cake",
+          "method": "POST",
+          "path": "/api/calculate-total-cost"
+        },
+        {
+          "endpoint_name": "Add to Cart",
+          "description": "Add the customized cake to the user's cart",
+          "method": "POST",
+          "path": "/api/add-to-cart"
+        },
+        {
+          "endpoint_name": "Proceed to Payment",
+          "description": "Proceed to payment for the customized cake",
+          "method": "POST",
+          "path": "/api/proceed-to-payment"
+        },
+        {
+          "endpoint_name": "Process Payment",
+          "description": "Process payment for the customized cake",
+          "method": "POST",
+          "path": "/api/process-payment"
+        },
+        {
+          "endpoint_name": "Create Account",
+          "description": "Create a new user account",
+          "method": "POST",
+          "path": "/api/create-account"
+        },
+        {
+          "endpoint_name": "Login",
+          "description": "Login to an existing user account",
+          "method": "POST",
+          "path": "/api/login"
+        },
+        {
+          "endpoint_name": "Get Order History",
+          "description": "Retrieve a user's order history",
+          "method": "GET",
+          "path": "/api/order-history"
+        }
+      ]
+    },
+    {
+      "page_name": "Cart Page",
+      "description": "View selected cakes and proceed to checkout",
+      "requirements": [
+        "Display a list of selected cakes with their details (name, price, quantity, flavor, design, message)",
+        "Allow users to update the quantity of each cake or remove cakes from the cart",
+        "Display the total cost of all cakes in the cart, including any applicable taxes or discounts",
+        "Provide a button to proceed to checkout",
+        "Display pickup and delivery options with estimated costs and time frames",
+        "Allow users to apply promo codes or discounts",
+        "Display a summary of the order, including cakes, pickup/delivery options, and payment method",
+        "Integrate a payment gateway to process online payments",
+        "Validate user input and handle any errors that occur during the checkout process",
+        "Ensure a secure and trusted payment process"
+      ],
+      "backend_endpoints": [
+        {
+          "endpoint_name": "Get Cart Items",
+          "description": "Retrieve a list of selected cakes with their details",
+          "method": "GET",
+          "path": "/api/cart/items"
+        },
+        {
+          "endpoint_name": "Update Cart Item Quantity",
+          "description": "Update the quantity of a cake in the cart",
+          "method": "PUT",
+          "path": "/api/cart/items/{itemId}/quantity"
+        },
+        {
+          "endpoint_name": "Remove Cart Item",
+          "description": "Remove a cake from the cart",
+          "method": "DELETE",
+          "path": "/api/cart/items/{itemId}"
+        },
+        {
+          "endpoint_name": "Get Total Cost",
+          "description": "Calculate the total cost of all cakes in the cart, including taxes and discounts",
+          "method": "GET",
+          "path": "/api/cart/total-cost"
+        },
+        {
+          "endpoint_name": "Get Pickup and Delivery Options",
+          "description": "Retrieve available pickup and delivery options with estimated costs and time frames",
+          "method": "GET",
+          "path": "/api/cart/pickup-delivery-options"
+        },
+        {
+          "endpoint_name": "Apply Promo Code",
+          "description": "Apply a promo code or discount to the cart",
+          "method": "POST",
+          "path": "/api/cart/promo-code"
+        },
+        {
+          "endpoint_name": "Get Order Summary",
+          "description": "Retrieve a summary of the order, including cakes, pickup/delivery options, and payment method",
+          "method": "GET",
+          "path": "/api/cart/order-summary"
+        },
+        {
+          "endpoint_name": "Proceed to Checkout",
+          "description": "Initiate the checkout process",
+          "method": "POST",
+          "path": "/api/cart/checkout"
+        },
+        {
+          "endpoint_name": "Process Payment",
+          "description": "Process online payment through a payment gateway",
+          "method": "POST",
+          "path": "/api/cart/payment"
+        },
+        {
+          "endpoint_name": "Validate Payment",
+          "description": "Validate user input and handle any errors during the checkout process",
+          "method": "POST",
+          "path": "/api/cart/payment/validate"
+        }
+      ]
+    },
+    {
+      "page_name": "Checkout Page",
+      "description": "Specify pickup or delivery options and payment details",
+      "requirements": [
+        "Display pickup and delivery options with corresponding addresses and time slots",
+        "Allow customers to select their preferred pickup or delivery option",
+        "Display payment method options (e.g. credit card, PayPal, etc.)",
+        "Implement a dummy payment gateway for testing purposes",
+        "Collect and validate payment details (e.g. card number, expiration date, CVV, etc.)",
+        "Display order summary, including cake details, pickup/delivery option, and total cost",
+        "Provide a 'Place Order' button to complete the checkout process",
+        "Integrate with the restaurant's existing POS system and inventory management to update order status and inventory levels",
+        "Allow customers to create an account or login to view order history",
+        "Display any applicable taxes, fees, or discounts",
+        "Implement input validation and error handling for payment and address fields"
+      ],
+      "backend_endpoints": [
+        {
+          "endpoint_name": "Get Pickup and Delivery Options",
+          "description": "Retrieve available pickup and delivery options with corresponding addresses and time slots",
+          "method": "GET",
+          "path": "/api/checkout/options"
+        },
+        {
+          "endpoint_name": "Get Payment Method Options",
+          "description": "Retrieve available payment method options",
+          "method": "GET",
+          "path": "/api/checkout/payment-methods"
+        },
+        {
+          "endpoint_name": "Create Order",
+          "description": "Create a new order with selected pickup or delivery option and payment details",
+          "method": "POST",
+          "path": "/api/checkout/orders"
+        },
+        {
+          "endpoint_name": "Validate Payment Details",
+          "description": "Validate payment details such as card number, expiration date, and CVV",
+          "method": "POST",
+          "path": "/api/checkout/payment-details/validate"
+        },
+        {
+          "endpoint_name": "Process Payment",
+          "description": "Process payment using a dummy payment gateway for testing purposes",
+          "method": "POST",
+          "path": "/api/checkout/payment/process"
+        },
+        {
+          "endpoint_name": "Get Order Summary",
+          "description": "Retrieve order summary, including cake details, pickup/delivery option, and total cost",
+          "method": "GET",
+          "path": "/api/checkout/orders/summary"
+        },
+        {
+          "endpoint_name": "Update Order Status",
+          "description": "Update order status in the restaurant's existing POS system and inventory management",
+          "method": "PUT",
+          "path": "/api/checkout/orders/status"
+        },
+        {
+          "endpoint_name": "Create Customer Account",
+          "description": "Create a new customer account",
+          "method": "POST",
+          "path": "/api/customers"
+        },
+        {
+          "endpoint_name": "Login Customer",
+          "description": "Login an existing customer to view order history",
+          "method": "POST",
+          "path": "/api/customers/login"
+        },
+        {
+          "endpoint_name": "Get Order History",
+          "description": "Retrieve order history for a logged-in customer",
+          "method": "GET",
+          "path": "/api/customers/orders"
+        },
+        {
+          "endpoint_name": "Calculate Taxes and Fees",
+          "description": "Calculate applicable taxes, fees, or discounts for an order",
+          "method": "POST",
+          "path": "/api/checkout/orders/calculate-taxes"
+        }
+      ]
+    },
+    {
+      "page_name": "Payment Page",
+      "description": "Complete payment using a dummy payment gateway",
+      "requirements": [
+        "Display payment method options (e.g. credit card, PayPal, etc.)",
+        "Implement a dummy payment gateway for testing purposes",
+        "Show order summary including cake details, pickup/delivery options, and total cost",
+        "Provide a secure payment form with required fields (e.g. card number, expiration date, CVV, etc.)",
+        "Include a 'Pay Now' or 'Complete Payment' button to submit the payment",
+        "Display payment errors or success messages after submission",
+        "Option to save payment information for future orders (if user is logged in)",
+        "Option to login or create an account during the payment process",
+        "Ensure payment form is accessible and follows web accessibility guidelines"
+      ],
+      "backend_endpoints": [
+        {
+          "endpoint_name": "Get Payment Methods",
+          "description": "Retrieve available payment method options",
+          "method": "GET",
+          "path": "/api/payment-methods"
+        },
+        {
+          "endpoint_name": "Get Order Summary",
+          "description": "Retrieve order summary including cake details, pickup/delivery options, and total cost",
+          "method": "GET",
+          "path": "/api/orders/summary"
+        },
+        {
+          "endpoint_name": "Process Payment",
+          "description": "Submit payment information to the dummy payment gateway",
+          "method": "POST",
+          "path": "/api/payments"
+        },
+        {
+          "endpoint_name": "Save Payment Information",
+          "description": "Save payment information for future orders (if user is logged in)",
+          "method": "POST",
+          "path": "/api/users/payment-info"
+        },
+        {
+          "endpoint_name": "Login",
+          "description": "Login to an existing account during the payment process",
+          "method": "POST",
+          "path": "/api/auth/login"
+        },
+        {
+          "endpoint_name": "Create Account",
+          "description": "Create a new account during the payment process",
+          "method": "POST",
+          "path": "/api/auth/register"
+        },
+        {
+          "endpoint_name": "Verify Payment",
+          "description": "Verify payment status after submission",
+          "method": "GET",
+          "path": "/api/payments/verify"
+        }
+      ]
+    },
+    {
+      "page_name": "Order Confirmation Page",
+      "description": "Display order summary and confirmation",
+      "requirements": [
+        "Display order summary including cake details, customization options, and quantity",
+        "Show pickup or delivery details, including date, time, and location",
+        "Display order total, payment method, and payment status",
+        "Provide a unique order confirmation number",
+        "Include a 'View Order History' button for logged-in users",
+        "Display a 'Print Receipt' or 'Download Receipt' option",
+        "Show a message confirming the order and providing next steps",
+        "Include a call-to-action to encourage customers to visit the restaurant's website or social media pages",
+        "Display the restaurant's contact information, including phone number and email address",
+        "Ensure the page is optimized for mobile and desktop devices"
+      ],
+      "backend_endpoints": [
+        {
+          "endpoint_name": "Get Order Details",
+          "description": "Retrieve order summary, including cake details, customization options, and quantity",
+          "method": "GET",
+          "path": "/api/orders/{orderId}"
+        },
+        {
+          "endpoint_name": "Get Order Pickup or Delivery Details",
+          "description": "Retrieve pickup or delivery details, including date, time, and location",
+          "method": "GET",
+          "path": "/api/orders/{orderId}/pickup-delivery"
+        },
+        {
+          "endpoint_name": "Get Order Payment Details",
+          "description": "Retrieve order total, payment method, and payment status",
+          "method": "GET",
+          "path": "/api/orders/{orderId}/payment"
+        },
+        {
+          "endpoint_name": "Get Order Confirmation Number",
+          "description": "Retrieve unique order confirmation number",
+          "method": "GET",
+          "path": "/api/orders/{orderId}/confirmation-number"
+        },
+        {
+          "endpoint_name": "Get Order History",
+          "description": "Retrieve order history for logged-in users",
+          "method": "GET",
+          "path": "/api/users/{userId}/order-history"
+        },
+        {
+          "endpoint_name": "Generate Receipt",
+          "description": "Generate receipt for the order",
+          "method": "GET",
+          "path": "/api/orders/{orderId}/receipt"
+        },
+        {
+          "endpoint_name": "Get Restaurant Contact Information",
+          "description": "Retrieve restaurant's contact information, including phone number and email address",
+          "method": "GET",
+          "path": "/api/restaurant/contact-info"
+        },
+        {
+          "endpoint_name": "Get Restaurant Social Media Links",
+          "description": "Retrieve restaurant's social media links",
+          "method": "GET",
+          "path": "/api/restaurant/social-media-links"
+        }
+      ]
+    },
+    {
+      "page_name": "Login Page",
+      "description": "User authentication",
+      "requirements": [
+        "Username input field",
+        "Password input field",
+        "Login button",
+        "Forgot password link",
+        "Create account link",
+        "Error message display for invalid credentials",
+        "Loading animation for login processing",
+        "Secure protocol (HTTPS) for data encryption",
+        "Username and password validation for empty fields",
+        "Password masking for security",
+        "Remember me checkbox for saving login credentials",
+        "Clear login credentials button"
+      ],
+      "backend_endpoints": [
+        {
+          "endpoint_name": "Login",
+          "description": "Authenticate user credentials",
+          "method": "POST",
+          "path": "/api/auth/login"
+        },
+        {
+          "endpoint_name": "Forgot Password",
+          "description": "Send password reset link to user",
+          "method": "POST",
+          "path": "/api/auth/forgot-password"
+        },
+        {
+          "endpoint_name": "Create Account",
+          "description": "Create new user account",
+          "method": "POST",
+          "path": "/api/auth/register"
+        },
+        {
+          "endpoint_name": "Validate Credentials",
+          "description": "Check if username and password are valid",
+          "method": "POST",
+          "path": "/api/auth/validate-credentials"
+        },
+        {
+          "endpoint_name": "Save Login Credentials",
+          "description": "Save user login credentials for remember me feature",
+          "method": "POST",
+          "path": "/api/auth/save-credentials"
+        },
+        {
+          "endpoint_name": "Clear Login Credentials",
+          "description": "Clear saved user login credentials",
+          "method": "DELETE",
+          "path": "/api/auth/clear-credentials"
+        }
+      ]
+    },
+    {
+      "page_name": "Registration Page",
+      "description": "Create a new user account",
+      "requirements": [
+        "Display registration form with fields for username, email, password, and confirm password",
+        "Implement form validation for all fields, including email format and password strength",
+        "Provide a checkbox for terms and conditions with a link to the terms and conditions page",
+        "Include a button to submit the registration form",
+        "Display error messages for any validation errors or registration failures",
+        "Option to login instead of registering, with a link to the login page",
+        "Password fields should be masked for security",
+        "Username and email fields should be unique and checked against existing users",
+        "Registration form should be responsive and accessible on various devices"
+      ],
+      "backend_endpoints": [
+        {
+          "endpoint_name": "Get Registration Form",
+          "description": "Returns the registration form with fields for username, email, password, and confirm password",
+          "method": "GET",
+          "path": "/api/registration/form"
+        },
+        {
+          "endpoint_name": "Validate Registration Form",
+          "description": "Validates the registration form data, including email format and password strength",
+          "method": "POST",
+          "path": "/api/registration/validate"
+        },
+        {
+          "endpoint_name": "Check Username Availability",
+          "description": "Checks if a username is available and not already in use",
+          "method": "GET",
+          "path": "/api/registration/username/:username"
+        },
+        {
+          "endpoint_name": "Check Email Availability",
+          "description": "Checks if an email is available and not already in use",
+          "method": "GET",
+          "path": "/api/registration/email/:email"
+        },
+        {
+          "endpoint_name": "Create New User",
+          "description": "Creates a new user account with the provided registration form data",
+          "method": "POST",
+          "path": "/api/registration"
+        },
+        {
+          "endpoint_name": "Get Terms and Conditions",
+          "description": "Returns the terms and conditions page content",
+          "method": "GET",
+          "path": "/api/terms-and-conditions"
+        },
+        {
+          "endpoint_name": "Get Login Page",
+          "description": "Redirects to the login page",
+          "method": "GET",
+          "path": "/api/login"
+        }
+      ]
+    },
+    {
+      "page_name": "Account Dashboard",
+      "description": "View order history and account information",
+      "requirements": [
+        "Display user's order history with order details (order date, cake type, customization options, pickup/delivery details, and order status)",
+        "Show user's account information (name, email, phone number, address)",
+        "Provide a search or filter function to view specific orders (by date, order status, or cake type)",
+        "Include a link or button to view order details or re-order a previous cake",
+        "Display user's loyalty or reward points (if applicable)",
+        "Allow users to edit their account information (name, email, phone number, address, password)",
+        "Include a logout button or link",
+        "Display a summary of user's recent orders (e.g., last 5 orders) with links to view full order history",
+        "Use a responsive design to ensure the page is accessible on various devices (desktop, tablet, mobile)"
+      ],
+      "backend_endpoints": [
+        {
+          "endpoint_name": "Get Account Information",
+          "description": "Retrieve user's account information",
+          "method": "GET",
+          "path": "/api/account"
+        },
+        {
+          "endpoint_name": "Get Order History",
+          "description": "Retrieve user's order history with order details",
+          "method": "GET",
+          "path": "/api/orders"
+        },
+        {
+          "endpoint_name": "Search Orders",
+          "description": "Search orders by date, order status, or cake type",
+          "method": "GET",
+          "path": "/api/orders/search"
+        },
+        {
+          "endpoint_name": "Get Order Details",
+          "description": "Retrieve details of a specific order",
+          "method": "GET",
+          "path": "/api/orders/{orderId}"
+        },
+        {
+          "endpoint_name": "Re-order Cake",
+          "description": "Re-order a previous cake",
+          "method": "POST",
+          "path": "/api/orders/{orderId}/reorder"
+        },
+        {
+          "endpoint_name": "Get Loyalty Points",
+          "description": "Retrieve user's loyalty or reward points",
+          "method": "GET",
+          "path": "/api/account/loyalty"
+        },
+        {
+          "endpoint_name": "Update Account Information",
+          "description": "Update user's account information",
+          "method": "PUT",
+          "path": "/api/account"
+        },
+        {
+          "endpoint_name": "Update Password",
+          "description": "Update user's password",
+          "method": "PUT",
+          "path": "/api/account/password"
+        },
+        {
+          "endpoint_name": "Logout",
+          "description": "Logout user from the system",
+          "method": "POST",
+          "path": "/api/logout"
+        },
+        {
+          "endpoint_name": "Get Recent Orders",
+          "description": "Retrieve a summary of user's recent orders",
+          "method": "GET",
+          "path": "/api/orders/recent"
+        }
+      ]
+    },
+    {
+      "page_name": "Order History Page",
+      "description": "Detailed view of past orders",
+      "requirements": [
+        "Display a list of all past orders for the logged-in customer",
+        "Show order details including order date, order total, and order status",
+        "Include a summary of the cake details for each order, such as cake type, flavor, design, and message",
+        "Provide a link or button to view the full order details, including payment and pickup/delivery information",
+        "Allow customers to filter orders by date range or order status",
+        "Include a search function to find specific orders by order number or cake details",
+        "Display the customer's name and contact information at the top of the page",
+        "Provide a link to the homepage or menu page to allow customers to place a new order",
+        "Ensure the page is responsive and accessible on various devices and browsers",
+        "Implement pagination or infinite scrolling to handle a large number of orders"
+      ],
+      "backend_endpoints": [
+        {
+          "endpoint_name": "Get Customer Orders",
+          "description": "Retrieve a list of all past orders for the logged-in customer",
+          "method": "GET",
+          "path": "/api/orders"
+        },
+        {
+          "endpoint_name": "Get Order Details",
+          "description": "Retrieve detailed information about a specific order",
+          "method": "GET",
+          "path": "/api/orders/{orderId}"
+        },
+        {
+          "endpoint_name": "Filter Orders",
+          "description": "Filter orders by date range or order status",
+          "method": "GET",
+          "path": "/api/orders/filter"
+        },
+        {
+          "endpoint_name": "Search Orders",
+          "description": "Search for specific orders by order number or cake details",
+          "method": "GET",
+          "path": "/api/orders/search"
+        },
+        {
+          "endpoint_name": "Get Customer Information",
+          "description": "Retrieve the customer's name and contact information",
+          "method": "GET",
+          "path": "/api/customers/me"
+        }
+      ]
+    },
+    {
+      "page_name": "Admin Dashboard",
+      "description": "Restaurant administration and order management",
+      "requirements": [
+        "Display overall sales and revenue metrics",
+        "List all current and pending orders with order status",
+        "Provide a search function to find specific orders by customer name, order ID, or date",
+        "Allow admins to update order status and add notes to orders",
+        "Display a calendar view of upcoming orders and pickups",
+        "Integrate with POS system to automatically update inventory levels",
+        "Show low-stock alerts for cake ingredients and decorations",
+        "Enable admins to manage cake menu items, including adding, editing, and removing items",
+        "Allow admins to view and manage customer accounts and order history",
+        "Display payment processing metrics, including successful and failed payments",
+        "Provide a dashboard for admins to view and manage restaurant settings, including pickup and delivery options"
+      ],
+      "backend_endpoints": [
+        {
+          "endpoint_name": "Get Sales Metrics",
+          "description": "Retrieve overall sales and revenue metrics",
+          "method": "GET",
+          "path": "/api/admin/sales-metrics"
+        },
+        {
+          "endpoint_name": "Get Orders",
+          "description": "List all current and pending orders with order status",
+          "method": "GET",
+          "path": "/api/admin/orders"
+        },
+        {
+          "endpoint_name": "Search Orders",
+          "description": "Find specific orders by customer name, order ID, or date",
+          "method": "GET",
+          "path": "/api/admin/orders/search"
+        },
+        {
+          "endpoint_name": "Update Order Status",
+          "description": "Update order status and add notes to orders",
+          "method": "PUT",
+          "path": "/api/admin/orders/{orderId}"
+        },
+        {
+          "endpoint_name": "Get Calendar View",
+          "description": "Display a calendar view of upcoming orders and pickups",
+          "method": "GET",
+          "path": "/api/admin/calendar"
+        },
+        {
+          "endpoint_name": "Get Low-Stock Alerts",
+          "description": "Show low-stock alerts for cake ingredients and decorations",
+          "method": "GET",
+          "path": "/api/admin/low-stock-alerts"
+        },
+        {
+          "endpoint_name": "Get Cake Menu Items",
+          "description": "Retrieve cake menu items",
+          "method": "GET",
+          "path": "/api/admin/cake-menu-items"
+        },
+        {
+          "endpoint_name": "Add Cake Menu Item",
+          "description": "Add a new cake menu item",
+          "method": "POST",
+          "path": "/api/admin/cake-menu-items"
+        },
+        {
+          "endpoint_name": "Update Cake Menu Item",
+          "description": "Update an existing cake menu item",
+          "method": "PUT",
+          "path": "/api/admin/cake-menu-items/{menuItemId}"
+        },
+        {
+          "endpoint_name": "Delete Cake Menu Item",
+          "description": "Remove a cake menu item",
+          "method": "DELETE",
+          "path": "/api/admin/cake-menu-items/{menuItemId}"
+        },
+        {
+          "endpoint_name": "Get Customer Accounts",
+          "description": "Retrieve customer accounts and order history",
+          "method": "GET",
+          "path": "/api/admin/customers"
+        },
+        {
+          "endpoint_name": "Get Customer Order History",
+          "description": "Retrieve order history for a specific customer",
+          "method": "GET",
+          "path": "/api/admin/customers/{customerId}/order-history"
+        },
+        {
+          "endpoint_name": "Get Payment Metrics",
+          "description": "Retrieve payment processing metrics",
+          "method": "GET",
+          "path": "/api/admin/payment-metrics"
+        },
+        {
+          "endpoint_name": "Get Restaurant Settings",
+          "description": "Retrieve restaurant settings",
+          "method": "GET",
+          "path": "/api/admin/restaurant-settings"
+        },
+        {
+          "endpoint_name": "Update Restaurant Settings",
+          "description": "Update restaurant settings",
+          "method": "PUT",
+          "path": "/api/admin/restaurant-settings"
+        },
+        {
+          "endpoint_name": "Integrate with POS System",
+          "description": "Integrate with POS system to automatically update inventory levels",
+          "method": "POST",
+          "path": "/api/admin/integrate-pos-system"
+        }
+      ]
+    },
+    {
+      "page_name": "POS Integration Page",
+      "description": "Integration with the restaurant's existing POS system",
+      "requirements": [
+        "Display a list of available POS systems for integration",
+        "Input field for POS system API key or credentials",
+        "Button to connect or disconnect from POS system",
+        "Real-time synchronization of cake inventory between the website and POS system",
+        "Automatic update of cake availability on the website based on POS system data",
+        "Error handling and notification for failed POS system integration or synchronization",
+        "Option to manually override POS system data for cake inventory or availability",
+        "Display of POS system integration status and connection history",
+        "Security measures to protect POS system credentials and data"
+      ],
+      "backend_endpoints": [
+        {
+          "endpoint_name": "Get Available POS Systems",
+          "description": "Returns a list of available POS systems for integration",
+          "method": "GET",
+          "path": "/api/pos/systems"
+        },
+        {
+          "endpoint_name": "Connect to POS System",
+          "description": "Connects to a POS system using the provided API key or credentials",
+          "method": "POST",
+          "path": "/api/pos/connect"
+        },
+        {
+          "endpoint_name": "Disconnect from POS System",
+          "description": "Disconnects from the currently connected POS system",
+          "method": "POST",
+          "path": "/api/pos/disconnect"
+        },
+        {
+          "endpoint_name": "Get POS System Integration Status",
+          "description": "Returns the current integration status and connection history of the POS system",
+          "method": "GET",
+          "path": "/api/pos/status"
+        },
+        {
+          "endpoint_name": "Update Cake Inventory",
+          "description": "Updates the cake inventory in the website based on the POS system data",
+          "method": "PUT",
+          "path": "/api/pos/inventory"
+        },
+        {
+          "endpoint_name": "Override POS System Data",
+          "description": "Manually overrides the POS system data for cake inventory or availability",
+          "method": "PUT",
+          "path": "/api/pos/override"
+        },
+        {
+          "endpoint_name": "Get POS System Connection History",
+          "description": "Returns the connection history of the POS system",
+          "method": "GET",
+          "path": "/api/pos/history"
+        },
+        {
+          "endpoint_name": "Handle POS System Error",
+          "description": "Handles errors that occur during POS system integration or synchronization",
+          "method": "POST",
+          "path": "/api/pos/error"
+        },
+        {
+          "endpoint_name": "Get POS System Credentials",
+          "description": "Returns the credentials of the currently connected POS system",
+          "method": "GET",
+          "path": "/api/pos/credentials"
+        },
+        {
+          "endpoint_name": "Update POS System Credentials",
+          "description": "Updates the credentials of the currently connected POS system",
+          "method": "PUT",
+          "path": "/api/pos/credentials"
+        }
+      ]
+    },
+    {
+      "page_name": "Inventory Management Page",
+      "description": "Manage cake inventory and availability",
+      "requirements": [
+        "Display a list of all available cakes with their respective quantities",
+        "Allow filtering and sorting of cakes by type, flavor, and availability",
+        "Provide a search function to find specific cakes",
+        "Display cake details, including description, price, and customization options",
+        "Enable addition and removal of cakes from inventory",
+        "Allow editing of cake quantities and details",
+        "Display low-stock warnings for cakes with limited availability",
+        "Integrate with the POS system to reflect real-time inventory updates",
+        "Include a dashboard to view overall inventory levels and statistics",
+        "Allow user to mark cakes as 'out of stock' or 'available'",
+        "Generate reports on cake sales and inventory levels"
+      ],
+      "backend_endpoints": [
+        {
+          "endpoint_name": "Get All Cakes",
+          "description": "Retrieve a list of all available cakes with their respective quantities",
+          "method": "GET",
+          "path": "/api/cakes"
+        },
+        {
+          "endpoint_name": "Filter Cakes",
+          "description": "Filter cakes by type, flavor, and availability",
+          "method": "GET",
+          "path": "/api/cakes/filter"
+        },
+        {
+          "endpoint_name": "Search Cakes",
+          "description": "Search for specific cakes by name or description",
+          "method": "GET",
+          "path": "/api/cakes/search"
+        },
+        {
+          "endpoint_name": "Get Cake Details",
+          "description": "Retrieve details of a specific cake, including description, price, and customization options",
+          "method": "GET",
+          "path": "/api/cakes/{cakeId}"
+        },
+        {
+          "endpoint_name": "Add Cake to Inventory",
+          "description": "Add a new cake to the inventory",
+          "method": "POST",
+          "path": "/api/cakes"
+        },
+        {
+          "endpoint_name": "Remove Cake from Inventory",
+          "description": "Remove a cake from the inventory",
+          "method": "DELETE",
+          "path": "/api/cakes/{cakeId}"
+        },
+        {
+          "endpoint_name": "Update Cake Quantity",
+          "description": "Update the quantity of a specific cake in the inventory",
+          "method": "PUT",
+          "path": "/api/cakes/{cakeId}/quantity"
+        },
+        {
+          "endpoint_name": "Update Cake Details",
+          "description": "Update the details of a specific cake, including description, price, and customization options",
+          "method": "PUT",
+          "path": "/api/cakes/{cakeId}"
+        },
+        {
+          "endpoint_name": "Get Low Stock Cakes",
+          "description": "Retrieve a list of cakes with limited availability",
+          "method": "GET",
+          "path": "/api/cakes/low-stock"
+        },
+        {
+          "endpoint_name": "Update Cake Availability",
+          "description": "Update the availability of a specific cake (e.g. mark as 'out of stock' or 'available')",
+          "method": "PUT",
+          "path": "/api/cakes/{cakeId}/availability"
+        },
+        {
+          "endpoint_name": "Get Inventory Dashboard",
+          "description": "Retrieve overall inventory levels and statistics",
+          "method": "GET",
+          "path": "/api/inventory/dashboard"
+        },
+        {
+          "endpoint_name": "Generate Sales Report",
+          "description": "Generate a report on cake sales",
+          "method": "GET",
+          "path": "/api/reports/sales"
+        },
+        {
+          "endpoint_name": "Generate Inventory Report",
+          "description": "Generate a report on inventory levels",
+          "method": "GET",
+          "path": "/api/reports/inventory"
+        }
+      ]
+    },
+    {
+      "page_name": "Contact Page",
+      "description": "Get in touch with the restaurant for inquiries and support",
+      "requirements": [
+        "Display contact information, including phone number, email, and physical address",
+        "Include a contact form with fields for name, email, and message",
+        "Add a map to display the restaurant's location",
+        "Provide links to social media profiles",
+        "Display business hours",
+        "Include a FAQ section for common inquiries",
+        "Option to upload files or images for custom cake inquiries",
+        "Clear call-to-action (CTA) for submitting the contact form",
+        "Validation for form fields to ensure accurate user input",
+        "Accessibility features for users with disabilities"
+      ],
+      "backend_endpoints": [
+        {
+          "endpoint_name": "Get Contact Information",
+          "description": "Retrieve contact information, including phone number, email, and physical address",
+          "method": "GET",
+          "path": "/api/contact-info"
+        },
+        {
+          "endpoint_name": "Get Business Hours",
+          "description": "Retrieve business hours",
+          "method": "GET",
+          "path": "/api/business-hours"
+        },
+        {
+          "endpoint_name": "Get Social Media Profiles",
+          "description": "Retrieve social media profiles",
+          "method": "GET",
+          "path": "/api/social-media"
+        },
+        {
+          "endpoint_name": "Get FAQ",
+          "description": "Retrieve FAQ section for common inquiries",
+          "method": "GET",
+          "path": "/api/faq"
+        },
+        {
+          "endpoint_name": "Submit Contact Form",
+          "description": "Submit contact form with fields for name, email, and message",
+          "method": "POST",
+          "path": "/api/contact-form"
+        },
+        {
+          "endpoint_name": "Upload File",
+          "description": "Upload files or images for custom cake inquiries",
+          "method": "POST",
+          "path": "/api/upload-file"
+        },
+        {
+          "endpoint_name": "Get Restaurant Location",
+          "description": "Retrieve restaurant location to display on map",
+          "method": "GET",
+          "path": "/api/restaurant-location"
+        }
+      ]
+    }
+  ]
+}

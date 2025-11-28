@@ -1,0 +1,48 @@
+
+============================================================
+FRONTEND DEBUGGER - Starting Project
+============================================================
+Project path: C:\Users\ASUS\Desktop\Codes\POME\Top down\frontend
+Port: 3000
+
+[1/2] Starting npm development server...
+  Process started (PID: 14284)
+  Waiting for server to start (30 seconds)...
+✓ Server appears to be running
+
+[2/2] Checking for errors...
+  ✗ Found 2 errors
+
+  Attempting to fix: syntax error
+
+  Fix suggestion from LLM:
+  PROBLEM:
+The issue here is that the `import` statement is being used inside a function, which is not allowed in a default import syntax. The `import` statement should be at the top level of the module. However, in this case, we are using a dynamic import which is allowed inside a function. But the syntax seems correct for dynamic import. The issue might be due to the environment or the configuration of the project. 
+
+However, one potential issue is that the `import` statement is not being handle...
+  ✓ Applied fix to reportWebVitals.js
+
+  Attempting to fix: syntax error
+
+  Fix suggestion from LLM:
+  PROBLEM:
+The issue here is that the import statement in the setupTests.js file is not properly closed. Although JavaScript allows semicolon-less syntax, it's generally a good practice to include semicolons at the end of statements to avoid potential issues. However, in this case, the issue is likely due to the fact that the import statement is not being used anywhere in the file, or there might be a configuration issue with Jest or the testing library. But the main problem seems to be the lack o...
+  ✓ Applied fix to setupTests.js
+
+============================================================
+FRONTEND DEBUGGER - Starting Project
+============================================================
+Project path: C:\Users\ASUS\Desktop\Codes\POME\Top down\frontend
+Port: 3000
+
+[1/2] Starting npm development server...
+  Process started (PID: 9528)
+  Waiting for server to start (30 seconds)...
+✗ Server failed to start
+  stdout: 
+> frontend@0.1.0 start
+> react-scripts start
+
+Something is already running on port 3000.
+
+  stderr: 
