@@ -1,0 +1,15 @@
+# Kaizen Methodology: Continuous Improvement Multi-Agent System
+# Requirements for running the Kaizen approach experiment
+
+# Environment variables
+python-dotenv==1.0.0
+
+# LangChain for LLM orchestration
+langchain-groq>=0.1.0
+langchain-core>=0.1.0
+
+# Note: The generated projects (frontend/backend) will have their own requirements.txt files
+# This file is only for the orchestration script itself
+
+
+
