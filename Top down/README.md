@@ -1,6 +1,6 @@
 # Application Design & Generation System
 
-🤖 Multi-agent system that automatically designs frontend pages and backend APIs from requirements, then generates complete **React** and **Flask** projects, **implements them with AI worker agents**, and **auto-starts with debugging agents**!
+🤖 Multi-agent system that automatically designs frontend pages and backend APIs from requirements, then generates complete **React** and **Flask** projects, and **implements them with AI worker agents**!
 
 ## ✨ Key Features
 
@@ -11,31 +11,30 @@
 - 🐍 **Flask Backend Generation** - Creates Flask API with all endpoints
 - 🤖 **AI Worker Agents** - 3 frontend + 3 backend agents implement production-quality code
 - 📊 **Intelligent Work Distribution** - Pages grouped by similarity, endpoints by resource
-- 🐛 **Auto-Start & Debug** - Automatically starts both projects and deploys debugging agents
-- 🔍 **Real-Time Error Detection** - AI agents monitor, detect, and suggest fixes for issues
-- 🚀 **Ready to Run** - Fully implemented projects with database, API calls, error handling!
+-  **Ready to Run** - Fully implemented projects with database, API calls, error handling!
 
 ## Files
 
-- `finalizer.py` - Requirements gathering agent (interactive chat)
-- `frontend_backend_managers.py` - Frontend & backend design agents with logging
+- `requirements_agent.py` - Requirements gathering agent (interactive chat)
+- `design_orchestrator.py` - Frontend & backend design agents with logging
 - `project_generator.py` - React & Flask project generator
 - `worker_agents.py` - 3 frontend + 3 backend AI worker agents for implementation
-- `debugging_agents.py` - Frontend & backend debugging agents (monitors running projects)
+- `backend_validator.py` - Backend environment setup and validation
+- `file_manager.py` - File operations agent using MCP tools
+- `workflow_resume.py` - Resume interrupted workflows from saved state
 - `main.py` - Complete workflow orchestration
-- `start_and_debug.py` - Standalone script to start and debug existing projects
 - `logs/` - All agent interactions, stage outputs, and session logs
 
 ## How It Works
 
 ### Multi-Stage Pipeline
 
-1. **Requirements Agent** (finalizer.py)
+1. **Requirements Agent** (requirements_agent.py)
    - Interactive chat to gather requirements
    - Confirms detailed description and features
    - Finalizes requirements for design phase
 
-2. **Design Agents** (frontend_backend_managers.py)
+2. **Design Agents** (design_orchestrator.py)
    - **Stage 1:** Frontend Agent lists all pages needed
    - **Stage 2:** Frontend Agent adds UI requirements to each page
    - **Stage 3:** Frontend Agent identifies endpoints for each page
@@ -56,23 +55,14 @@
    - **Database Setup:** Auto-generates SQLAlchemy models
    - **Independent Work:** Agents work in parallel, merge at completion
 
-5. **Debugging Agents** (debugging_agents.py) - **NEW!**
-   - **Frontend Debugger:** Monitors React dev server, detects compilation/runtime errors
-   - **Backend Debugger:** Monitors Flask server, detects Python errors and crashes
-   - **Auto-Start:** Automatically starts both projects
-   - **Real-Time Analysis:** LLM analyzes errors and suggests fixes
-   - **Comprehensive Logging:** Saves all debugging activity to logs
-   - **Error Reports:** Generates JSON reports with found issues and suggested solutions
-
-6. **Orchestrator** (main.py)
+5. **Orchestrator** (main.py)
    - Runs requirements gathering
    - Triggers design workflow
    - Generates project scaffolding
    - Deploys worker agents for implementation
-   - Auto-starts projects and debugging agents
    - Saves all outputs and logs
 
-7. **Resume Script** (resume.py)
+6. **Resume Script** (workflow_resume.py)
    - Detects current project state automatically
    - Resumes from where you left off
    - Skips completed steps
@@ -95,10 +85,10 @@ python main.py
 
 ```powershell
 # Check current status
-python resume.py --status
+python workflow_resume.py --status
 
 # Resume building from where you left off
-python resume.py
+python workflow_resume.py
 ```
 
 The resume script will:
@@ -118,28 +108,8 @@ Running `python main.py` will:
 6. **Ask if you want AI agents to implement the code**
 7. If yes, deploy 3 frontend + 3 backend worker agents
 8. Agents implement production-quality code in parallel
-9. **Ask if you want to start projects and run debugging agents**
-10. If yes, auto-start both servers and deploy 2 debugging agents
-11. Debugging agents monitor for errors and suggest fixes
-12. Projects run until you press Ctrl+C
 
-### Start & Debug Existing Projects
 
-If you've already generated and implemented projects:
-
-```powershell
-# Start both projects with debugging agents
-python start_and_debug.py
-```
-
-This will:
-- ✅ Start React dev server on port 3000
-- ✅ Start Flask backend on port 5000
-- ✅ Deploy frontend debugging agent
-- ✅ Deploy backend debugging agent
-- ✅ Monitor for errors and suggest fixes
-- ✅ Generate debugging report in `/logs`
-- ✅ Keep servers running until Ctrl+C
 
 ## Resume Scenarios
 
@@ -164,7 +134,7 @@ The resume script handles these situations:
 **Status Check Examples:**
 ```powershell
 # Quick status check
-python resume.py --status
+python workflow_resume.py --status
 
 # Output shows:
 # ✅ Design phase
@@ -230,56 +200,7 @@ python resume.py --status
 - Implementation summary with success/error counts
 - Full code generation history preserved
 
-## Debugging Agents
 
-The debugging agents automatically start your projects and monitor them for issues:
-
-### What They Do
-
-**Frontend Debugger:**
-- Starts React dev server (`npm start`)
-- Waits for server to initialize
-- Monitors for compilation errors
-- Checks for runtime errors in code
-- Analyzes error output with LLM
-- Suggests fixes for detected issues
-- Logs all activity to `/logs/frontend_debugger_*.log`
-
-**Backend Debugger:**
-- Starts Flask server in virtual environment
-- Waits for server to initialize
-- Monitors for Python syntax errors
-- Checks for crashes and exceptions
-- Compiles all Python files to check validity
-- Analyzes errors with LLM
-- Suggests fixes for detected issues
-- Logs all activity to `/logs/backend_debugger_*.log`
-
-### Debugging Output
-
-After running, you'll get:
-- **Console Summary:** Issues found, fixes suggested, server status
-- **Individual Logs:** Detailed logs for each debugger
-- **Debugging Report:** JSON report at `/logs/debugging_report_*.json`
-
-Example report structure:
-```json
-{
-  "timestamp": "20250108_143022",
-  "frontend": {
-    "running": true,
-    "errors_found": 1,
-    "fixes_applied": 1,
-    "log_file": "logs/frontend_debugger_20250108_143022.log"
-  },
-  "backend": {
-    "running": true,
-    "errors_found": 0,
-    "fixes_applied": 0,
-    "log_file": "logs/backend_debugger_20250108_143022.log"
-  }
-}
-```
 
 ## Project Structure After Generation
 
@@ -300,19 +221,20 @@ Top down/
 │   ├── .env
 │   └── BACKEND_README.md
 │
-├── logs/                        # All logs
-│   ├── frontend_debugger_*.log
-│   ├── backend_debugger_*.log
-│   └── debugging_report_*.json
+├── logs/                        # All logs (session logs, stage outputs, agent interactions)
+│                                # Logs are automatically generated and can be archived
+│
+├── MCPServer/                   # MCP server for file operations (used by file_manager.py)
 │
 ├── application_design.json      # Complete design spec
-├── finalizer.py
-├── frontend_backend_managers.py
-├── project_generator.py
-├── worker_agents.py
-├── debugging_agents.py
-├── start_and_debug.py
-└── main.py
+├── requirements_agent.py       # Requirements gathering
+├── design_orchestrator.py       # Design workflow
+├── project_generator.py         # Project scaffolding
+├── worker_agents.py             # Implementation agents
+├── backend_validator.py          # Backend setup/validation
+├── file_manager.py               # File operations
+├── workflow_resume.py            # Resume workflow
+└── main.py                      # Main orchestrator
 ```
 
 ## Running Generated Projects

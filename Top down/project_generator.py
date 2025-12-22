@@ -15,6 +15,7 @@ def check_prerequisites():
     
     # Check Node.js and npm
     try:
+        print(f"RUNNING TERMINAL COMMAND: node --version")
         result = subprocess.run(
             "node --version",
             shell=True,
@@ -29,6 +30,7 @@ def check_prerequisites():
         issues.append("Node.js not found")
     
     try:
+        print(f"RUNNING TERMINAL COMMAND: npm --version")
         result = subprocess.run(
             "npm --version",
             shell=True,
@@ -44,6 +46,7 @@ def check_prerequisites():
     
     # Check Python
     try:
+        print(f"RUNNING TERMINAL COMMAND: python --version")
         result = subprocess.run(
             "python --version",
             shell=True,
@@ -72,15 +75,37 @@ def check_prerequisites():
 
 
 def sanitize_filename(name: str) -> str:
-    """Convert page/component name to valid filename."""
-    # Remove special characters and convert to PascalCase
-    words = name.replace('-', ' ').replace('_', ' ').split()
+    """
+    Convert page/component name to valid filename using PascalCase.
+    IMPORTANT: Uses underscores for internal word separation if needed.
+    """
+    # Remove special characters, replace hyphens with underscores
+    # Convert to PascalCase for component names (e.g., UserProfile, AccountDashboard)
+    words = name.replace('-', '_').replace(' ', '_').split('_')
+    # Filter out empty strings
+    words = [word for word in words if word]
     return ''.join(word.capitalize() for word in words)
 
 
+def sanitize_backend_filename(name: str) -> str:
+    """
+    Convert endpoint/route name to valid backend filename.
+    MANDATORY: Uses ONLY underscores (_), NEVER hyphens (-).
+    """
+    # Convert to lowercase and use underscores only
+    name = name.lower().replace('-', '_').replace(' ', '_')
+    # Remove any special characters except underscores
+    import re
+    name = re.sub(r'[^a-z0-9_]', '', name)
+    return name
+
+
 def sanitize_route_name(name: str) -> str:
-    """Convert page name to URL route."""
-    # Convert to lowercase and replace spaces with hyphens
+    """
+    Convert page name to URL route.
+    Uses hyphens for URLs (standard web convention).
+    """
+    # Convert to lowercase and replace spaces/underscores with hyphens for URLs
     return name.lower().replace(' ', '-').replace('_', '-')
 
 
@@ -129,7 +154,7 @@ def create_react_project(design: Dict[str, Any], project_name: str = "frontend")
         log_print(f"  Command: npx create-react-app {project_name}")
         
         try:
-            log_print("  Executing command...")
+            print(f"RUNNING TERMINAL COMMAND: npx create-react-app {project_name}")
             result = subprocess.run(
                 f"npx create-react-app {project_name}",
                 shell=True,
@@ -165,7 +190,7 @@ def create_react_project(design: Dict[str, Any], project_name: str = "frontend")
     log_print(f"  Command: npm install react-router-dom axios")
     
     try:
-        log_print("  Executing npm install...")
+        print(f"RUNNING TERMINAL COMMAND: npm install react-router-dom axios")
         result = subprocess.run(
             "npm install react-router-dom axios",
             shell=True,
@@ -556,8 +581,10 @@ def create_flask_backend(design: Dict[str, Any], project_name: str = "backend"):
     # Step 2: Create virtual environment
     print(f"\n[2/5] Setting up virtual environment...")
     try:
+        command = ["python", "-m", "venv", "venv"]
+        print(f"RUNNING TERMINAL COMMAND: {' '.join(command)}")
         subprocess.run(
-            ["python", "-m", "venv", "venv"],
+            command,
             cwd=project_name,
             check=True,
             capture_output=True
@@ -595,8 +622,10 @@ requests==2.31.0
             pip_cmd = os.path.join(project_name, "venv", "bin", "pip")
         
         # Install dependencies
+        command = f'"{pip_cmd}" install -r requirements.txt'
+        print(f"RUNNING TERMINAL COMMAND: {command}")
         result = subprocess.run(
-            f'"{pip_cmd}" install -r requirements.txt',
+            command,
             shell=True,
             cwd=project_name,
             check=True,
@@ -643,7 +672,7 @@ requests==2.31.0
             flask_path = path.replace('{', '<').replace('}', '>')
             flask_path = flask_path.replace(':id', '<int:id>').replace(':noteId', '<int:note_id>')
             
-            function_name = sanitize_filename(endpoint_name).replace(' ', '_').lower()
+            function_name = sanitize_backend_filename(endpoint_name)
             
             route_handler = f'''
 @app.route('{flask_path}', methods=['{method}'])

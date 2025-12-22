@@ -1,0 +1,311 @@
+{
+  "frontend": {
+    "pages": [
+      {
+        "page_name": "Homepage",
+        "description": "Displays the current date and time fetched from the Flask backend server.",
+        "requirements": [
+          "Display current date",
+          "Display current time",
+          "Fetch data from Flask backend server",
+          "Visually appealing design",
+          "Responsive layout",
+          "Clear and readable font",
+          "Accurate date and time update",
+          "Error handling for backend server connection"
+        ],
+        "backend_endpoints": [
+          {
+            "endpoint_name": "Get Current Date",
+            "description": "Returns the current date",
+            "method": "GET",
+            "path": "/api/current-date"
+          },
+          {
+            "endpoint_name": "Get Current Time",
+            "description": "Returns the current time",
+            "method": "GET",
+            "path": "/api/current-time"
+          },
+          {
+            "endpoint_name": "Get Current Date and Time",
+            "description": "Returns the current date and time",
+            "method": "GET",
+            "path": "/api/current-datetime"
+          },
+          {
+            "endpoint_name": "Health Check",
+            "description": "Checks if the backend server is running and returns a success response",
+            "method": "GET",
+            "path": "/api/health-check"
+          }
+        ]
+      },
+      {
+        "page_name": "Error Page",
+        "description": "Handles and displays any errors that occur during data fetching or application execution.",
+        "requirements": [
+          "Display error message",
+          "Show error code",
+          "Provide retry option",
+          "Include link to homepage",
+          "Maintain visually appealing design",
+          "Display error details",
+          "Option to report error"
+        ],
+        "backend_endpoints": [
+          {
+            "endpoint_name": "Get Error Details",
+            "description": "Fetch error details to display on the error page",
+            "method": "GET",
+            "path": "/api/error/details"
+          },
+          {
+            "endpoint_name": "Report Error",
+            "description": "Send error report to the server",
+            "method": "POST",
+            "path": "/api/error/report"
+          },
+          {
+            "endpoint_name": "Retry Request",
+            "description": "Retry the failed request",
+            "method": "POST",
+            "path": "/api/error/retry"
+          },
+          {
+            "endpoint_name": "Get Homepage Link",
+            "description": "Get the link to the homepage",
+            "method": "GET",
+            "path": "/api/homepage/link"
+          }
+        ]
+      },
+      {
+        "page_name": "About Page",
+        "description": "Provides information about the application and its features.",
+        "requirements": [
+          "Display application name and logo",
+          "Include a brief description of the application",
+          "List the key features of the application",
+          "Provide information about the technologies used (React and Flask)",
+          "Display a visually appealing design with proper typography and color scheme",
+          "Ensure responsive design for various screen sizes and devices",
+          "Include a section for displaying the current date and time",
+          "Add a call-to-action (CTA) button for navigation to other pages or features"
+        ],
+        "backend_endpoints": [
+          {
+            "endpoint_name": "Get Application Info",
+            "description": "Retrieve application name, logo, and description",
+            "method": "GET",
+            "path": "/api/app-info"
+          },
+          {
+            "endpoint_name": "Get Key Features",
+            "description": "Retrieve list of key features of the application",
+            "method": "GET",
+            "path": "/api/key-features"
+          },
+          {
+            "endpoint_name": "Get Technologies Used",
+            "description": "Retrieve information about the technologies used in the application",
+            "method": "GET",
+            "path": "/api/technologies-used"
+          },
+          {
+            "endpoint_name": "Get Current Date and Time",
+            "description": "Retrieve the current date and time",
+            "method": "GET",
+            "path": "/api/current-datetime"
+          }
+        ]
+      },
+      {
+        "page_name": "Loading Screen",
+        "description": "Displays a loading animation while the application fetches data from the backend server.",
+        "requirements": [
+          "Display a visually appealing loading animation",
+          "Show a progress indicator or a loading message",
+          "Have a consistent design language throughout the application",
+          "Be accessible on various devices and screen sizes",
+          "Display for a limited time until data is fetched from the backend server",
+          "Have a smooth transition to the main page after loading is complete"
+        ],
+        "backend_endpoints": [
+          {
+            "endpoint_name": "Fetch Initial Data",
+            "description": "Fetches the initial data required for the application to load",
+            "method": "GET",
+            "path": "/api/init"
+          },
+          {
+            "endpoint_name": "Check Data Availability",
+            "description": "Checks if the required data is available and ready to be fetched",
+            "method": "GET",
+            "path": "/api/data/ready"
+          },
+          {
+            "endpoint_name": "Get Loading Progress",
+            "description": "Returns the loading progress as a percentage",
+            "method": "GET",
+            "path": "/api/loading/progress"
+          }
+        ]
+      }
+    ],
+    "is_complete": true
+  },
+  "backend": {
+    "endpoints": [
+      {
+        "endpoint_name": "Get Current Date",
+        "description": "Returns the current date",
+        "method": "GET",
+        "path": "/api/current-date",
+        "request_body": "No request body is required for this endpoint. It accepts no parameters.",
+        "response": "The response will be a JSON object containing the current date in the format 'YYYY-MM-DD' and the current time in the format 'HH:MM:SS'. Example: {\"date\": \"2024-09-16\", \"time\": \"14:30:00\"}",
+        "page_context": "Homepage"
+      },
+      {
+        "endpoint_name": "Get Current Time",
+        "description": "Returns the current time",
+        "method": "GET",
+        "path": "/api/current-time",
+        "request_body": "None, no parameters or body required",
+        "response": "JSON object with a single key 'current_time' containing the current date and time in ISO 8601 format, e.g. {\"current_time\": \"2024-09-16T10:00:00\"}",
+        "page_context": "Homepage"
+      },
+      {
+        "endpoint_name": "Get Current Date and Time",
+        "description": "Returns the current date and time",
+        "method": "GET",
+        "path": "/api/current-datetime",
+        "request_body": "None, no parameters or request body required",
+        "response": "JSON object with 'current_datetime' key containing the current date and time in ISO 8601 format, e.g., {'current_datetime': '2024-09-16T10:30:00.000000'}",
+        "page_context": "Homepage, About Page"
+      },
+      {
+        "endpoint_name": "Health Check",
+        "description": "Checks if the backend server is running and returns a success response",
+        "method": "GET",
+        "path": "/api/health-check",
+        "request_body": "No request body required. The endpoint does not expect any parameters.",
+        "response": "A JSON object with a single key, 'status', and a value of 'ok' or 'healthy' to indicate the server is running. Example: {\"status\": \"ok\"}",
+        "page_context": "Homepage"
+      },
+      {
+        "endpoint_name": "Get Error Details",
+        "description": "Fetch error details to display on the error page",
+        "method": "GET",
+        "path": "/api/error/details",
+        "request_body": "None",
+        "response": {
+          "error_code": "integer",
+          "error_message": "string",
+          "error_details": "string"
+        },
+        "page_context": "Error Page"
+      },
+      {
+        "endpoint_name": "Report Error",
+        "description": "Send error report to the server",
+        "method": "POST",
+        "path": "/api/error/report",
+        "request_body": {
+          "error_code": "integer",
+          "error_message": "string",
+          "error_details": "string",
+          "user_agent": "string",
+          "request_url": "string"
+        },
+        "response": {
+          "status": "string",
+          "message": "string"
+        },
+        "page_context": "Error Page"
+      },
+      {
+        "endpoint_name": "Retry Request",
+        "description": "Retry the failed request",
+        "method": "POST",
+        "path": "/api/error/retry",
+        "request_body": {
+          "original_request_method": "string",
+          "original_request_url": "string",
+          "original_request_body": "object"
+        },
+        "response": {
+          "status": "string",
+          "data": "object"
+        },
+        "page_context": "Error Page"
+      },
+      {
+        "endpoint_name": "Get Homepage Link",
+        "description": "Get the link to the homepage",
+        "method": "GET",
+        "path": "/api/homepage/link",
+        "request_body": "None, no parameters or body required",
+        "response": "JSON object with a single key 'link' containing the URL of the homepage, e.g. {\"link\": \"/\"}",
+        "page_context": "Error Page"
+      },
+      {
+        "endpoint_name": "Get Application Info",
+        "description": "Retrieve application name, logo, and description",
+        "method": "GET",
+        "path": "/api/app-info",
+        "request_body": "None, no parameters or body required",
+        "response": "JSON object with properties: {name: string, logo: string, description: string}, example: {name: 'Current Time App', logo: 'https://example.com/logo.png', description: 'A React-based single-page application that displays the current date and time'}",
+        "page_context": "About Page"
+      },
+      {
+        "endpoint_name": "Get Key Features",
+        "description": "Retrieve list of key features of the application",
+        "method": "GET",
+        "path": "/api/key-features",
+        "request_body": "None, no parameters or request body required",
+        "response": "JSON array of key features, each feature represented as an object with 'id', 'name', and 'description' properties, e.g. [{ 'id': 1, 'name': 'Current Date and Time', 'description': 'Displays the current date and time fetched from the server' }]",
+        "page_context": "About Page"
+      },
+      {
+        "endpoint_name": "Get Technologies Used",
+        "description": "Retrieve information about the technologies used in the application",
+        "method": "GET",
+        "path": "/api/technologies-used",
+        "request_body": "None, no parameters or body required for this endpoint",
+        "response": "A JSON array containing objects with the following properties: technology (string), description (string), version (string), and url (string) for each technology used in the application. Example: [{\"technology\": \"React\", \"description\": \"Frontend framework\", \"version\": \"18.2.0\", \"url\": \"https://reactjs.org/\"}, {\"technology\": \"Flask\", \"description\": \"Backend framework\", \"version\": \"2.2.2\", \"url\": \"https://flask.palletsprojects.com/\"}]",
+        "page_context": "About Page"
+      },
+      {
+        "endpoint_name": "Fetch Initial Data",
+        "description": "Fetches the initial data required for the application to load",
+        "method": "GET",
+        "path": "/api/init",
+        "request_body": "No request body is required for this endpoint. It only requires the GET method to fetch the initial data.",
+        "response": "The response will be a JSON object containing the current date and time in the following format: {\"date\": \"YYYY-MM-DD\", \"time\": \"HH:MM:SS\"}",
+        "page_context": "Loading Screen"
+      },
+      {
+        "endpoint_name": "Check Data Availability",
+        "description": "Checks if the required data is available and ready to be fetched",
+        "method": "GET",
+        "path": "/api/data/ready",
+        "request_body": "None, no parameters or body required",
+        "response": "Boolean value indicating whether the data is available, e.g. {\"ready\": true}",
+        "page_context": "Loading Screen"
+      },
+      {
+        "endpoint_name": "Get Loading Progress",
+        "description": "Returns the loading progress as a percentage",
+        "method": "GET",
+        "path": "/api/loading/progress",
+        "request_body": "None, no parameters or body required",
+        "response": {
+          "progress": "integer representing the loading progress as a percentage (0-100)"
+        },
+        "page_context": "Loading Screen"
+      }
+    ],
+    "is_complete": true
+  }
+}

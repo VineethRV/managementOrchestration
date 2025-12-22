@@ -1,3 +1,0 @@
-  Starting WCGW with: C:\Users\ASUS\Desktop\Codes\POME\Top down\myenv\Scripts\python.exe -m wcgw.client.mcp_server
-✗ Failed to start WCGW server: Connection closed
-   Continuing without WCGW - file modifications will be skipped

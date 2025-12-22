@@ -1,0 +1,242 @@
+{
+  "stage": "Stage 4: API Specifications",
+  "timestamp": "20251202_084604",
+  "resource_groups": 12,
+  "total_endpoints": 14,
+  "batch_interactions": [
+    {
+      "resource": "current-date",
+      "endpoints_count": 1,
+      "request": "Create full API specifications for ALL endpoints in the /current-date resource.\n\nApplication Context: A React-based single-page application that displays the current date and time fetched from a Flask backend server with no database requirements. The application should have a visually appealing design.\n\nEndpoints to specify:\n\n1. Endpoint: Get Current Date\n   Method: GET\n   Path: /api/current-date\n   Description: Returns the current date\n   Used by pages: Homepage\n\nReturn a JSON array with specifications for each endpoint in order:\n[\n  {\"request_body\": \"describe parameters/body for endpoint 1\", \"response\": \"describe response structure for endpoint 1\"},\n  {\"request_body\": \"describe parameters/body for endpoint 2\", \"response\": \"describe response structure for endpoint 2\"},\n  ...\n]\n\nJSON array only:",
+      "response": "[\n  {\n    \"request_body\": \"No request body is required for this endpoint. It accepts no parameters.\",\n    \"response\": \"The response will be a JSON object containing the current date in the format 'YYYY-MM-DD' and the current time in the format 'HH:MM:SS'. Example: {\\\"date\\\": \\\"2024-09-16\\\", \\\"time\\\": \\\"14:30:00\\\"}\"\n  }\n]",
+      "success": true
+    },
+    {
+      "resource": "current-time",
+      "endpoints_count": 1,
+      "request": "Create full API specifications for ALL endpoints in the /current-time resource.\n\nApplication Context: A React-based single-page application that displays the current date and time fetched from a Flask backend server with no database requirements. The application should have a visually appealing design.\n\nEndpoints to specify:\n\n1. Endpoint: Get Current Time\n   Method: GET\n   Path: /api/current-time\n   Description: Returns the current time\n   Used by pages: Homepage\n\nReturn a JSON array with specifications for each endpoint in order:\n[\n  {\"request_body\": \"describe parameters/body for endpoint 1\", \"response\": \"describe response structure for endpoint 1\"},\n  {\"request_body\": \"describe parameters/body for endpoint 2\", \"response\": \"describe response structure for endpoint 2\"},\n  ...\n]\n\nJSON array only:",
+      "response": "[\n  {\n    \"request_body\": \"None, no parameters or body required\",\n    \"response\": \"JSON object with a single key 'current_time' containing the current date and time in ISO 8601 format, e.g. {\\\"current_time\\\": \\\"2024-09-16T10:00:00\\\"}\"\n  }\n]",
+      "success": true
+    },
+    {
+      "resource": "current-datetime",
+      "endpoints_count": 1,
+      "request": "Create full API specifications for ALL endpoints in the /current-datetime resource.\n\nApplication Context: A React-based single-page application that displays the current date and time fetched from a Flask backend server with no database requirements. The application should have a visually appealing design.\n\nEndpoints to specify:\n\n1. Endpoint: Get Current Date and Time\n   Method: GET\n   Path: /api/current-datetime\n   Description: Returns the current date and time\n   Used by pages: Homepage, About Page\n\nReturn a JSON array with specifications for each endpoint in order:\n[\n  {\"request_body\": \"describe parameters/body for endpoint 1\", \"response\": \"describe response structure for endpoint 1\"},\n  {\"request_body\": \"describe parameters/body for endpoint 2\", \"response\": \"describe response structure for endpoint 2\"},\n  ...\n]\n\nJSON array only:",
+      "response": "[\n  {\n    \"request_body\": \"None, no parameters or request body required\",\n    \"response\": \"JSON object with 'current_datetime' key containing the current date and time in ISO 8601 format, e.g., {'current_datetime': '2024-09-16T10:30:00.000000'}\"\n  }\n]",
+      "success": true
+    },
+    {
+      "resource": "health-check",
+      "endpoints_count": 1,
+      "request": "Create full API specifications for ALL endpoints in the /health-check resource.\n\nApplication Context: A React-based single-page application that displays the current date and time fetched from a Flask backend server with no database requirements. The application should have a visually appealing design.\n\nEndpoints to specify:\n\n1. Endpoint: Health Check\n   Method: GET\n   Path: /api/health-check\n   Description: Checks if the backend server is running and returns a success response\n   Used by pages: Homepage\n\nReturn a JSON array with specifications for each endpoint in order:\n[\n  {\"request_body\": \"describe parameters/body for endpoint 1\", \"response\": \"describe response structure for endpoint 1\"},\n  {\"request_body\": \"describe parameters/body for endpoint 2\", \"response\": \"describe response structure for endpoint 2\"},\n  ...\n]\n\nJSON array only:",
+      "response": "[\n  {\n    \"request_body\": \"No request body required. The endpoint does not expect any parameters.\",\n    \"response\": \"A JSON object with a single key, 'status', and a value of 'ok' or 'healthy' to indicate the server is running. Example: {\\\"status\\\": \\\"ok\\\"}\"\n  }\n]",
+      "success": true
+    },
+    {
+      "resource": "error",
+      "endpoints_count": 3,
+      "request": "Create full API specifications for ALL endpoints in the /error resource.\n\nApplication Context: A React-based single-page application that displays the current date and time fetched from a Flask backend server with no database requirements. The application should have a visually appealing design.\n\nEndpoints to specify:\n\n1. Endpoint: Get Error Details\n   Method: GET\n   Path: /api/error/details\n   Description: Fetch error details to display on the error page\n   Used by pages: Error Page\n2. Endpoint: Report Error\n   Method: POST\n   Path: /api/error/report\n   Description: Send error report to the server\n   Used by pages: Error Page\n3. Endpoint: Retry Request\n   Method: POST\n   Path: /api/error/retry\n   Description: Retry the failed request\n   Used by pages: Error Page\n\nReturn a JSON array with specifications for each endpoint in order:\n[\n  {\"request_body\": \"describe parameters/body for endpoint 1\", \"response\": \"describe response structure for endpoint 1\"},\n  {\"request_body\": \"describe parameters/body for endpoint 2\", \"response\": \"describe response structure for endpoint 2\"},\n  ...\n]\n\nJSON array only:",
+      "response": "[\n  {\n    \"request_body\": \"None\",\n    \"response\": {\n      \"error_code\": \"integer\",\n      \"error_message\": \"string\",\n      \"error_details\": \"string\"\n    }\n  },\n  {\n    \"request_body\": {\n      \"error_code\": \"integer\",\n      \"error_message\": \"string\",\n      \"error_details\": \"string\",\n      \"user_agent\": \"string\",\n      \"request_url\": \"string\"\n    },\n    \"response\": {\n      \"status\": \"string\",\n      \"message\": \"string\"\n    }\n  },\n  {\n    \"request_body\": {\n      \"original_request_method\": \"string\",\n      \"original_request_url\": \"string\",\n      \"original_request_body\": \"object\"\n    },\n    \"response\": {\n      \"status\": \"string\",\n      \"data\": \"object\"\n    }\n  }\n]",
+      "success": true
+    },
+    {
+      "resource": "homepage",
+      "endpoints_count": 1,
+      "request": "Create full API specifications for ALL endpoints in the /homepage resource.\n\nApplication Context: A React-based single-page application that displays the current date and time fetched from a Flask backend server with no database requirements. The application should have a visually appealing design.\n\nEndpoints to specify:\n\n1. Endpoint: Get Homepage Link\n   Method: GET\n   Path: /api/homepage/link\n   Description: Get the link to the homepage\n   Used by pages: Error Page\n\nReturn a JSON array with specifications for each endpoint in order:\n[\n  {\"request_body\": \"describe parameters/body for endpoint 1\", \"response\": \"describe response structure for endpoint 1\"},\n  {\"request_body\": \"describe parameters/body for endpoint 2\", \"response\": \"describe response structure for endpoint 2\"},\n  ...\n]\n\nJSON array only:",
+      "response": "[\n  {\n    \"request_body\": \"None, no parameters or body required\",\n    \"response\": \"JSON object with a single key 'link' containing the URL of the homepage, e.g. {\\\"link\\\": \\\"/\\\"}\"\n  }\n]",
+      "success": true
+    },
+    {
+      "resource": "app-info",
+      "endpoints_count": 1,
+      "request": "Create full API specifications for ALL endpoints in the /app-info resource.\n\nApplication Context: A React-based single-page application that displays the current date and time fetched from a Flask backend server with no database requirements. The application should have a visually appealing design.\n\nEndpoints to specify:\n\n1. Endpoint: Get Application Info\n   Method: GET\n   Path: /api/app-info\n   Description: Retrieve application name, logo, and description\n   Used by pages: About Page\n\nReturn a JSON array with specifications for each endpoint in order:\n[\n  {\"request_body\": \"describe parameters/body for endpoint 1\", \"response\": \"describe response structure for endpoint 1\"},\n  {\"request_body\": \"describe parameters/body for endpoint 2\", \"response\": \"describe response structure for endpoint 2\"},\n  ...\n]\n\nJSON array only:",
+      "response": "[\n  {\n    \"request_body\": \"None, no parameters or body required\",\n    \"response\": \"JSON object with properties: {name: string, logo: string, description: string}, example: {name: 'Current Time App', logo: 'https://example.com/logo.png', description: 'A React-based single-page application that displays the current date and time'}\"\n  }\n]",
+      "success": true
+    },
+    {
+      "resource": "key-features",
+      "endpoints_count": 1,
+      "request": "Create full API specifications for ALL endpoints in the /key-features resource.\n\nApplication Context: A React-based single-page application that displays the current date and time fetched from a Flask backend server with no database requirements. The application should have a visually appealing design.\n\nEndpoints to specify:\n\n1. Endpoint: Get Key Features\n   Method: GET\n   Path: /api/key-features\n   Description: Retrieve list of key features of the application\n   Used by pages: About Page\n\nReturn a JSON array with specifications for each endpoint in order:\n[\n  {\"request_body\": \"describe parameters/body for endpoint 1\", \"response\": \"describe response structure for endpoint 1\"},\n  {\"request_body\": \"describe parameters/body for endpoint 2\", \"response\": \"describe response structure for endpoint 2\"},\n  ...\n]\n\nJSON array only:",
+      "response": "[\n  {\n    \"request_body\": \"None, no parameters or request body required\",\n    \"response\": \"JSON array of key features, each feature represented as an object with 'id', 'name', and 'description' properties, e.g. [{ 'id': 1, 'name': 'Current Date and Time', 'description': 'Displays the current date and time fetched from the server' }]\"\n  }\n]",
+      "success": true
+    },
+    {
+      "resource": "technologies-used",
+      "endpoints_count": 1,
+      "request": "Create full API specifications for ALL endpoints in the /technologies-used resource.\n\nApplication Context: A React-based single-page application that displays the current date and time fetched from a Flask backend server with no database requirements. The application should have a visually appealing design.\n\nEndpoints to specify:\n\n1. Endpoint: Get Technologies Used\n   Method: GET\n   Path: /api/technologies-used\n   Description: Retrieve information about the technologies used in the application\n   Used by pages: About Page\n\nReturn a JSON array with specifications for each endpoint in order:\n[\n  {\"request_body\": \"describe parameters/body for endpoint 1\", \"response\": \"describe response structure for endpoint 1\"},\n  {\"request_body\": \"describe parameters/body for endpoint 2\", \"response\": \"describe response structure for endpoint 2\"},\n  ...\n]\n\nJSON array only:",
+      "response": "[\n  {\n    \"request_body\": \"None, no parameters or body required for this endpoint\",\n    \"response\": \"A JSON array containing objects with the following properties: technology (string), description (string), version (string), and url (string) for each technology used in the application. Example: [{\\\"technology\\\": \\\"React\\\", \\\"description\\\": \\\"Frontend framework\\\", \\\"version\\\": \\\"18.2.0\\\", \\\"url\\\": \\\"https://reactjs.org/\\\"}, {\\\"technology\\\": \\\"Flask\\\", \\\"description\\\": \\\"Backend framework\\\", \\\"version\\\": \\\"2.2.2\\\", \\\"url\\\": \\\"https://flask.palletsprojects.com/\\\"}]\"\n  }\n]",
+      "success": true
+    },
+    {
+      "resource": "init",
+      "endpoints_count": 1,
+      "request": "Create full API specifications for ALL endpoints in the /init resource.\n\nApplication Context: A React-based single-page application that displays the current date and time fetched from a Flask backend server with no database requirements. The application should have a visually appealing design.\n\nEndpoints to specify:\n\n1. Endpoint: Fetch Initial Data\n   Method: GET\n   Path: /api/init\n   Description: Fetches the initial data required for the application to load\n   Used by pages: Loading Screen\n\nReturn a JSON array with specifications for each endpoint in order:\n[\n  {\"request_body\": \"describe parameters/body for endpoint 1\", \"response\": \"describe response structure for endpoint 1\"},\n  {\"request_body\": \"describe parameters/body for endpoint 2\", \"response\": \"describe response structure for endpoint 2\"},\n  ...\n]\n\nJSON array only:",
+      "response": "[\n  {\n    \"request_body\": \"No request body is required for this endpoint. It only requires the GET method to fetch the initial data.\",\n    \"response\": \"The response will be a JSON object containing the current date and time in the following format: {\\\"date\\\": \\\"YYYY-MM-DD\\\", \\\"time\\\": \\\"HH:MM:SS\\\"}\"\n  }\n]",
+      "success": true
+    },
+    {
+      "resource": "data",
+      "endpoints_count": 1,
+      "request": "Create full API specifications for ALL endpoints in the /data resource.\n\nApplication Context: A React-based single-page application that displays the current date and time fetched from a Flask backend server with no database requirements. The application should have a visually appealing design.\n\nEndpoints to specify:\n\n1. Endpoint: Check Data Availability\n   Method: GET\n   Path: /api/data/ready\n   Description: Checks if the required data is available and ready to be fetched\n   Used by pages: Loading Screen\n\nReturn a JSON array with specifications for each endpoint in order:\n[\n  {\"request_body\": \"describe parameters/body for endpoint 1\", \"response\": \"describe response structure for endpoint 1\"},\n  {\"request_body\": \"describe parameters/body for endpoint 2\", \"response\": \"describe response structure for endpoint 2\"},\n  ...\n]\n\nJSON array only:",
+      "response": "[\n  {\n    \"request_body\": \"None, no parameters or body required\",\n    \"response\": \"Boolean value indicating whether the data is available, e.g. {\\\"ready\\\": true}\"\n  }\n]",
+      "success": true
+    },
+    {
+      "resource": "loading",
+      "endpoints_count": 1,
+      "request": "Create full API specifications for ALL endpoints in the /loading resource.\n\nApplication Context: A React-based single-page application that displays the current date and time fetched from a Flask backend server with no database requirements. The application should have a visually appealing design.\n\nEndpoints to specify:\n\n1. Endpoint: Get Loading Progress\n   Method: GET\n   Path: /api/loading/progress\n   Description: Returns the loading progress as a percentage\n   Used by pages: Loading Screen\n\nReturn a JSON array with specifications for each endpoint in order:\n[\n  {\"request_body\": \"describe parameters/body for endpoint 1\", \"response\": \"describe response structure for endpoint 1\"},\n  {\"request_body\": \"describe parameters/body for endpoint 2\", \"response\": \"describe response structure for endpoint 2\"},\n  ...\n]\n\nJSON array only:",
+      "response": "[\n  {\n    \"request_body\": \"None, no parameters or body required\",\n    \"response\": {\n      \"progress\": \"integer representing the loading progress as a percentage (0-100)\"\n    }\n  }\n]",
+      "success": true
+    }
+  ],
+  "endpoints": [
+    {
+      "endpoint_name": "Get Current Date",
+      "description": "Returns the current date",
+      "method": "GET",
+      "path": "/api/current-date",
+      "request_body": "No request body is required for this endpoint. It accepts no parameters.",
+      "response": "The response will be a JSON object containing the current date in the format 'YYYY-MM-DD' and the current time in the format 'HH:MM:SS'. Example: {\"date\": \"2024-09-16\", \"time\": \"14:30:00\"}",
+      "page_context": "Homepage"
+    },
+    {
+      "endpoint_name": "Get Current Time",
+      "description": "Returns the current time",
+      "method": "GET",
+      "path": "/api/current-time",
+      "request_body": "None, no parameters or body required",
+      "response": "JSON object with a single key 'current_time' containing the current date and time in ISO 8601 format, e.g. {\"current_time\": \"2024-09-16T10:00:00\"}",
+      "page_context": "Homepage"
+    },
+    {
+      "endpoint_name": "Get Current Date and Time",
+      "description": "Returns the current date and time",
+      "method": "GET",
+      "path": "/api/current-datetime",
+      "request_body": "None, no parameters or request body required",
+      "response": "JSON object with 'current_datetime' key containing the current date and time in ISO 8601 format, e.g., {'current_datetime': '2024-09-16T10:30:00.000000'}",
+      "page_context": "Homepage, About Page"
+    },
+    {
+      "endpoint_name": "Health Check",
+      "description": "Checks if the backend server is running and returns a success response",
+      "method": "GET",
+      "path": "/api/health-check",
+      "request_body": "No request body required. The endpoint does not expect any parameters.",
+      "response": "A JSON object with a single key, 'status', and a value of 'ok' or 'healthy' to indicate the server is running. Example: {\"status\": \"ok\"}",
+      "page_context": "Homepage"
+    },
+    {
+      "endpoint_name": "Get Error Details",
+      "description": "Fetch error details to display on the error page",
+      "method": "GET",
+      "path": "/api/error/details",
+      "request_body": "None",
+      "response": {
+        "error_code": "integer",
+        "error_message": "string",
+        "error_details": "string"
+      },
+      "page_context": "Error Page"
+    },
+    {
+      "endpoint_name": "Report Error",
+      "description": "Send error report to the server",
+      "method": "POST",
+      "path": "/api/error/report",
+      "request_body": {
+        "error_code": "integer",
+        "error_message": "string",
+        "error_details": "string",
+        "user_agent": "string",
+        "request_url": "string"
+      },
+      "response": {
+        "status": "string",
+        "message": "string"
+      },
+      "page_context": "Error Page"
+    },
+    {
+      "endpoint_name": "Retry Request",
+      "description": "Retry the failed request",
+      "method": "POST",
+      "path": "/api/error/retry",
+      "request_body": {
+        "original_request_method": "string",
+        "original_request_url": "string",
+        "original_request_body": "object"
+      },
+      "response": {
+        "status": "string",
+        "data": "object"
+      },
+      "page_context": "Error Page"
+    },
+    {
+      "endpoint_name": "Get Homepage Link",
+      "description": "Get the link to the homepage",
+      "method": "GET",
+      "path": "/api/homepage/link",
+      "request_body": "None, no parameters or body required",
+      "response": "JSON object with a single key 'link' containing the URL of the homepage, e.g. {\"link\": \"/\"}",
+      "page_context": "Error Page"
+    },
+    {
+      "endpoint_name": "Get Application Info",
+      "description": "Retrieve application name, logo, and description",
+      "method": "GET",
+      "path": "/api/app-info",
+      "request_body": "None, no parameters or body required",
+      "response": "JSON object with properties: {name: string, logo: string, description: string}, example: {name: 'Current Time App', logo: 'https://example.com/logo.png', description: 'A React-based single-page application that displays the current date and time'}",
+      "page_context": "About Page"
+    },
+    {
+      "endpoint_name": "Get Key Features",
+      "description": "Retrieve list of key features of the application",
+      "method": "GET",
+      "path": "/api/key-features",
+      "request_body": "None, no parameters or request body required",
+      "response": "JSON array of key features, each feature represented as an object with 'id', 'name', and 'description' properties, e.g. [{ 'id': 1, 'name': 'Current Date and Time', 'description': 'Displays the current date and time fetched from the server' }]",
+      "page_context": "About Page"
+    },
+    {
+      "endpoint_name": "Get Technologies Used",
+      "description": "Retrieve information about the technologies used in the application",
+      "method": "GET",
+      "path": "/api/technologies-used",
+      "request_body": "None, no parameters or body required for this endpoint",
+      "response": "A JSON array containing objects with the following properties: technology (string), description (string), version (string), and url (string) for each technology used in the application. Example: [{\"technology\": \"React\", \"description\": \"Frontend framework\", \"version\": \"18.2.0\", \"url\": \"https://reactjs.org/\"}, {\"technology\": \"Flask\", \"description\": \"Backend framework\", \"version\": \"2.2.2\", \"url\": \"https://flask.palletsprojects.com/\"}]",
+      "page_context": "About Page"
+    },
+    {
+      "endpoint_name": "Fetch Initial Data",
+      "description": "Fetches the initial data required for the application to load",
+      "method": "GET",
+      "path": "/api/init",
+      "request_body": "No request body is required for this endpoint. It only requires the GET method to fetch the initial data.",
+      "response": "The response will be a JSON object containing the current date and time in the following format: {\"date\": \"YYYY-MM-DD\", \"time\": \"HH:MM:SS\"}",
+      "page_context": "Loading Screen"
+    },
+    {
+      "endpoint_name": "Check Data Availability",
+      "description": "Checks if the required data is available and ready to be fetched",
+      "method": "GET",
+      "path": "/api/data/ready",
+      "request_body": "None, no parameters or body required",
+      "response": "Boolean value indicating whether the data is available, e.g. {\"ready\": true}",
+      "page_context": "Loading Screen"
+    },
+    {
+      "endpoint_name": "Get Loading Progress",
+      "description": "Returns the loading progress as a percentage",
+      "method": "GET",
+      "path": "/api/loading/progress",
+      "request_body": "None, no parameters or body required",
+      "response": {
+        "progress": "integer representing the loading progress as a percentage (0-100)"
+      },
+      "page_context": "Loading Screen"
+    }
+  ]
+}

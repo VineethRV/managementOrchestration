@@ -1,11 +1,10 @@
-from finalizer import run_requirements_agent, finalized_requirements
-from frontend_backend_managers import design_application
+from requirements_agent import run_requirements_agent, finalized_requirements
+from design_orchestrator import design_application
 from project_generator import generate_projects
 from worker_agents import implement_with_worker_agents
-from debugging_agents import run_debugging_agents
+from backend_validator import BackendDebugger
 import json
 import os
-import asyncio
 
 print("Starting requirements gathering session...\n")
 run_requirements_agent()
@@ -74,13 +73,15 @@ if design_result['frontend']['is_complete'] and design_result['backend']['is_com
                     description=finalized_requirements['detailed_description']
                 )
                 
-                # After implementation, ask about debugging
-                debug_input = input("\n\nWould you like to start the projects and run debugging agents? (yes/no): ").strip().lower()
-                
-                if debug_input in ['yes', 'y']:
-                    asyncio.run(run_debugging_agents(react_path, flask_path))
+                # Setup backend environment after implementation
+                print("\n" + "="*70)
+                print("SETTING UP BACKEND ENVIRONMENT")
+                print("="*70)
+                debugger = BackendDebugger(flask_path)
+                if debugger.setup_environment():
+                    print("✓ Backend environment ready")
                 else:
-                    print("\nDebugging phase skipped.")
+                    print("⚠ Failed to setup backend environment")
             else:
                 print("\n⚠ Could not find generated project directories.")
                 print(f"React path: {react_path}")

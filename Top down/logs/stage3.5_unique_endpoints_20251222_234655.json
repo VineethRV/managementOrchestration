@@ -1,0 +1,54 @@
+{
+  "stage": "Stage 3.5: Endpoint Deduplication",
+  "timestamp": "20251222_234655",
+  "total_endpoints_before": 7,
+  "unique_endpoints": 5,
+  "duplicates_removed": 2,
+  "endpoints": [
+    {
+      "endpoint_name": "Get Usernames",
+      "description": "Retrieve the list of stored usernames",
+      "method": "GET",
+      "path": "/api/usernames",
+      "request_body": "",
+      "response": "",
+      "page_context": "Username List Page"
+    },
+    {
+      "endpoint_name": "Add Username",
+      "description": "Add a new username to the list",
+      "method": "POST",
+      "path": "/api/usernames",
+      "request_body": "",
+      "response": "",
+      "page_context": "Username List Page"
+    },
+    {
+      "endpoint_name": "Check Username Availability",
+      "description": "Validate if a username is available for addition",
+      "method": "POST",
+      "path": "/api/usernames/check",
+      "request_body": "",
+      "response": "",
+      "page_context": "Username List Page"
+    },
+    {
+      "endpoint_name": "Get About Page Data",
+      "description": "Retrieve data for the About page",
+      "method": "GET",
+      "path": "/api/about",
+      "request_body": "",
+      "response": "",
+      "page_context": "About Page"
+    },
+    {
+      "endpoint_name": "Check Username Availability",
+      "description": "Check if a username is already in the list",
+      "method": "GET",
+      "path": "/api/usernames/availability",
+      "request_body": "",
+      "response": "",
+      "page_context": "Username List Page"
+    }
+  ]
+}
