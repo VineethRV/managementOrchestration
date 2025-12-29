@@ -17,6 +17,72 @@ import os
 import json
 import sys
 from datetime import datetime
+from dotenv import load_dotenv
+
+# Load environment variables from .env file in the Kaizen folder
+# Get the directory where main.py is located
+kaizen_dir = os.path.dirname(os.path.abspath(__file__))
+env_path = os.path.join(kaizen_dir, ".env")
+
+# Load .env file if it exists
+api_key_loaded = False
+api_key = None
+
+if os.path.exists(env_path):
+    # First, try to manually parse the .env file to handle any formatting issues
+    try:
+        with open(env_path, 'r', encoding='utf-8-sig') as f:  # utf-8-sig handles BOM
+            for line in f:
+                line = line.strip()
+                # Skip empty lines and comments
+                if not line or line.startswith('#'):
+                    continue
+                # Parse KEY=VALUE format
+                if '=' in line:
+                    key, value = line.split('=', 1)
+                    key = key.strip()
+                    value = value.strip()
+                    # Remove quotes if present
+                    if value.startswith('"') and value.endswith('"'):
+                        value = value[1:-1]
+                    elif value.startswith("'") and value.endswith("'"):
+                        value = value[1:-1]
+                    # Set environment variable directly
+                    if key == "GROQ_API_KEY":
+                        os.environ[key] = value
+                        api_key = value
+                        api_key_loaded = True
+                        masked_key = value[:8] + "..." + value[-4:] if len(value) > 12 else "***"
+                        print(f"✓ Loaded GROQ_API_KEY from .env file: {masked_key}")
+                        break
+    except Exception as e:
+        print(f"⚠ Error reading .env file manually: {e}")
+    
+    # Also try load_dotenv as backup
+    if not api_key_loaded:
+        load_dotenv(env_path, override=True)
+        api_key = os.getenv("GROQ_API_KEY")
+        if api_key:
+            api_key_loaded = True
+            masked_key = api_key[:8] + "..." + api_key[-4:] if len(api_key) > 12 else "***"
+            print(f"✓ Loaded GROQ_API_KEY via load_dotenv: {masked_key}")
+else:
+    # Try loading from current directory (fallback)
+    load_dotenv(override=True)
+    api_key = os.getenv("GROQ_API_KEY")
+    if api_key:
+        api_key_loaded = True
+        masked_key = api_key[:8] + "..." + api_key[-4:] if len(api_key) > 12 else "***"
+        print(f"✓ Loaded GROQ_API_KEY from current directory: {masked_key}")
+
+# Verify API key is set before importing kaizen_orchestrator
+if not api_key_loaded or not os.getenv("GROQ_API_KEY"):
+    print("\n❌ Error: GROQ_API_KEY not found in environment variables.")
+    print(f"   Please create or fix the .env file at: {env_path}")
+    print("   With the following content (NO quotes, NO spaces around =):")
+    print("   GROQ_API_KEY=your_api_key_here")
+    sys.exit(1)
+
 from kaizen_orchestrator import (
     gather_requirements_interactive,
     design_application_kaizen,
@@ -24,15 +90,13 @@ from kaizen_orchestrator import (
     _metrics,
     log_and_print,
     set_defect_ledger,
-    get_defect_ledger
+    get_defect_ledger,
+    determine_db_usage,
+    generate_react_tailwind_project,
+    generate_flask_mongodb_backend
 )
 from defect_ledger import DefectLedger
 from rate_limiter import RateLimiter
-
-# Import project generator from Top down directory
-topdown_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "Top down")
-sys.path.insert(0, topdown_path)
-from project_generator import generate_projects
 
 
 def main():
@@ -95,48 +159,35 @@ def main():
     log_and_print(f"  Frontend: {pages_count} pages", main_log)
     log_and_print(f"  Backend: {endpoints_count} endpoints", main_log)
     
-    # Ask if user wants to generate projects
-    user_input = input("\n\nWould you like to generate React and Flask projects? (yes/no): ").strip().lower()
-    if user_input not in ['yes', 'y']:
-        log_and_print("\nProject generation skipped.", main_log)
-        return
-    
-    # Phase 3: Generate Project Scaffolding
+    # Phase 3: Determine project paths (projects will be generated in Cycle 1)
     log_and_print("\n" + "="*70, main_log)
-    log_and_print("PHASE 3: PROJECT SCAFFOLDING GENERATION", main_log)
+    log_and_print("PHASE 3: PROJECT SETUP", main_log)
     log_and_print("="*70, main_log)
     
-    project_paths = generate_projects(design)
+    # Determine MongoDB usage
+    use_mongodb = determine_db_usage(
+        requirements["detailed_description"],
+        requirements["features"],
+        design
+    )
     
-    react_path = project_paths.get('react')
-    flask_path = project_paths.get('flask')
+    # Set project paths (will be created in Cycle 1 DO phase)
+    react_path = os.path.abspath("frontend")
+    flask_path = os.path.abspath("backend")
     
-    if not react_path or not flask_path:
-        log_and_print("\n⚠ Failed to generate projects.", main_log)
-        return
-    
-    log_and_print(f"\n✓ Projects generated:", main_log)
-    log_and_print(f"  React: {react_path}", main_log)
-    log_and_print(f"  Flask: {flask_path}", main_log)
-    
-    # Ask if user wants to run PDCA cycles
-    user_input = input("\n\nWould you like to run PDCA cycles for continuous improvement? (yes/no): ").strip().lower()
-    if user_input not in ['yes', 'y']:
-        log_and_print("\nPDCA cycles skipped.", main_log)
-        return
+    log_and_print(f"\n✓ Project paths configured:", main_log)
+    log_and_print(f"  React + Tailwind CSS: {react_path}", main_log)
+    log_and_print(f"  Flask {'+ MongoDB' if use_mongodb else '(no database)'}: {flask_path}", main_log)
+    log_and_print(f"\n  Note: Projects will be generated in Cycle 1 DO phase", main_log)
     
     # Phase 4: PDCA Cycles
     log_and_print("\n" + "="*70, main_log)
     log_and_print("PHASE 4: PDCA CYCLES (Continuous Improvement)", main_log)
     log_and_print("="*70, main_log)
     
-    # Ask for number of cycles
-    try:
-        num_cycles = int(input("\nHow many PDCA cycles would you like to run? (default: 3): ").strip() or "3")
-    except ValueError:
-        num_cycles = 3
-    
-    log_and_print(f"\nRunning {num_cycles} PDCA cycles...", main_log)
+    # Default to 1 PDCA cycle
+    num_cycles = 1
+    log_and_print(f"\nRunning {num_cycles} PDCA cycle...", main_log)
     
     cycle_results = []
     for cycle_num in range(1, num_cycles + 1):

@@ -344,10 +344,9 @@ Check the log files for specific errors. The system will continue even if indivi
 ```
 managementOrchestration/Kaizen/
 ├── main.py                    # Main entry point
-├── kaizen_orchestrator.py     # Core orchestrator with PDCA cycles
+├── kaizen_orchestrator.py     # Core orchestrator with PDCA cycles + direct project generation
 ├── defect_ledger.py           # Defect tracking system
 ├── rate_limiter.py            # Token and rate limiting
-├── project_generator.py        # React/Flask project generation
 ├── requirements.txt           # Python dependencies
 └── README.md                  # This file
 ```
