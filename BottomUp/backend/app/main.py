@@ -4,11 +4,11 @@ import asyncio
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.responses import JSONResponse, FileResponse
 from fastapi.middleware.cors import CORSMiddleware
-from .model_agent import ModelAgent
-from .agents import AgentManagementHelper
-from .coordinator import GlobalCoordinator
+from model_agent import ModelAgent
+from agents import AgentManagementHelper
+from coordinator import GlobalCoordinator
 from typing import Dict
-from .personality_config import AGENT_PERSONALITIES
+from personality_config import AGENT_PERSONALITIES
 from dotenv import load_dotenv
 app = FastAPI(title='Bottom-up Groq Agent System')
 global model
@@ -26,7 +26,8 @@ model = None
 @app.on_event('startup')
 async def startup_event():
     global model
-    model = ModelAgent(api_key_env=os.getenv("GROQ_API_KEY"))  
+    load_dotenv()
+    model = ModelAgent()#api_key_env=os.getenv("GROQ_API_KEY"))  
 
 # simple websocket connection manager
 class ConnectionManager:
@@ -106,7 +107,20 @@ async def run_pipeline(payload: Dict):
                 arc = os.path.relpath(full, outdir)
                 z.write(full, arcname=arc)
     await manager.broadcast('Pipeline complete. ZIP ready.')
-    return {'status': 'done', 'zip': zip_path}
+    metrics = None
+    try:
+        metrics = model.get_metrics()
+    except Exception:
+        metrics = {'conversation': 0, 'coding': 0}
+    return {'status': 'done', 'zip': zip_path, 'metrics': metrics}
+
+
+@app.get('/api/metrics')
+def get_metrics():
+    try:
+        return {'metrics': model.get_metrics()}
+    except Exception:
+        return {'metrics': {'conversation': 0, 'coding': 0}}
 
 
 

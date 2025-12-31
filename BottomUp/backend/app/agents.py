@@ -1,6 +1,6 @@
 import traceback
-from .memory import Memory
-from .model_agent import ModelAgent
+from memory import Memory
+from model_agent import ModelAgent
 from typing import List, Dict, Any
 
 class LowerAgent:
@@ -33,7 +33,7 @@ Keep code runnable for the file(s) you emit.
     def proposal(self):
         prompt = self._build_proposal_prompt()
         try:
-            code = self.model.run(prompt, temperature=self.personality.get('temperature', 0.1), max_tokens=1200)
+            code = self.model.run(prompt, temperature=self.personality.get('temperature', 0.1), max_tokens=2000, category='coding')
         except Exception as e:
             code = f"[ERROR] {e}\n{traceback.format_exc()}"
         self.last_code = code
@@ -50,7 +50,7 @@ Fragments:
 
 Output concise actionable critique.
 """
-        critique = self.model.run(prompt, temperature=0.0, max_tokens=500)
+        critique = self.model.run(prompt, temperature=0.0, max_tokens=2500,category='conversation')
         self.memory.add_own(f"Critique:\n{critique}")
         for a in agents:
             if a.name != self.name:
@@ -71,7 +71,7 @@ class CollectorAgent:
 Evaluate the following code. Score 1-10 with a short justification:
 {code}
 """
-        return self.model.run(prompt)
+        return self.model.run(prompt, category='conversation')
 
     def score_alignment(self, code):
         prompt = f"""
@@ -80,7 +80,7 @@ Rate alignment 1-10.
 Code:
 {code}
 """
-        return self.model.run(prompt)
+        return self.model.run(prompt, category='conversation')
 
     def check_satisfaction(self):
         proposals = [a.last_code for a in self.agents]
@@ -98,7 +98,7 @@ Fragments:
 
 Return final merged code. and ensure all apis, urls and calls are consistent across agents.
 """
-        return self.model.run(prompt)
+        return self.model.run(prompt, category='coding')
 
 
 
@@ -116,9 +116,10 @@ class AgentManagementHelper:
 
     def run_once(self) -> str:
         # one round: proposals + critiques + collect
-        for a in self.agents:
-            a.proposal()
-        for a in self.agents:
-            a.critique(self.agents)
+        for i in range(3):
+            for a in self.agents:
+                a.proposal()
+            for a in self.agents:
+                a.critique(self.agents)
         merged = self.collector.get_final_code()
         return merged
