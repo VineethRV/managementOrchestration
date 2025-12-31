@@ -10,7 +10,7 @@ Role outputs:
 
 Return valid JSON only. and dont add any comments like Sure hers the json, only json nothing else. also see that frontend is calling backend with correct endpoitns else change.
         """
-        out = self.model.run(prompt, temperature=0.0, max_tokens=8000)
+        out = self.model.run(prompt, temperature=0.0, max_tokens=8000, category='coding')
         try:
             import json
             parsed = json.loads(out)
