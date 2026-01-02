@@ -3,4 +3,5 @@ myenv/
 venv/
 node_modules/
 __pycache__/
+data/
 data*/
