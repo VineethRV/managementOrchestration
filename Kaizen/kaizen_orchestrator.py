@@ -13,6 +13,7 @@ import json
 import sys
 import time
 import subprocess
+import re
 from datetime import datetime
 from typing import List, Dict, Any, Optional, Tuple
 from dotenv import load_dotenv
@@ -1446,12 +1447,67 @@ def validate_frontend_backend_integration(design: Dict, react_path: str, flask_p
                 component_code = f.read()
             
             # Check if component calls the specified endpoints
+            # **ENHANCED**: Also check for API calls that don't match any endpoint specification
+            import re
+            api_call_pattern = r'(axios|axiosInstance|api|fetch)\s*\.\s*(get|post|put|delete|patch)\s*\(\s*[\'"`]([^\'"`]+)[\'"`]'
+            api_calls = re.findall(api_call_pattern, component_code, re.IGNORECASE)
+            
+            # Extract all endpoint paths from specifications
+            specified_endpoints = {ep.get('path', '') for ep in page_endpoints}
+            
+            for api_match in api_calls:
+                if len(api_match) >= 3:
+                    api_path = api_match[2]
+                    # Normalize path (remove query params, fragments)
+                    api_path_clean = api_path.split('?')[0].split('#')[0]
+                    
+                    # Check if this API call matches any specified endpoint
+                    matches_spec = False
+                    for spec_path in specified_endpoints:
+                        # Check exact match or parameterized match
+                        if api_path_clean == spec_path:
+                            matches_spec = True
+                            break
+                        # Check if it's a parameterized endpoint (e.g., /api/users/:id vs /api/users/123)
+                        spec_path_pattern = spec_path.replace(':id', r'\w+').replace('<id>', r'\w+')
+                        if re.match(spec_path_pattern, api_path_clean):
+                            matches_spec = True
+                            break
+                    
+                    # If API call doesn't match any specified endpoint, flag it
+                    if not matches_spec and api_path_clean.startswith('/api/'):
+                        if _defect_ledger:
+                            _defect_ledger.add_defect(
+                                f"Frontend component '{page_name}' calls API endpoint '{api_path_clean}' that is not in endpoint specifications - verify endpoint exists in backend",
+                                f"frontend/{page_name}",
+                                DefectSeverity.HIGH,
+                                "Integration Validator",
+                                "missing_endpoint"
+                            )
+                            defects_found += 1
+            
+            # Check if component calls the specified endpoints
             for ep in page_endpoints:
                 ep_path = ep.get('path', '')
                 ep_method = ep.get('method', 'GET')
                 
-                # Check if endpoint path is called in component
-                if ep_path not in component_code and ep_path.replace('/api/', '') not in component_code:
+                # Check if endpoint path is called in component (with flexible matching)
+                ep_path_variants = [
+                    ep_path,
+                    ep_path.replace('/api/', ''),
+                    ep_path.replace(':id', ''),
+                    ep_path.replace('<id>', ''),
+                ]
+                path_found = any(variant in component_code for variant in ep_path_variants if variant)
+                
+                # Also check for parameterized calls (e.g., `/api/users/${id}` matches `/api/users/:id`)
+                if not path_found:
+                    # Check for template literal patterns
+                    template_pattern = ep_path.replace(':id', r'\$\{[^}]+\}').replace('<id>', r'\$\{[^}]+\}')
+                    if re.search(template_pattern, component_code):
+                        path_found = True
+                
+                if not path_found:
                     if _defect_ledger:
                         _defect_ledger.add_defect(
                             f"Frontend component '{page_name}' doesn't call backend endpoint {ep_method} {ep_path}",
@@ -1588,21 +1644,53 @@ def validate_frontend_backend_integration(design: Dict, react_path: str, flask_p
             
             # Check if route is defined
             import re
+            # **ENHANCED**: Check for route with proper method matching
+            # Try exact path match
             route_pattern = rf"@app\.route\(['\"]{re.escape(path)}['\"]"
-            if route_pattern not in route_code and f"methods=['{method}']" not in route_code:
-                # Try with Flask parameter syntax
+            route_found = False
+            
+            if route_pattern in route_code:
+                # Check if method matches
+                route_context = route_code[route_code.find(route_pattern):route_code.find(route_pattern) + 200]
+                if f"methods=['{method}']" in route_context or f'methods=["{method}"]' in route_context or f"methods=[{method}]" in route_context:
+                    route_found = True
+            
+            # Try with Flask parameter syntax
+            if not route_found:
                 flask_path_pattern = path.replace('{', '<').replace('}', '>').replace(':id', '<id>')
                 route_pattern2 = rf"@app\.route\(['\"]{re.escape(flask_path_pattern)}['\"]"
-                if route_pattern2 not in route_code:
+                if route_pattern2 in route_code:
+                    route_context = route_code[route_code.find(route_pattern2):route_code.find(route_pattern2) + 200]
+                    if f"methods=['{method}']" in route_context or f'methods=["{method}"]' in route_context or f"methods=[{method}]" in route_context:
+                        route_found = True
+            
+            # Try checking for route with any method (less strict)
+            if not route_found:
+                # Check if route exists with any method
+                any_route_pattern = rf"@app\.route\(['\"]{re.escape(path)}['\"]"
+                if any_route_pattern in route_code:
+                    # Route exists but method might not match - flag as medium severity
                     if _defect_ledger:
                         _defect_ledger.add_defect(
-                            f"Backend route {method} {path} not found in route file",
+                            f"Backend route {path} exists but may not support {method} method - verify HTTP method is implemented",
                             f"backend/{path}",
-                            DefectSeverity.CRITICAL,
+                            DefectSeverity.MEDIUM,
                             "Integration Validator",
-                            "missing_route"
+                            "method_mismatch"
                         )
                         defects_found += 1
+                    route_found = True  # Route exists, just method mismatch
+            
+            if not route_found:
+                if _defect_ledger:
+                    _defect_ledger.add_defect(
+                        f"Backend route {method} {path} not found in route file",
+                        f"backend/{path}",
+                        DefectSeverity.CRITICAL,
+                        "Integration Validator",
+                        "missing_route"
+                    )
+                    defects_found += 1
         except Exception as e:
             log_and_print(f"    [Warning] Could not validate route {method} {path}: {e}", log_file)
     
@@ -2234,6 +2322,9 @@ Return ONLY complete React component code (JSX) with Tailwind, starting with imp
         component_file = get_page_file_path(page, project_path)
         os.makedirs(os.path.dirname(component_file), exist_ok=True)
         
+        # **CRITICAL**: Fix import paths dynamically before saving
+        component_code = fix_import_paths(component_code, component_file, project_path)
+        
         with open(component_file, 'w', encoding='utf-8') as f:
             f.write(component_code)
         
@@ -2272,6 +2363,130 @@ Return ONLY complete React component code (JSX) with Tailwind, starting with imp
         return False
 
 
+def resolve_import_path(import_name: str, from_file: str, project_path: str) -> Optional[str]:
+    """
+    Dynamically resolve the correct import path for a component.
+    Scans the project structure to find where the file actually exists and returns the correct relative path.
+    
+    Args:
+        import_name: The component name being imported (e.g., "AttendanceRecordTable")
+        from_file: The file path where the import is being used
+        project_path: Root path of the project (e.g., "frontend")
+    
+    Returns:
+        The correct relative import path (e.g., "../components/AttendanceRecordTable") or None if not found
+    """
+    import_name_clean = import_name.replace('.jsx', '').replace('.js', '')
+    
+    # Get the directory of the file making the import
+    from_dir = os.path.dirname(os.path.abspath(from_file))
+    
+    # Search directories in order of preference
+    search_dirs = [
+        os.path.join(project_path, "src", "components"),
+        os.path.join(project_path, "src", "pages"),
+        os.path.join(project_path, "src"),
+        os.path.dirname(from_file),  # Same directory
+    ]
+    
+    # Also search subdirectories
+    src_path = os.path.join(project_path, "src")
+    if os.path.exists(src_path):
+        for root, dirs, files in os.walk(src_path):
+            # Skip node_modules and other non-source directories
+            if 'node_modules' in root or '.git' in root:
+                continue
+            search_dirs.append(root)
+    
+    # Find the actual file location
+    target_file = None
+    for search_dir in search_dirs:
+        if not os.path.exists(search_dir):
+            continue
+        
+        # Try with .jsx extension
+        test_path = os.path.join(search_dir, f"{import_name_clean}.jsx")
+        if os.path.exists(test_path):
+            target_file = test_path
+            break
+        
+        # Try with .js extension
+        test_path = os.path.join(search_dir, f"{import_name_clean}.js")
+        if os.path.exists(test_path):
+            target_file = test_path
+            break
+    
+    if not target_file:
+        return None
+    
+    # Calculate relative path from from_file to target_file
+    from_dir_abs = os.path.abspath(from_dir)
+    target_dir_abs = os.path.dirname(os.path.abspath(target_file))
+    
+    # Get relative path
+    try:
+        rel_path = os.path.relpath(target_file, from_dir_abs)
+        # Normalize to use forward slashes (for cross-platform compatibility in imports)
+        rel_path = rel_path.replace('\\', '/')
+        # Remove .jsx/.js extension for cleaner imports
+        if rel_path.endswith('.jsx'):
+            rel_path = rel_path[:-4]
+        elif rel_path.endswith('.js'):
+            rel_path = rel_path[:-3]
+        # Ensure it starts with ./ or ../
+        if not rel_path.startswith('.') and not rel_path.startswith('/'):
+            rel_path = './' + rel_path
+        return rel_path
+    except ValueError:
+        # If paths are on different drives (Windows), use absolute path approach
+        return None
+
+
+def fix_import_paths(component_code: str, component_file: str, project_path: str) -> str:
+    """
+    Automatically fix all relative import paths in component code by resolving them dynamically.
+    Scans the project structure to find where imported files actually exist and updates import statements.
+    
+    Args:
+        component_code: The component code with potentially incorrect import paths
+        component_file: The file path where this code will be saved
+        project_path: Root path of the project
+    
+    Returns:
+        Component code with corrected import paths
+    """
+    import re
+    
+    # Pattern to match relative imports: import X from './path' or import X from '../path'
+    import_pattern = r"(import\s+(?:\{[^}]*\}|\w+|\*\s+as\s+\w+)\s+from\s+['\"])(\.\/[^'\"]+)(['\"])"
+    
+    def replace_import(match):
+        full_import = match.group(0)
+        import_prefix = match.group(1)
+        import_path = match.group(2)
+        import_suffix = match.group(3)
+        
+        # Extract component name from import path
+        # Handle: ./Component, ./Component.jsx, ./pages/Component, ../components/Component
+        path_parts = import_path.replace('./', '').replace('../', '').split('/')
+        component_name = path_parts[-1].replace('.jsx', '').replace('.js', '')
+        
+        # Resolve the correct path
+        resolved_path = resolve_import_path(component_name, component_file, project_path)
+        
+        if resolved_path:
+            # Use the resolved path
+            return import_prefix + resolved_path + import_suffix
+        else:
+            # If we can't resolve it, keep the original but it might be a missing component
+            return full_import
+    
+    # Replace all relative imports
+    fixed_code = re.sub(import_pattern, replace_import, component_code)
+    
+    return fixed_code
+
+
 def detect_missing_imports(component_code: str, component_file: str, project_path: str) -> List[str]:
     """
     Detect missing imported components from a React component file.
@@ -2295,14 +2510,9 @@ def detect_missing_imports(component_code: str, component_file: str, project_pat
         if '/' in import_path_clean:
             import_path_clean = import_path_clean.split('/')[-1]
         
-        # Check if file exists in pages, components, or same directory
-        possible_paths = [
-            os.path.join(pages_dir, f"{import_path_clean}.jsx"),
-            os.path.join(components_dir, f"{import_path_clean}.jsx"),
-            os.path.join(same_dir, f"{import_path_clean}.jsx"),
-        ]
-        file_exists = any(os.path.exists(p) for p in possible_paths)
-        if not file_exists and import_path_clean not in missing:
+        # Use resolve_import_path to check if file exists
+        resolved = resolve_import_path(import_path_clean, component_file, project_path)
+        if not resolved and import_path_clean not in missing:
             missing.append(import_path_clean)
     
     return missing
@@ -2422,6 +2632,9 @@ Return ONLY the complete React component code (JSX) with Tailwind CSS classes, n
             if component_code.strip().endswith("}"):
                 component_code += f"\n\nexport default {component_name};"
         
+        # **CRITICAL**: Fix import paths dynamically before saving
+        component_code = fix_import_paths(component_code, component_file, project_path)
+        
         # Save component
         with open(component_file, 'w', encoding='utf-8') as f:
             f.write(component_code)
@@ -2434,6 +2647,157 @@ Return ONLY the complete React component code (JSX) with Tailwind CSS classes, n
         if log_file:
             log_and_print(f"  ✗ Failed to generate missing component {component_name}: {e}", log_file)
         return False
+
+
+def serialize_objectid_recursively(obj):
+    """
+    Recursively convert ObjectId objects to strings in dictionaries and lists.
+    This prevents "Object of type ObjectId is not JSON serializable" errors.
+    Works for any nested structure dynamically.
+    """
+    from bson import ObjectId
+    
+    if isinstance(obj, ObjectId):
+        return str(obj)
+    elif isinstance(obj, dict):
+        return {key: serialize_objectid_recursively(value) for key, value in obj.items()}
+    elif isinstance(obj, list):
+        return [serialize_objectid_recursively(item) for item in obj]
+    elif isinstance(obj, tuple):
+        return tuple(serialize_objectid_recursively(item) for item in obj)
+    else:
+        return obj
+
+
+def ensure_objectid_serialization_in_code(code: str, use_mongodb: bool) -> str:
+    """
+    Dynamically ensure all MongoDB query results have ObjectId serialization.
+    Adds automatic serialization wrapper for find(), find_one(), and aggregate() results.
+    This prevents ObjectId serialization errors in future code generation.
+    """
+    if not use_mongodb:
+        return code
+    
+    import re
+    
+    # Pattern 1: Wrap find() results
+    # Find patterns like: attendance_records = list(collection.find())
+    find_pattern = r'(\w+)\s*=\s*list\s*\(\s*(\w+)\s*\.\s*find\s*\([^)]*\)\s*\)'
+    matches = list(re.finditer(find_pattern, code))
+    for match in reversed(matches):  # Reverse to maintain positions
+        var_name = match.group(1)
+        collection_name = match.group(2)
+        # Check if serialization already exists
+        if f"serialize_objectid_recursively" not in code[:match.end()]:
+            # Add serialization after the find
+            replacement = f"{var_name} = list({collection_name}.find())\n        # Auto-serialize ObjectIds\n        {var_name} = [serialize_objectid_recursively(doc) for doc in {var_name}]"
+            code = code[:match.start()] + replacement + code[match.end():]
+    
+    # Pattern 2: Wrap find_one() results
+    find_one_pattern = r'(\w+)\s*=\s*(\w+)\s*\.\s*find_one\s*\([^)]*\)'
+    matches = list(re.finditer(find_one_pattern, code))
+    for match in reversed(matches):
+        var_name = match.group(1)
+        collection_name = match.group(2)
+        # Check if serialization already exists
+        if f"serialize_objectid_recursively({var_name})" not in code[:match.end()]:
+            # Add serialization after find_one
+            replacement = f"{var_name} = {collection_name}.find_one()\n        if {var_name}:\n            {var_name} = serialize_objectid_recursively({var_name})"
+            code = code[:match.start()] + replacement + code[match.end():]
+    
+    # Pattern 3: Ensure _id is converted to id in all documents
+    # This is handled in the prompt, but we can also add a safety check
+    # The prompt already instructs to convert _id to id, so this is a backup
+    
+    return code
+
+
+def validate_python_syntax_and_patterns(code: str) -> Tuple[bool, Optional[str], List[str]]:
+    """
+    Dynamically validate Python code syntax and detect problematic patterns.
+    Returns: (is_valid, syntax_error_message, pattern_issues_list)
+    """
+    import ast
+    import re
+    
+    syntax_error = None
+    pattern_issues = []
+    
+    # 1. Check Python syntax using ast.parse
+    try:
+        ast.parse(code)
+    except SyntaxError as e:
+        syntax_error = f"Line {e.lineno}: {e.msg}"
+        return (False, syntax_error, pattern_issues)
+    except Exception as e:
+        # Try compile as fallback
+        try:
+            compile(code, '<string>', 'exec')
+        except SyntaxError as e2:
+            syntax_error = f"Syntax error: {str(e2)}"
+            return (False, syntax_error, pattern_issues)
+        except Exception as e2:
+            syntax_error = f"Code validation error: {str(e2)}"
+            return (False, syntax_error, pattern_issues)
+    
+    # 2. Detect problematic patterns dynamically
+    lines = code.split('\n')
+    
+    # Check for repeated patterns in a single line (like the massive or chain)
+    for i, line in enumerate(lines, 1):
+        line_stripped = line.strip()
+        if len(line_stripped) > 500:  # Very long lines are suspicious
+            # Check for repeated substrings
+            words = line_stripped.split()
+            if len(words) > 50:  # Too many tokens in one line
+                # Check for repeated patterns
+                for word in set(words):
+                    if words.count(word) > 20:  # Same word repeated 20+ times
+                        pattern_issues.append(f"Line {i}: Excessive repetition of '{word[:30]}...' (possible infinite loop pattern)")
+                        break
+                
+                # Check for unclosed parentheses in long lines
+                open_parens = line_stripped.count('(')
+                close_parens = line_stripped.count(')')
+                if open_parens > close_parens + 5:  # Significant imbalance
+                    pattern_issues.append(f"Line {i}: Unclosed parentheses detected ({open_parens} open, {close_parens} close)")
+    
+    # 3. Check for balanced brackets/parentheses/quotes across entire code
+    open_brackets = code.count('(') + code.count('[') + code.count('{')
+    close_brackets = code.count(')') + code.count(']') + code.count('}')
+    if abs(open_brackets - close_brackets) > 5:  # Significant imbalance
+        pattern_issues.append(f"Unbalanced brackets: {open_brackets} open, {close_brackets} close")
+    
+    # 4. Check for suspiciously long expressions (potential infinite generation)
+    # Look for lines with many 'or' operators in a chain
+    for i, line in enumerate(lines, 1):
+        if ' or ' in line:
+            or_count = line.count(' or ')
+            if or_count > 10:  # More than 10 'or' operators is suspicious
+                pattern_issues.append(f"Line {i}: Excessive 'or' chain ({or_count} operators) - possible infinite pattern")
+    
+    # 5. Check for repeated function calls with same arguments
+    # Pattern: session.get('userId') repeated many times
+    patterns_to_check = [
+        (r"session\.get\(['\"]\w+['\"]\)", "session.get() calls"),
+        (r"str\([^)]+\)", "str() conversions"),
+        (r"ObjectId\([^)]+\)", "ObjectId() conversions"),
+    ]
+    
+    for pattern, description in patterns_to_check:
+        matches = re.findall(pattern, code)
+        if len(matches) > 15:  # Too many similar calls
+            # Check if they're all the same
+            unique_matches = set(matches)
+            if len(unique_matches) < 3 and len(matches) > 20:  # Same pattern repeated 20+ times
+                pattern_issues.append(f"Excessive repetition of {description} ({len(matches)} occurrences)")
+    
+    # 6. Check for lines that are suspiciously long (potential truncation or infinite generation)
+    for i, line in enumerate(lines, 1):
+        if len(line) > 2000:  # Lines over 2000 chars are very suspicious
+            pattern_issues.append(f"Line {i}: Extremely long line ({len(line)} chars) - possible infinite generation")
+    
+    return (True, None, pattern_issues)
 
 
 def implement_endpoint_kaizen(endpoint: Dict, project_path: str, description: str, agent_id: int, log_file: str, is_refinement: bool = False, use_mongodb: bool = False) -> bool:
@@ -2519,11 +2883,12 @@ REQUIREMENTS:
 - Error handling: wrap ALL DB ops in try-except, handle pymongo.errors, return JSON errors with jsonify()
 - Input validation: validate required fields, types, formats, return 400 on failure
 - HTTP status: 200 GET/PUT, 201 POST, 400 invalid, 404 not found, 500 server error
-- Database connection: {"ALWAYS use the shared 'db' variable provided by app.py, NEVER create new MongoClient() or database connections. Check 'if db is None:' before operations. GET returns empty list [] if no DB, POST/PUT/DELETE return error if no DB. Derive collection names dynamically from path segments (e.g., /api/products → db['products'], /api/user/profile → db['user']). Convert ObjectId to string: str(doc['_id']). Use .count_documents() not .count(). ObjectId and PyMongoError are available in exec namespace - use them directly." if use_mongodb else "Use in-memory or skip if no DB"}
-- HTTP methods: Implement ALL methods specified in endpoint (GET, POST, PUT, DELETE). If endpoint supports POST, implement POST handler. If endpoint supports multiple methods, implement all of them.
+- Database: {"Use shared 'db' variable from app.py. Check 'if db is None:' before operations. Derive collection names from path segments. Convert ObjectId to string. Use .count_documents() not .count()." if use_mongodb else "Use in-memory or skip if no DB"}
+- HTTP methods: Implement ALL methods specified in endpoint
 - Response format: list endpoints return {{"items": [...]}}, single resource endpoints return object with 'id' as string, always use jsonify()
 - Accept camelCase and snake_case: `field = data.get('field_name') or data.get('fieldName')` for all input fields
-- ObjectId handling: Use ObjectId() from exec namespace (provided by app.py), ALWAYS wrap in try-except for conversion, handle invalid IDs with 400 error, handle missing documents with 404. For GET endpoints with <id>, try ObjectId conversion first, if fails try finding by string id field or matching string _id as fallback
+- ObjectId: Use ObjectId() from exec namespace, wrap in try-except, handle invalid IDs with 400, missing with 404
+- ObjectId serialization: Convert all ObjectId to string before JSON. Use serialize_objectid_recursively() for nested structures.
 - Edge cases: empty results [], missing data 404, invalid IDs 400, malformed JSON 400, database unavailable 500
 - No placeholders, TODOs, or incomplete code
 - No imports: Do NOT import MongoClient, ObjectId, PyMongoError, datetime, jsonify, request - these are provided by app.py exec namespace
@@ -2552,6 +2917,68 @@ Return ONLY Python route handler code starting with @app.route."""
         # Ensure it has a function definition
         if "def " not in code:
             raise Exception(f"Generated endpoint code missing function definition. Invalid endpoint code generated. Cannot proceed.")
+        
+        # **CRITICAL: Ensure ObjectId serialization is present**
+        if use_mongodb:
+            code = ensure_objectid_serialization_in_code(code, use_mongodb)
+            # Add helper function if not present (will be added to app.py exec namespace)
+            # The serialize_objectid_recursively function is available in exec namespace
+        
+        # **CRITICAL: Dynamic syntax validation and pattern detection**
+        max_retries = 2
+        for retry_attempt in range(max_retries):
+            syntax_valid, syntax_error, pattern_issues = validate_python_syntax_and_patterns(code)
+            
+            if syntax_valid and not pattern_issues:
+                # Code is valid, proceed
+                break
+            
+            if retry_attempt < max_retries - 1:
+                # Retry with cleaner prompt
+                log_and_print(f"    [Syntax Validation] Issues detected (attempt {retry_attempt + 1}/{max_retries}):", log_file)
+                if syntax_error:
+                    log_and_print(f"      - Syntax error: {syntax_error[:200]}", log_file)
+                if pattern_issues:
+                    log_and_print(f"      - Pattern issues: {', '.join(pattern_issues[:2])}", log_file)
+                log_and_print(f"    [Retry] Requesting corrected code from AI...", log_file)
+                
+                # Create retry prompt that emphasizes clean, valid code
+                retry_prompt = f"""The previous code had syntax errors or problematic patterns. Generate CORRECTED, VALID Python code.
+
+ISSUES FOUND:
+{syntax_error if syntax_error else 'None'}
+{chr(10).join(f'- {issue}' for issue in pattern_issues) if pattern_issues else ''}
+
+ORIGINAL REQUIREMENTS:
+{json.dumps(endpoint, indent=2)}
+
+CRITICAL REQUIREMENTS:
+- Generate COMPLETE, VALID Python syntax
+- NO unclosed parentheses, brackets, or quotes
+- NO repeated patterns (avoid repeating the same expression multiple times)
+- Use concise, clean code - avoid verbosity
+- Ensure all parentheses, brackets, and quotes are properly closed
+- Keep expressions simple and readable
+
+Return ONLY valid Python code starting with @app.route decorator."""
+                
+                retry_response = invoke_with_rate_limit(agent, [HumanMessage(content=retry_prompt)], log_file, estimated_tokens=2000)
+                if retry_response:
+                    retry_code = retry_response.content.strip()
+                    if "```python" in retry_code:
+                        retry_code = retry_code.split("```python")[1].split("```")[0]
+                    elif "```" in retry_code:
+                        retry_code = retry_code.split("```")[1].split("```")[0]
+                    code = retry_code
+                    continue
+            else:
+                # Final attempt failed - raise exception with details
+                error_msg = "Generated code has syntax errors that could not be fixed after retries."
+                if syntax_error:
+                    error_msg += f" Syntax error: {syntax_error[:300]}"
+                if pattern_issues:
+                    error_msg += f" Pattern issues: {', '.join(pattern_issues[:3])}"
+                raise Exception(error_msg)
         
         # Validate code quality - check for common issues
         validation_errors = []
@@ -2661,6 +3088,39 @@ Return ONLY Python route handler code starting with @app.route."""
                         validation_errors.append("ObjectId conversion should have fallback: try ObjectId conversion first, if fails try finding by string id field or matching string _id")
             else:
                 validation_errors.append("GET endpoint with <id> parameter should convert string ID to ObjectId using ObjectId(id) from exec namespace")
+        
+        # **CRITICAL VALIDATION**: Check for ObjectId serialization in all MongoDB responses
+        if use_mongodb:
+            # Check if code converts _id to id and serializes ObjectIds
+            has_id_conversion = 'id' in code and ('str(' in code or 'serialize_objectid_recursively' in code)
+            has_objectid_serialization = 'serialize_objectid_recursively' in code or ('str(' in code and 'ObjectId' in code)
+            
+            # Check for patterns that return MongoDB documents directly
+            return_patterns = [
+                r'return\s+jsonify\s*\(\s*(\w+)\s*\)',
+                r'return\s+jsonify\s*\(\s*\{\s*"items":\s*(\w+)\s*\}\)',
+            ]
+            for pattern in return_patterns:
+                matches = re.findall(pattern, code)
+                for var_name in matches:
+                    # Check if this variable comes from MongoDB query
+                    var_def_pattern = rf'{var_name}\s*=\s*.*\.(find|find_one|aggregate)'
+                    if re.search(var_def_pattern, code):
+                        # Check if ObjectId serialization is applied
+                        if not has_objectid_serialization and 'str(' not in code:
+                            validation_errors.append(f"CRITICAL: Variable '{var_name}' from MongoDB query may contain ObjectId objects - must serialize ObjectIds before returning in JSON. Use serialize_objectid_recursively() or convert _id to id and all ObjectId values to strings.")
+        
+        # **CRITICAL VALIDATION**: Check for session management based on code structure
+        # Detect authentication endpoints by structure: POST with password validation
+        if method == 'POST' and 'password' in code.lower() and ('username' in code.lower() or 'email' in code.lower()):
+            if 'session[' not in code and 'session.get' not in code:
+                validation_errors.append("CRITICAL: Authentication endpoint should set Flask session variables after successful validation.")
+        
+        # **CRITICAL VALIDATION**: Check for session usage in endpoints that read user-specific data
+        # Detect by structure: GET endpoint that queries user data without session check
+        if method == 'GET' and ('find_one' in code or 'find(' in code) and ('user' in code.lower() or '_id' in code):
+            if 'session.get' not in code and 'session[' not in code:
+                validation_errors.append("CRITICAL: Endpoint accessing user-specific data should check Flask session for authentication.")
         
         # **CRITICAL VALIDATION**: Check for duplicate imports in route files
         import_lines = re.findall(r'^(from\s+\S+\s+import|import\s+\S+)', code, re.MULTILINE)
@@ -3458,6 +3918,8 @@ CORS(app, resources={{r"/*": {{"origins": "*"}}}}, supports_credentials=True)
 # Configuration
 app.config['DEBUG'] = True
 app.config['JSON_SORT_KEYS'] = False
+# Session management (required for authentication)
+app.secret_key = os.getenv("SECRET_KEY", "supersecretkey")
 {mongodb_setup}
 # Home route
 @app.route('/')
@@ -3500,6 +3962,20 @@ if os.path.exists(route_files_dir):
             # Make app, db, and all necessary imports available in the route file's namespace
             from bson import ObjectId
             from pymongo.errors import PyMongoError
+            
+            # Helper function for ObjectId serialization (prevents serialization errors)
+            def serialize_objectid_recursively(obj):
+                if isinstance(obj, ObjectId):
+                    return str(obj)
+                elif isinstance(obj, dict):
+                    return {{key: serialize_objectid_recursively(value) for key, value in obj.items()}}
+                elif isinstance(obj, list):
+                    return [serialize_objectid_recursively(item) for item in obj]
+                elif isinstance(obj, tuple):
+                    return tuple(serialize_objectid_recursively(item) for item in obj)
+                else:
+                    return obj
+            
             exec(route_code, {{
                 'app': app, 
                 'db': db, 
@@ -3516,7 +3992,8 @@ if os.path.exists(route_files_dir):
                 'bcrypt': bcrypt,
                 'jwt': jwt,
                 'datetime': datetime,
-                're': re
+                're': re,
+                'serialize_objectid_recursively': serialize_objectid_recursively
             }})
             print(f"Loaded routes from {{route_file}}")
         except Exception as e:
@@ -3827,67 +4304,53 @@ def generate_app_js_with_routing(design: Dict[str, Any], react_path: str, log_fi
         component_name = page_name.replace(" ", "").replace("-", "")
         route_path = page_name.lower().replace(' ', '-').replace('_', '-')
         
-        # Check if this page needs dynamic routing (e.g., "Video Details", "Product Details", "Post Details")
-        # Look for keywords that suggest detail pages
-        is_detail_page = any(keyword in page_name.lower() for keyword in ['detail', 'view', 'show', 'item', 'single'])
-        
-        # If it's a detail page, check if endpoints suggest an ID parameter
+        # Determine routing needs from endpoint structure, not keywords
         page_endpoints = page.get('backend_endpoints', [])
-        has_id_endpoint = any('/:id' in ep.get('path', '') or 'id' in ep.get('path', '').lower() for ep in page_endpoints)
         
-        # Determine if dynamic route is needed
-        if is_detail_page or has_id_endpoint:
-            # Create both static and dynamic routes for flexibility
-            # Static route for pages that can work without ID (e.g., /user-account)
+        # Detect dynamic routing needs from endpoint path patterns
+        has_id_param = False
+        has_nested_path = False
+        path_segments = []
+        
+        for ep in page_endpoints:
+            ep_path = ep.get('path', '')
+            # Check for ID parameter patterns
+            if '/:id' in ep_path or '/<id>' in ep_path or re.search(r'[/-]id[/-]', ep_path):
+                has_id_param = True
+            # Check for nested path structure (e.g., /api/resource/subresource/:id)
+            path_parts = [p for p in ep_path.split('/') if p and not p.startswith(':') and not p.startswith('<')]
+            if len(path_parts) >= 3:
+                has_nested_path = True
+                path_segments = path_parts
+        
+        # Generate routes based on structure
+        if has_id_param:
             routes.append(f'            <Route path="/{route_path}" element={{<{component_name} />}} />')
-            # Dynamic route with :id parameter (e.g., /user-account/:id)
-            dynamic_route_path = f"/{route_path}/:id"
-            routes.append(f'            <Route path="{dynamic_route_path}" element={{<{component_name} />}} />')
+            routes.append(f'            <Route path="/{route_path}/:id" element={{<{component_name} />}} />')
+            
+            # Generate nested routes from endpoint path structure
+            if has_nested_path and len(path_segments) >= 2:
+                parent_seg = path_segments[1]  # e.g., "attendance" from /api/attendance/records/:id
+                child_seg = path_segments[2] if len(path_segments) > 2 else path_segments[-1]
+                nested_route = f"/{parent_seg}/{child_seg}/:id"
+                existing_routes = [r.split('"')[1] if '"' in r else r.split("'")[1] if "'" in r else '' for r in routes]
+                if nested_route not in existing_routes:
+                    routes.append(f'            <Route path="{nested_route}" element={{<{component_name} />}} />')
         else:
-            # Regular static route
             routes.append(f'            <Route path="/{route_path}" element={{<{component_name} />}} />')
         
-        # Create intelligent route aliases (GENERIC - pattern-based, works for any app)
-        # Generate common aliases based on page name patterns
-        page_name_lower = page_name.lower()
-        route_path_lower = route_path.lower()
-        
-        # Pattern 1: If page name has multiple words, create alias from last significant word
-        # e.g., "Shopping Cart" -> /cart, "Product List" -> /products, "User Profile" -> /profile
-        words = page_name_lower.split()
+        # Generate route aliases from path structure
+        words = route_path.split('-')
         if len(words) > 1:
-            # Get the last significant word (skip common words like "page", "view", "list" if they're not the only word)
-            significant_words = [w for w in words if w not in ['page', 'view', 'screen']]
-            if significant_words:
-                last_word = significant_words[-1]
-                # Create alias if it's different from full route path
-                alias_path = f"/{last_word}"
-                if alias_path != f"/{route_path}" and alias_path not in [r.split('"')[1] if '"' in r else '' for r in routes]:
-                    routes.append(f'            <Route path="{alias_path}" element={{<{component_name} />}} />')
-        
-        # Pattern 2: Create plural/singular aliases for list pages
-        # e.g., "ProductList" -> /products (plural), "Product" -> /products
-        if 'list' in page_name_lower or 'index' in page_name_lower or 'home' in page_name_lower:
-            # Extract resource name (first word before "List", "Index", etc.)
-            resource_word = words[0] if words else ''
-            if resource_word:
-                # Create plural alias
-                plural_alias = f"/{resource_word}s"  # Simple pluralization
-                if plural_alias != f"/{route_path}" and plural_alias not in [r.split('"')[1] if '"' in r else '' for r in routes]:
-                    routes.append(f'            <Route path="{plural_alias}" element={{<{component_name} />}} />')
-        
-        # Pattern 3: Create common shortened aliases for multi-word routes
-        # e.g., "ShoppingCart" -> /cart, "UserProfile" -> /profile, "ProductDetail" -> /product
-        if len(words) >= 2:
-            # Create alias from last word if route is long
-            if len(route_path) > 10:  # Only for longer routes
-                last_word_alias = f"/{words[-1]}"
-                if last_word_alias != f"/{route_path}" and last_word_alias not in [r.split('"')[1] if '"' in r else '' for r in routes]:
-                    routes.append(f'            <Route path="{last_word_alias}" element={{<{component_name} />}} />')
+            last_word = words[-1]
+            alias_path = f"/{last_word}"
+            existing_routes = [r.split('"')[1] if '"' in r else r.split("'")[1] if "'" in r else '' for r in routes]
+            if alias_path != f"/{route_path}" and alias_path not in existing_routes:
+                routes.append(f'            <Route path="{alias_path}" element={{<{component_name} />}} />')
         
         imports.append(f"import {component_name} from './pages/{component_name}.jsx';")
-        # Only add to nav if it's not a detail page (detail pages are accessed via links from list pages)
-        if not is_detail_page:
+        # Add to nav if page doesn't require ID parameter (determined by endpoint structure)
+        if not has_id_param:
             nav_links.append(f'                <Link to="/{route_path}" className="px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-white/10 hover:text-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/50">{page_name}</Link>')
     
     # First page is the home route
@@ -3899,9 +4362,11 @@ def generate_app_js_with_routing(design: Dict[str, Any], react_path: str, log_fi
     for page in pages:
         page_name = page.get('page_name', 'Unknown')
         route_path = page_name.lower().replace(' ', '-').replace('_', '-')
-        is_detail_page = any(keyword in page_name.lower() for keyword in ['detail', 'view', 'show', 'item', 'single'])
+        # Determine if page requires ID from endpoint structure
+        page_endpoints = page.get('backend_endpoints', [])
+        requires_id = any('/:id' in ep.get('path', '') or '/<id>' in ep.get('path', '') for ep in page_endpoints)
         
-        if not is_detail_page:
+        if not requires_id:
             desktop_nav_links.append(f'            <Link to="/{route_path}" className={{`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${{isActive("/{route_path}") ? "bg-white/20 text-white shadow-md" : "text-gray-300 hover:bg-white/10 hover:text-white"}}`}}>{page_name}</Link>')
             mobile_nav_links.append(f'            <Link to="/{route_path}" onClick={{() => setMobileMenuOpen(false)}} className={{`block px-4 py-3 rounded-lg text-base font-medium transition-all duration-200 ${{isActive("/{route_path}") ? "bg-white/20 text-white" : "text-gray-300 hover:bg-white/10 hover:text-white"}}`}}>{page_name}</Link>')
     
@@ -4126,6 +4591,9 @@ Return ONLY the complete React component code (JSX) with Tailwind CSS classes, n
             # Add imports if missing
             if "import React" not in component_code:
                 component_code = "import React from 'react';\n\n" + component_code
+            
+            # **CRITICAL**: Fix import paths dynamically before saving
+            component_code = fix_import_paths(component_code, component_file, react_path)
             
             # Save component file
             with open(component_file, 'w', encoding='utf-8') as f:
