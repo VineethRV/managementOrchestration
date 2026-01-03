@@ -1,14 +1,15 @@
-from requirements_agent import run_requirements_agent, finalized_requirements
-from design_orchestrator import design_application
+from finalizer import run_requirements_agent, finalized_requirements
+from frontend_backend_managers import design_application
 from project_generator import generate_projects
 from worker_agents import implement_with_worker_agents
-from backend_validator import BackendDebugger
+from backend_debugger_agent import BackendDebugger
+from token_tracker import get_tracker
 import json
 import os
 
 print("Starting requirements gathering session...\n")
 run_requirements_agent()
-
+    
 if not finalized_requirements["is_finalized"]:
     exit()
 
@@ -66,6 +67,7 @@ if design_result['frontend']['is_complete'] and design_result['backend']['is_com
             flask_path = project_paths.get('flask')
             
             if react_path and flask_path:
+                
                 implement_with_worker_agents(
                     design=design_result,
                     react_project_path=react_path,
@@ -92,3 +94,8 @@ if design_result['frontend']['is_complete'] and design_result['backend']['is_com
         print("\nProject generation skipped. You can generate projects later using the design JSON.")
 else:
     print("\n⚠ Design incomplete. Cannot generate projects.")
+
+# Print and save token consumption summary
+tracker = get_tracker()
+tracker.print_summary()
+tracker.save_summary()

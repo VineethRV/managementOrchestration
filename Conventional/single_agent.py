@@ -41,37 +41,82 @@ if not os.getenv("GROQ_API_KEY"):
 class MetricsTracker:
     """Track metrics for comparison with other approaches."""
     def __init__(self):
-        self.total_tokens = 0
-        self.bugs_encountered = 0
+        # Detailed token tracking
+        self.conversation_tokens = {"input": 0, "output": 0, "total": 0}
+        self.coding_tokens = {"input": 0, "output": 0, "total": 0}
+        
+        self.syntactic_bugs = 0
+        self.logical_bugs = 0
         self.features_implemented = 0
+        self.features_requested = 0
+        self.false_interpretations = 0
         self.lines_of_code = 0
+        self.lines_modified_debugging = 0
         self.start_time = datetime.now()
+        self.bug_details = []
         
-    def add_tokens(self, count: int):
-        self.total_tokens += count
+    def add_tokens(self, input_tokens: int, output_tokens: int, is_coding: bool = False):
+        total = input_tokens + output_tokens
+        if is_coding:
+            self.coding_tokens["input"] += input_tokens
+            self.coding_tokens["output"] += output_tokens
+            self.coding_tokens["total"] += total
+        else:
+            self.conversation_tokens["input"] += input_tokens
+            self.conversation_tokens["output"] += output_tokens
+            self.conversation_tokens["total"] += total
         
-    def add_bug(self, description: str):
-        self.bugs_encountered += 1
+    def add_bug(self, description: str, is_syntactic: bool = True):
+        if is_syntactic:
+            self.syntactic_bugs += 1
+        else:
+            self.logical_bugs += 1
+        self.bug_details.append({"description": description, "type": "syntactic" if is_syntactic else "logical"})
         
     def add_feature(self, feature_name: str):
         self.features_implemented += 1
+    
+    def set_features_requested(self, count: int):
+        self.features_requested = count
+        
+    def add_false_interpretation(self):
+        self.false_interpretations += 1
         
     def add_lines_of_code(self, count: int):
         self.lines_of_code += count
+    
+    def add_debug_modification(self, lines: int):
+        self.lines_modified_debugging += lines
         
     def get_metrics(self) -> Dict[str, Any]:
         """Get all collected metrics."""
         end_time = datetime.now()
         duration = (end_time - self.start_time).total_seconds()
         
+        # Calculate grand totals
+        total_input = self.conversation_tokens["input"] + self.coding_tokens["input"]
+        total_output = self.conversation_tokens["output"] + self.coding_tokens["output"]
+        total_all = self.conversation_tokens["total"] + self.coding_tokens["total"]
+        
         return {
-            "total_tokens": self.total_tokens,
-            "bugs_encountered": self.bugs_encountered,
+            "conversation_tokens": self.conversation_tokens["total"],
+            "conversation_tokens_breakdown": self.conversation_tokens,
+            "coding_tokens": self.coding_tokens["total"],
+            "coding_tokens_breakdown": self.coding_tokens,
+            "total_tokens": total_all,
+            "grand_total_breakdown": {"input": total_input, "output": total_output, "total": total_all},
+            "syntactic_bugs": self.syntactic_bugs,
+            "logical_bugs": self.logical_bugs,
+            "total_bugs": self.syntactic_bugs + self.logical_bugs,
             "features_implemented": self.features_implemented,
+            "features_requested": self.features_requested,
+            "false_interpretations": self.false_interpretations,
             "lines_of_code": self.lines_of_code,
+            "lines_modified_debugging": self.lines_modified_debugging,
             "duration_seconds": duration,
             "start_time": self.start_time.isoformat(),
-            "end_time": end_time.isoformat()
+            "end_time": end_time.isoformat(),
+            "bug_details": self.bug_details
         }
     
     def save(self, filepath: str):
@@ -79,6 +124,32 @@ class MetricsTracker:
         metrics = self.get_metrics()
         with open(filepath, 'w', encoding='utf-8') as f:
             json.dump(metrics, f, indent=2)
+    
+    def print_summary(self):
+        """Print a summary matching paper format."""
+        m = self.get_metrics()
+        print("\n" + "="*70)
+        print("METRICS SUMMARY (Paper Format)")
+        print("="*70)
+        print("Note: Paper comparison uses OUTPUT TOKENS ONLY")
+        print("-" * 70)
+        
+        conv = m['conversation_tokens_breakdown']
+        code = m['coding_tokens_breakdown']
+        
+        print(f"  Tokens consumed during conversation: {conv['total']:,} (Input: {conv['input']:,}, Output: {conv['output']:,})")
+        print(f"  Tokens consumed during coding: {code['total']:,} (Input: {code['input']:,}, Output: {code['output']:,})")
+        print(f"  Total tokens: {m['total_tokens']:,}")
+        print("-" * 70)
+        print(f"  Features implemented: {m['features_implemented']} out of {m['features_requested']}")
+        print(f"  False interpretations: {m['false_interpretations']} out of {m['features_requested']}")
+        print(f"  Total bugs encountered: {m['total_bugs']}")
+        print(f"    - Logical errors: {m['logical_bugs']}")
+        print(f"    - Syntactic errors: {m['syntactic_bugs']}")
+        print(f"  Lines of code modified during debugging: {m['lines_modified_debugging']}")
+        print(f"  Total lines of code generated: {m['lines_of_code']}")
+        print(f"  Duration: {m['duration_seconds']:.2f} seconds")
+        print("="*70)
 
 
 # Cache for the agent instance
@@ -110,7 +181,7 @@ def log_and_print(message: str, log_file: str):
         f.write(message + '\n')
 
 
-def invoke_with_metrics(agent, messages, log_file: str = None):
+def invoke_with_metrics(agent, messages, log_file: str = None, is_coding: bool = False):
     """Invoke agent and track token usage in metrics."""
     if agent is None:
         agent = get_single_agent()
@@ -120,12 +191,27 @@ def invoke_with_metrics(agent, messages, log_file: str = None):
     if hasattr(response, 'response_metadata') and response.response_metadata:
         token_usage = response.response_metadata.get('token_usage', {})
         if token_usage:
-            total_tokens = token_usage.get('total_tokens', 0)
-            if total_tokens:
-                metrics.add_tokens(total_tokens)
+            prompt_tokens = token_usage.get('prompt_tokens', 0)
+            completion_tokens = token_usage.get('completion_tokens', 0)
+            
+            if prompt_tokens or completion_tokens:
+                metrics.add_tokens(prompt_tokens, completion_tokens, is_coding=is_coding)
                 if log_file:
-                    log_and_print(f"[Tokens: {total_tokens}]", log_file)
+                    category = "coding" if is_coding else "conversation"
+                    log_and_print(f"[Tokens: {prompt_tokens}+{completion_tokens}={prompt_tokens+completion_tokens} ({category})]", log_file)
     
+    # Also support usage_metadata (newer LangChain versions)
+    elif hasattr(response, 'usage_metadata') and response.usage_metadata:
+        usage = response.usage_metadata
+        prompt_tokens = getattr(usage, 'input_tokens', 0)
+        completion_tokens = getattr(usage, 'output_tokens', 0)
+        
+        if prompt_tokens or completion_tokens:
+            metrics.add_tokens(prompt_tokens, completion_tokens, is_coding=is_coding)
+            if log_file:
+                category = "coding" if is_coding else "conversation"
+                log_and_print(f"[Tokens: {prompt_tokens}+{completion_tokens}={prompt_tokens+completion_tokens} ({category})]", log_file)
+
     return response
 
 
@@ -324,10 +410,7 @@ def generate_project_scaffolding(design: Dict[str, Any], react_path: str = "fron
     print("Phase 3: Project Scaffolding Generation")
     print("-" * 70)
     
-    # Import project generator from Top down directory
-    import sys
-    topdown_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "Top down")
-    sys.path.insert(0, topdown_path)
+    # Import local project generator
     from project_generator import generate_projects
     
     project_paths = generate_projects(design)
@@ -405,7 +488,7 @@ Return ONLY the complete React component code (JSX), nothing else. Start with im
 
     try:
         agent = get_single_agent()
-        response = invoke_with_metrics(agent, [HumanMessage(content=prompt)], log_file)
+        response = invoke_with_metrics(agent, [HumanMessage(content=prompt)], log_file, is_coding=True)
         component_code = response.content.strip()
         
         # Clean code blocks
@@ -436,7 +519,7 @@ Return ONLY the complete React component code (JSX), nothing else. Start with im
         
     except Exception as e:
         log_and_print(f"  ✗ Error implementing {page_name}: {e}", log_file)
-        metrics.add_bug(f"Frontend {page_name}: {str(e)}")
+        metrics.add_bug(f"Frontend {page_name}: {str(e)}", is_syntactic=True)
 
 
 def implement_backend_endpoint(endpoint: Dict, project_path: str, description: str, log_file: str):
@@ -464,7 +547,7 @@ Format as: @app.route('...', methods=['...'])\ndef ...(): ..."""
 
     try:
         agent = get_single_agent()
-        response = invoke_with_metrics(agent, [HumanMessage(content=prompt)], log_file)
+        response = invoke_with_metrics(agent, [HumanMessage(content=prompt)], log_file, is_coding=True)
         code = response.content.strip()
         
         # Clean code blocks
@@ -496,7 +579,320 @@ Format as: @app.route('...', methods=['...'])\ndef ...(): ..."""
         
     except Exception as e:
         log_and_print(f"  ✗ Error implementing {method} {path}: {e}", log_file)
-        metrics.add_bug(f"Backend {method} {path}: {str(e)}")
+        metrics.add_bug(f"Backend {method} {path}: {str(e)}", is_syntactic=True)
+
+
+def validate_and_debug_code(react_path: str, flask_path: str, description: str, max_iterations: int = 3):
+    """
+    Phase 5: Validate generated code and fix bugs.
+    Checks for syntax errors and common issues, then uses LLM to fix them.
+    
+    Args:
+        react_path: Path to React frontend project
+        flask_path: Path to Flask backend project
+        description: Application description for context
+        max_iterations: Maximum debugging iterations
+    
+    Returns:
+        Dictionary with validation results
+    """
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    log_file = os.path.join(logs_dir, f"conventional_debug_{timestamp}.log")
+    
+    print("\n" + "="*70)
+    print("Phase 5: Validation and Debugging")
+    print("-" * 70)
+    
+    total_bugs_found = 0
+    total_lines_modified = 0
+    
+    for iteration in range(max_iterations):
+        print(f"\n[Iteration {iteration + 1}/{max_iterations}]")
+        bugs_this_iteration = 0
+        
+        # Validate Python files (backend)
+        print("  Checking Python files...")
+        python_bugs = validate_python_files(flask_path, log_file)
+        bugs_this_iteration += len(python_bugs)
+        
+        # Validate JavaScript files (frontend)
+        print("  Checking JavaScript files...")
+        js_bugs = validate_js_files(react_path, log_file)
+        bugs_this_iteration += len(js_bugs)
+        
+        total_bugs_found += bugs_this_iteration
+        
+        if bugs_this_iteration == 0:
+            log_and_print(f"  ✓ No bugs found in iteration {iteration + 1}", log_file)
+            break
+        
+        log_and_print(f"  Found {bugs_this_iteration} bugs, attempting fixes...", log_file)
+        
+        # Fix Python bugs
+        for bug in python_bugs:
+            lines_fixed = fix_bug(bug, description, log_file)
+            total_lines_modified += lines_fixed
+            
+        # Fix JS bugs
+        for bug in js_bugs:
+            lines_fixed = fix_bug(bug, description, log_file)
+            total_lines_modified += lines_fixed
+    
+    # Record debugging metrics
+    metrics.add_debug_modification(total_lines_modified)
+    
+    print(f"\n  Total bugs found: {total_bugs_found}")
+    print(f"  Total lines modified: {total_lines_modified}")
+    
+    return {
+        "bugs_found": total_bugs_found,
+        "lines_modified": total_lines_modified,
+        "iterations": iteration + 1
+    }
+
+
+def validate_python_files(project_path: str, log_file: str) -> List[Dict]:
+    """Check Python files for syntax errors."""
+    import ast
+    bugs = []
+    
+    routes_dir = os.path.join(project_path, "routes")
+    if not os.path.exists(routes_dir):
+        return bugs
+    
+    for filename in os.listdir(routes_dir):
+        if filename.endswith('.py'):
+            filepath = os.path.join(routes_dir, filename)
+            try:
+                with open(filepath, 'r', encoding='utf-8') as f:
+                    code = f.read()
+                ast.parse(code)
+            except SyntaxError as e:
+                bug = {
+                    "file": filepath,
+                    "type": "syntactic",
+                    "error": str(e),
+                    "line": e.lineno,
+                    "language": "python"
+                }
+                bugs.append(bug)
+                metrics.add_bug(f"Python syntax: {filename}:{e.lineno}", is_syntactic=True)
+                log_and_print(f"    ✗ Syntax error in {filename}:{e.lineno}: {e.msg}", log_file)
+            except Exception as e:
+                bug = {
+                    "file": filepath,
+                    "type": "logical",
+                    "error": str(e),
+                    "line": 0,
+                    "language": "python"
+                }
+                bugs.append(bug)
+                metrics.add_bug(f"Python error: {filename}", is_syntactic=False)
+                log_and_print(f"    ✗ Error in {filename}: {e}", log_file)
+    
+    return bugs
+
+
+def validate_js_files(project_path: str, log_file: str) -> List[Dict]:
+    """Check JavaScript files for common issues."""
+    bugs = []
+    
+    pages_dir = os.path.join(project_path, "src", "pages")
+    if not os.path.exists(pages_dir):
+        return bugs
+    
+    for filename in os.listdir(pages_dir):
+        if filename.endswith('.js'):
+            filepath = os.path.join(pages_dir, filename)
+            try:
+                with open(filepath, 'r', encoding='utf-8') as f:
+                    code = f.read()
+                
+                # Check for common JS issues
+                issues = []
+                
+                # Check for missing imports
+                if 'axios' in code and "import axios" not in code:
+                    issues.append("Missing axios import")
+                if 'useState' in code and 'useState' not in code.split('\n')[0]:
+                    if "import React" not in code or "useState" not in code.split("import")[1].split("from")[0]:
+                        issues.append("Missing useState import")
+                
+                # Check for undefined variables patterns
+                if 'undefined' in code.lower() and 'typeof' not in code:
+                    issues.append("Potential undefined variable usage")
+                
+                # Check for unclosed brackets (basic check)
+                if code.count('{') != code.count('}'):
+                    issues.append("Mismatched curly braces")
+                if code.count('(') != code.count(')'):
+                    issues.append("Mismatched parentheses")
+                
+                for issue in issues:
+                    bug = {
+                        "file": filepath,
+                        "type": "syntactic",
+                        "error": issue,
+                        "line": 0,
+                        "language": "javascript"
+                    }
+                    bugs.append(bug)
+                    metrics.add_bug(f"JS issue: {filename} - {issue}", is_syntactic=True)
+                    log_and_print(f"    ✗ Issue in {filename}: {issue}", log_file)
+                    
+            except Exception as e:
+                bug = {
+                    "file": filepath,
+                    "type": "logical",
+                    "error": str(e),
+                    "line": 0,
+                    "language": "javascript"
+                }
+                bugs.append(bug)
+                metrics.add_bug(f"JS error: {filename}", is_syntactic=False)
+    
+    return bugs
+
+
+def fix_bug(bug: Dict, description: str, log_file: str) -> int:
+    """Use LLM to fix a detected bug. Returns lines modified."""
+    filepath = bug["file"]
+    error = bug["error"]
+    language = bug["language"]
+    
+    try:
+        with open(filepath, 'r', encoding='utf-8') as f:
+            original_code = f.read()
+        original_lines = len(original_code.split('\n'))
+        
+        prompt = f"""Fix the following bug in this {language} code.
+
+BUG: {error}
+{f"Line: {bug['line']}" if bug.get('line') else ""}
+
+APPLICATION CONTEXT: {description}
+
+CURRENT CODE:
+```{language}
+{original_code}
+```
+
+Return ONLY the complete fixed code, nothing else. No explanations."""
+
+        agent = get_single_agent()
+        response = invoke_with_metrics(agent, [HumanMessage(content=prompt)], log_file, is_coding=True)
+        fixed_code = response.content.strip()
+        
+        # Clean code blocks
+        if "```" in fixed_code:
+            parts = fixed_code.split("```")
+            if len(parts) >= 2:
+                fixed_code = parts[1]
+                if fixed_code.startswith(language) or fixed_code.startswith("python") or fixed_code.startswith("javascript"):
+                    fixed_code = fixed_code.split('\n', 1)[1] if '\n' in fixed_code else fixed_code
+                if len(parts) > 2:
+                    fixed_code = fixed_code.split("```")[0]
+        
+        # Write fixed code
+        with open(filepath, 'w', encoding='utf-8') as f:
+            f.write(fixed_code)
+        
+        new_lines = len(fixed_code.split('\n'))
+        lines_modified = abs(new_lines - original_lines) + 5  # Estimate: at least 5 lines changed
+        
+        log_and_print(f"    ✓ Fixed {os.path.basename(filepath)} (~{lines_modified} lines modified)", log_file)
+        return lines_modified
+        
+    except Exception as e:
+        log_and_print(f"    ✗ Failed to fix {os.path.basename(filepath)}: {e}", log_file)
+        return 0
+
+
+def run_experiment(spec_file: str = None, description: str = None, features: List[str] = None):
+    """
+    Non-interactive experiment mode for reproducible runs.
+    
+    Args:
+        spec_file: Path to JSON file with specification (has "detailed_description" and "features")
+        description: Direct description string (alternative to spec_file)
+        features: Direct features list (alternative to spec_file)
+    
+    Usage:
+        # From file:
+        run_experiment("specification.json")
+        
+        # Direct:
+        run_experiment(
+            description="A username management application...",
+            features=["Add username", "Check availability", "List all"]
+        )
+    """
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    log_file = os.path.join(logs_dir, f"conventional_experiment_{timestamp}.log")
+    
+    print("\n" + "="*70)
+    print("CONVENTIONAL BASELINE: EXPERIMENT MODE (NON-INTERACTIVE)")
+    print("="*70)
+    
+    # Load specification
+    if spec_file:
+        with open(spec_file, 'r', encoding='utf-8') as f:
+            spec = json.load(f)
+        description = spec.get("detailed_description", spec.get("description", ""))
+        features = spec.get("features", [])
+        log_and_print(f"Loaded specification from: {spec_file}", log_file)
+    
+    if not description or not features:
+        print("ERROR: Specification required. Provide spec_file or description+features.")
+        return None
+    
+    log_and_print(f"Description: {description[:100]}...", log_file)
+    log_and_print(f"Features: {features}", log_file)
+    
+    # Set features count for metrics
+    metrics.set_features_requested(len(features))
+    
+    # Phase 2: Design (skip requirements gathering)
+    print("\n[Phase 2] Designing application...")
+    design = design_application(description, features)
+    
+    # Save design
+    design_path = os.path.join(logs_dir, f"conventional_design_{timestamp}.json")
+    with open(design_path, 'w', encoding='utf-8') as f:
+        json.dump(design, f, indent=2)
+    
+    # Phase 3: Generate scaffolding
+    print("\n[Phase 3] Generating project scaffolding...")
+    project_paths = generate_project_scaffolding(design)
+    
+    react_path = project_paths.get('react')
+    flask_path = project_paths.get('flask')
+    
+    if not react_path or not flask_path:
+        print("ERROR: Failed to generate projects.")
+        return None
+    
+    # Phase 4: Implementation
+    print("\n[Phase 4] Implementing code...")
+    implement_all_code(design, react_path, flask_path, description)
+    
+    # Phase 5: Validation and Debugging
+    print("\n[Phase 5] Validating and debugging...")
+    debug_results = validate_and_debug_code(react_path, flask_path, description)
+    
+    # Save metrics
+    metrics_path = os.path.join(logs_dir, f"conventional_metrics_{timestamp}.json")
+    metrics.save(metrics_path)
+    
+    print("\n" + "="*70)
+    print("EXPERIMENT COMPLETE")
+    print("="*70)
+    print(f"✓ Metrics saved to: {metrics_path}")
+    
+    # Print paper-format summary
+    metrics.print_summary()
+    
+    return metrics.get_metrics()
 
 
 def main():
@@ -560,14 +956,9 @@ def main():
     print("CONVENTIONAL BASELINE COMPLETE")
     print("="*70)
     print(f"\n✓ Metrics saved to: {metrics_path}")
-    print(f"\nMetrics Summary:")
-    metrics_dict = metrics.get_metrics()
-    print(f"  - Total Tokens: {metrics_dict['total_tokens']}")
-    print(f"  - Bugs Encountered: {metrics_dict['bugs_encountered']}")
-    print(f"  - Features Implemented: {metrics_dict['features_implemented']}")
-    print(f"  - Lines of Code: {metrics_dict['lines_of_code']}")
-    print(f"  - Duration: {metrics_dict['duration_seconds']:.2f} seconds")
-    print("="*70)
+    
+    # Use paper-format summary
+    metrics.print_summary()
 
 
 if __name__ == "__main__":

@@ -1,0 +1,103 @@
+
+============================================================
+BACKEND AGENT 3 - Starting Implementation
+============================================================
+Assigned Endpoints: 36
+  - POST /api/auth/login
+  - POST /api/auth/forgot-password
+  - POST /api/auth/register
+  - GET /api/auth/validate-username
+  - POST /api/auth/validate-password
+  - GET /api/auth/user-role
+  - POST /api/auth/login-attempt
+  - POST /api/auth/teacher/login
+  - GET /api/user-roles
+  - PUT /api/user-roles
+  - POST /api/user-roles
+  - GET /api/user-roles/{roleId}
+  - PUT /api/user-roles/{roleId}
+  - DELETE /api/user-roles/{roleId}
+  - GET /api/user-roles/paginated
+  - GET /api/users
+  - POST /api/users/{userId}/roles
+  - DELETE /api/users/{userId}/roles/{roleId}
+  - GET /api/users/paginated
+  - GET /api/users/by-role/{roleId}
+  - GET /api/users/sorted
+  - GET /api/user-profile
+  - PUT /api/user-profile
+  - PUT /api/user-profile/password
+  - GET /api/account-settings
+  - PUT /api/account-settings
+  - GET /api/system-defaults
+  - PUT /api/system-defaults
+  - GET /api/roles
+  - GET /api/user/details
+  - GET /api/notifications
+  - GET /api/students?page={page}&size={size}
+  - POST /api/forgot-password
+  - GET /api/check-username-email
+  - GET /api/homepage
+  - GET /api/contact
+
+[Resource: /auth] Implementing 8 endpoints
+  Generating implementation for /auth...
+  ✗ Error: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kcxs1jj0ej4abzcx4b7y7fv6` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99991, Requested 1156. Please try again in 16m31.007999999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+
+[Resource: /user-roles] Implementing 7 endpoints
+  Generating implementation for /user-roles...
+  ✗ Error: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kcxs1jj0ej4abzcx4b7y7fv6` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99991, Requested 1223. Please try again in 17m28.896s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+
+[Resource: /users] Implementing 6 endpoints
+  Generating implementation for /users...
+  ✗ Error: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kcxs1jj0ej4abzcx4b7y7fv6` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99991, Requested 1198. Please try again in 17m7.296s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+
+[Resource: /user-profile] Implementing 3 endpoints
+  Generating implementation for /user-profile...
+  ✗ Error: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kcxs1jj0ej4abzcx4b7y7fv6` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99991, Requested 749. Please try again in 10m39.36s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+
+[Resource: /account-settings] Implementing 2 endpoints
+  Generating implementation for /account-settings...
+  ✗ Error: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kcxs1jj0ej4abzcx4b7y7fv6` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99991, Requested 590. Please try again in 8m21.984s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+
+[Resource: /system-defaults] Implementing 2 endpoints
+  Generating implementation for /system-defaults...
+  ✗ Error: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kcxs1jj0ej4abzcx4b7y7fv6` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99991, Requested 631. Please try again in 8m57.408s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+
+[Resource: /roles] Implementing 1 endpoints
+  Generating implementation for /roles...
+  ✗ Error: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kcxs1jj0ej4abzcx4b7y7fv6` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99991, Requested 459. Please try again in 6m28.799999999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+
+[Resource: /user] Implementing 1 endpoints
+  Generating implementation for /user...
+  ✗ Error: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kcxs1jj0ej4abzcx4b7y7fv6` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99991, Requested 449. Please try again in 6m20.16s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+
+[Resource: /notifications] Implementing 1 endpoints
+  Generating implementation for /notifications...
+  ✗ Error: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kcxs1jj0ej4abzcx4b7y7fv6` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99991, Requested 510. Please try again in 7m12.864s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+
+[Resource: /students?page={page}&size={size}] Implementing 1 endpoints
+  Generating implementation for /students?page={page}&size={size}...
+  ✗ Error: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kcxs1jj0ej4abzcx4b7y7fv6` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99991, Requested 498. Please try again in 7m2.496s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+
+[Resource: /forgot-password] Implementing 1 endpoints
+  Generating implementation for /forgot-password...
+  ✗ Error: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kcxs1jj0ej4abzcx4b7y7fv6` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99990, Requested 492. Please try again in 6m56.448s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+
+[Resource: /check-username-email] Implementing 1 endpoints
+  Generating implementation for /check-username-email...
+  ✗ Error: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kcxs1jj0ej4abzcx4b7y7fv6` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99990, Requested 548. Please try again in 7m44.832s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+
+[Resource: /homepage] Implementing 1 endpoints
+  Generating implementation for /homepage...
+  ✗ Error: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kcxs1jj0ej4abzcx4b7y7fv6` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99990, Requested 453. Please try again in 6m22.752s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+
+[Resource: /contact] Implementing 1 endpoints
+  Generating implementation for /contact...
+  ✗ Error: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kcxs1jj0ej4abzcx4b7y7fv6` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99990, Requested 446. Please try again in 6m16.704s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+
+============================================================
+BACKEND AGENT 3 - Completed
+Successfully implemented: 0 endpoints
+Errors: 36
+============================================================

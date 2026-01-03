@@ -1,0 +1,357 @@
+{
+  "frontend": {
+    "pages": [
+      {
+        "page_name": "Login Page",
+        "description": "Page for users to login and obtain access tokens",
+        "requirements": [
+          "username input",
+          "password input",
+          "login button"
+        ],
+        "backend_endpoints": [
+          {
+            "endpoint_name": "Login Endpoint",
+            "method": "POST",
+            "path": "/auth/login",
+            "description": "Authenticate user and issue access token",
+            "request_body": {
+              "username": "string",
+              "password": "string"
+            },
+            "response": {
+              "token": "string",
+              "role": "string"
+            }
+          }
+        ]
+      },
+      {
+        "page_name": "Registration Page",
+        "description": "Page for new users to register and obtain access tokens",
+        "requirements": [
+          "username input",
+          "password input",
+          "role selection",
+          "register button"
+        ],
+        "backend_endpoints": [
+          {
+            "endpoint_name": "Registration Endpoint",
+            "method": "POST",
+            "path": "/auth/register",
+            "description": "Register new user and issue access token",
+            "request_body": {
+              "username": "string",
+              "password": "string",
+              "role": "string"
+            },
+            "response": {
+              "token": "string",
+              "role": "string"
+            }
+          }
+        ]
+      },
+      {
+        "page_name": "Student Dashboard",
+        "description": "Page for students to view daily and historical attendance",
+        "requirements": [
+          "attendance summary display",
+          "attendance history display"
+        ],
+        "backend_endpoints": [
+          {
+            "endpoint_name": "Student Attendance Summary Endpoint",
+            "method": "GET",
+            "path": "/student/attendance/summary",
+            "description": "Retrieve student attendance summary",
+            "request_body": null,
+            "response": {
+              "attendance_summary": {
+                "total_days": "integer",
+                "present_days": "integer",
+                "absent_days": "integer"
+              }
+            }
+          },
+          {
+            "endpoint_name": "Student Attendance History Endpoint",
+            "method": "GET",
+            "path": "/student/attendance/history",
+            "description": "Retrieve student attendance history",
+            "request_body": null,
+            "response": {
+              "attendance_history": [
+                {
+                  "date": "string",
+                  "status": "string"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "page_name": "Student Attendance Marking Page",
+        "description": "Page for students to mark attendance",
+        "requirements": [
+          "mark attendance button"
+        ],
+        "backend_endpoints": [
+          {
+            "endpoint_name": "Student Attendance Marking Endpoint",
+            "method": "POST",
+            "path": "/student/attendance/mark",
+            "description": "Mark student attendance for the day",
+            "request_body": null,
+            "response": {
+              "message": "string"
+            }
+          }
+        ]
+      },
+      {
+        "page_name": "Teacher Dashboard",
+        "description": "Page for teachers to view attendance overview and filter by date or student",
+        "requirements": [
+          "attendance overview display",
+          "filter by date input",
+          "filter by student input"
+        ],
+        "backend_endpoints": [
+          {
+            "endpoint_name": "Teacher Dashboard Endpoint",
+            "method": "GET",
+            "path": "/teacher/dashboard",
+            "description": "Retrieve teacher attendance overview",
+            "request_body": null,
+            "response": {
+              "attendance_overview": {
+                "total_students": "integer",
+                "present_students": "integer",
+                "absent_students": "integer"
+              }
+            }
+          },
+          {
+            "endpoint_name": "Teacher Attendance Endpoint",
+            "method": "GET",
+            "path": "/teacher/attendance",
+            "description": "Retrieve teacher attendance records",
+            "request_body": null,
+            "response": {
+              "attendance_records": [
+                {
+                  "student_id": "integer",
+                  "date": "string",
+                  "status": "string"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "page_name": "Teacher Attendance Record Management Page",
+        "description": "Page for teachers to view and update attendance records",
+        "requirements": [
+          "attendance record display",
+          "update attendance record button"
+        ],
+        "backend_endpoints": [
+          {
+            "endpoint_name": "Teacher Attendance Record Management Endpoint",
+            "method": "PUT",
+            "path": "/teacher/attendance/{attendanceId}",
+            "description": "Update teacher attendance record",
+            "request_body": {
+              "status": "string"
+            },
+            "response": {
+              "message": "string"
+            }
+          }
+        ]
+      },
+      {
+        "page_name": "Profile Management Page",
+        "description": "Page for users to view and update profile details",
+        "requirements": [
+          "profile details display",
+          "update profile button"
+        ],
+        "backend_endpoints": [
+          {
+            "endpoint_name": "User Profile Endpoint",
+            "method": "GET",
+            "path": "/user/profile",
+            "description": "Retrieve user profile details",
+            "request_body": null,
+            "response": {
+              "profile_details": {
+                "username": "string",
+                "role": "string"
+              }
+            }
+          },
+          {
+            "endpoint_name": "User Profile Update Endpoint",
+            "method": "PUT",
+            "path": "/user/profile",
+            "description": "Update user profile details",
+            "request_body": {
+              "username": "string",
+              "role": "string"
+            },
+            "response": {
+              "message": "string"
+            }
+          }
+        ]
+      }
+    ],
+    "is_complete": true
+  },
+  "backend": {
+    "endpoints": [
+      {
+        "endpoint_name": "Login Endpoint",
+        "method": "POST",
+        "path": "/auth/login",
+        "description": "Authenticate user and issue access token",
+        "request_body": {
+          "username": "string",
+          "password": "string"
+        },
+        "response": {
+          "token": "string",
+          "role": "string"
+        }
+      },
+      {
+        "endpoint_name": "Registration Endpoint",
+        "method": "POST",
+        "path": "/auth/register",
+        "description": "Register new user and issue access token",
+        "request_body": {
+          "username": "string",
+          "password": "string",
+          "role": "string"
+        },
+        "response": {
+          "token": "string",
+          "role": "string"
+        }
+      },
+      {
+        "endpoint_name": "Student Attendance Summary Endpoint",
+        "method": "GET",
+        "path": "/student/attendance/summary",
+        "description": "Retrieve student attendance summary",
+        "request_body": null,
+        "response": {
+          "attendance_summary": {
+            "total_days": "integer",
+            "present_days": "integer",
+            "absent_days": "integer"
+          }
+        }
+      },
+      {
+        "endpoint_name": "Student Attendance History Endpoint",
+        "method": "GET",
+        "path": "/student/attendance/history",
+        "description": "Retrieve student attendance history",
+        "request_body": null,
+        "response": {
+          "attendance_history": [
+            {
+              "date": "string",
+              "status": "string"
+            }
+          ]
+        }
+      },
+      {
+        "endpoint_name": "Student Attendance Marking Endpoint",
+        "method": "POST",
+        "path": "/student/attendance/mark",
+        "description": "Mark student attendance for the day",
+        "request_body": null,
+        "response": {
+          "message": "string"
+        }
+      },
+      {
+        "endpoint_name": "Teacher Dashboard Endpoint",
+        "method": "GET",
+        "path": "/teacher/dashboard",
+        "description": "Retrieve teacher attendance overview",
+        "request_body": null,
+        "response": {
+          "attendance_overview": {
+            "total_students": "integer",
+            "present_students": "integer",
+            "absent_students": "integer"
+          }
+        }
+      },
+      {
+        "endpoint_name": "Teacher Attendance Endpoint",
+        "method": "GET",
+        "path": "/teacher/attendance",
+        "description": "Retrieve teacher attendance records",
+        "request_body": null,
+        "response": {
+          "attendance_records": [
+            {
+              "student_id": "integer",
+              "date": "string",
+              "status": "string"
+            }
+          ]
+        }
+      },
+      {
+        "endpoint_name": "Teacher Attendance Record Management Endpoint",
+        "method": "PUT",
+        "path": "/teacher/attendance/{attendanceId}",
+        "description": "Update teacher attendance record",
+        "request_body": {
+          "status": "string"
+        },
+        "response": {
+          "message": "string"
+        }
+      },
+      {
+        "endpoint_name": "User Profile Endpoint",
+        "method": "GET",
+        "path": "/user/profile",
+        "description": "Retrieve user profile details",
+        "request_body": null,
+        "response": {
+          "profile_details": {
+            "username": "string",
+            "role": "string"
+          }
+        }
+      },
+      {
+        "endpoint_name": "User Profile Update Endpoint",
+        "method": "PUT",
+        "path": "/user/profile",
+        "description": "Update user profile details",
+        "request_body": {
+          "username": "string",
+          "role": "string"
+        },
+        "response": {
+          "message": "string"
+        }
+      }
+    ],
+    "is_complete": true
+  }
+}

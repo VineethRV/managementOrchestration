@@ -15,13 +15,10 @@
 
 ## Files
 
-- `requirements_agent.py` - Requirements gathering agent (interactive chat)
-- `design_orchestrator.py` - Frontend & backend design agents with logging
+- `finalizer.py` - Requirements gathering agent (interactive chat)
+- `frontend_backend_managers.py` - Frontend & backend design agents with logging
 - `project_generator.py` - React & Flask project generator
 - `worker_agents.py` - 3 frontend + 3 backend AI worker agents for implementation
-- `backend_validator.py` - Backend environment setup and validation
-- `file_manager.py` - File operations agent using MCP tools
-- `workflow_resume.py` - Resume interrupted workflows from saved state
 - `main.py` - Complete workflow orchestration
 - `logs/` - All agent interactions, stage outputs, and session logs
 
@@ -29,12 +26,12 @@
 
 ### Multi-Stage Pipeline
 
-1. **Requirements Agent** (requirements_agent.py)
+1. **Requirements Agent** (finalizer.py)
    - Interactive chat to gather requirements
    - Confirms detailed description and features
    - Finalizes requirements for design phase
 
-2. **Design Agents** (design_orchestrator.py)
+2. **Design Agents** (frontend_backend_managers.py)
    - **Stage 1:** Frontend Agent lists all pages needed
    - **Stage 2:** Frontend Agent adds UI requirements to each page
    - **Stage 3:** Frontend Agent identifies endpoints for each page
@@ -62,7 +59,7 @@
    - Deploys worker agents for implementation
    - Saves all outputs and logs
 
-6. **Resume Script** (workflow_resume.py)
+6. **Resume Script** (resume.py)
    - Detects current project state automatically
    - Resumes from where you left off
    - Skips completed steps
@@ -85,10 +82,10 @@ python main.py
 
 ```powershell
 # Check current status
-python workflow_resume.py --status
+python resume.py --status
 
 # Resume building from where you left off
-python workflow_resume.py
+python resume.py
 ```
 
 The resume script will:
@@ -134,7 +131,7 @@ The resume script handles these situations:
 **Status Check Examples:**
 ```powershell
 # Quick status check
-python workflow_resume.py --status
+python resume.py --status
 
 # Output shows:
 # ✅ Design phase
@@ -221,20 +218,14 @@ Top down/
 │   ├── .env
 │   └── BACKEND_README.md
 │
-├── logs/                        # All logs (session logs, stage outputs, agent interactions)
-│                                # Logs are automatically generated and can be archived
-│
-├── MCPServer/                   # MCP server for file operations (used by file_manager.py)
+├── logs/                        # All logs
 │
 ├── application_design.json      # Complete design spec
-├── requirements_agent.py       # Requirements gathering
-├── design_orchestrator.py       # Design workflow
-├── project_generator.py         # Project scaffolding
-├── worker_agents.py             # Implementation agents
-├── backend_validator.py          # Backend setup/validation
-├── file_manager.py               # File operations
-├── workflow_resume.py            # Resume workflow
-└── main.py                      # Main orchestrator
+├── finalizer.py
+├── frontend_backend_managers.py
+├── project_generator.py
+├── worker_agents.py
+└── main.py
 ```
 
 ## Running Generated Projects

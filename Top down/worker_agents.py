@@ -5,6 +5,7 @@ from typing import List, Dict, Any
 from dotenv import load_dotenv
 from langchain_groq import ChatGroq
 from langchain_core.messages import HumanMessage
+from token_tracker import get_tracker
 
 load_dotenv()
 
@@ -32,6 +33,8 @@ JSON only:"""
     
     try:
         response = llm.invoke([HumanMessage(content=grouping_prompt)])
+        # Track conversation tokens for page grouping
+        get_tracker().track_conversation(response, "page_grouping")
         content = response.content.strip().replace("```json", "").replace("```", "").strip()
         groups_indices = json.loads(content)
         
@@ -157,6 +160,8 @@ Start directly with imports and component code."""
         try:
             log_print(f"  Generating implementation...")
             response = llm.invoke([HumanMessage(content=implementation_prompt)])
+            # Track coding tokens for frontend implementation
+            get_tracker().track_coding(response, "frontend_implementation")
             component_code = response.content.strip()
             
             # Clean code blocks if present
@@ -169,8 +174,10 @@ Start directly with imports and component code."""
             if "import React" not in component_code:
                 component_code = "import React, { useState, useEffect } from 'react';\nimport axios from 'axios';\n\n" + component_code
             
-            # Save component file
-            component_name = page_name.replace(" ", "").replace("-", "")
+            # Save component file - sanitize name to remove hyphens and special chars
+            component_name = page_name.replace(" ", "").replace("-", "").replace("_", "")
+            # Remove any remaining special characters
+            component_name = ''.join(c for c in component_name if c.isalnum())
             component_file = os.path.join(project_path, "src", "pages", f"{component_name}.js")
             
             with open(component_file, 'w', encoding='utf-8') as f:
@@ -291,6 +298,8 @@ Return ONLY the Python code, nothing else."""
         try:
             log_print(f"  Generating implementation for /{resource}...")
             response = llm.invoke([HumanMessage(content=implementation_prompt)])
+            # Track coding tokens for backend implementation
+            get_tracker().track_coding(response, "backend_implementation")
             code = response.content.strip()
             
             # Clean code blocks
@@ -299,8 +308,13 @@ Return ONLY the Python code, nothing else."""
             elif "```" in code:
                 code = code.split("```")[1].split("```")[0]
             
-            # Save to resource-specific file
-            resource_file = os.path.join(project_path, "routes", f"{resource}_routes.py")
+            # Sanitize resource name - replace hyphens with underscores
+            safe_resource = resource.replace('-', '_').replace(' ', '_').lower()
+            # Remove any remaining special characters except underscores
+            safe_resource = ''.join(c for c in safe_resource if c.isalnum() or c == '_')
+            
+            # Save to resource-specific file (no hyphens in filename)
+            resource_file = os.path.join(project_path, "routes", f"{safe_resource}_routes.py")
             os.makedirs(os.path.dirname(resource_file), exist_ok=True)
             
             with open(resource_file, 'w', encoding='utf-8') as f:
@@ -468,6 +482,8 @@ Return complete Python code for models.py file:"""
 
     try:
         response = llm.invoke([HumanMessage(content=prompt)])
+        # Track coding tokens for database setup
+        get_tracker().track_coding(response, "database_setup")
         code = response.content.strip()
         
         if "```python" in code:
@@ -487,6 +503,11 @@ Return complete Python code for models.py file:"""
 def update_flask_app_with_routes(project_path: str, backend_groups: List[List[Dict]]):
     """Update app.py to register all route blueprints."""
     
+    def sanitize_resource_name(name: str) -> str:
+        """Sanitize resource name - no hyphens, only underscores."""
+        safe_name = name.replace('-', '_').replace(' ', '_').lower()
+        return ''.join(c for c in safe_name if c.isalnum() or c == '_')
+    
     # Collect all unique resources
     resources = set()
     for group in backend_groups:
@@ -494,7 +515,7 @@ def update_flask_app_with_routes(project_path: str, backend_groups: List[List[Di
             path = ep.get('path', '')
             path_parts = path.strip('/').split('/')
             resource = path_parts[1] if len(path_parts) > 1 else 'general'
-            resources.add(resource)
+            resources.add(sanitize_resource_name(resource))
     
     app_py_path = os.path.join(project_path, "app.py")
     
@@ -503,7 +524,7 @@ def update_flask_app_with_routes(project_path: str, backend_groups: List[List[Di
         with open(app_py_path, 'r', encoding='utf-8') as f:
             app_content = f.read()
         
-        # Add imports for route modules
+        # Add imports for route modules (no hyphens in file names)
         import_lines = []
         register_lines = []
         

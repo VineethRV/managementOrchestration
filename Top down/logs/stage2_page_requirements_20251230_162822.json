@@ -1,0 +1,273 @@
+{
+  "stage": "Stage 2: Page Requirements",
+  "timestamp": "20251230_162822",
+  "pages": [
+    {
+      "page_name": "Login Page",
+      "description": "User authentication with role-based access",
+      "requirements": [
+        "Username input field",
+        "Password input field",
+        "Login button",
+        "Forgot password link",
+        "Registration link for new users",
+        "Role selection option (student/teacher)",
+        "Error message display for invalid credentials",
+        "Loading animation for login process",
+        "Secure password input (password masking)",
+        "Username and password validation checks",
+        "Remember me checkbox",
+        "Login failure limit and timeout functionality"
+      ],
+      "backend_endpoints": []
+    },
+    {
+      "page_name": "Registration Page",
+      "description": "User registration for students and teachers",
+      "requirements": [
+        "Username field for user input",
+        "Email field for user input",
+        "Password field for user input",
+        "Confirm password field for user input",
+        "Role selection dropdown/menu for student/teacher",
+        "Registration form submission button",
+        "Validation for empty fields",
+        "Validation for password mismatch",
+        "Validation for invalid email format",
+        "Error messages for invalid input",
+        "Success message for successful registration",
+        "Link to login page for existing users",
+        "Password strength indicator",
+        "Terms and conditions checkbox",
+        "Cancel/Back button to return to previous page"
+      ],
+      "backend_endpoints": []
+    },
+    {
+      "page_name": "Dashboard",
+      "description": "Main user interface for students and teachers",
+      "requirements": [
+        "Display user's role (student/teacher) and name on the dashboard",
+        "Provide a daily attendance marking feature for students",
+        "Display attendance records for teachers, including attendance history and patterns",
+        "Include a navigation menu or links to access other features such as profile management and password recovery",
+        "Display a calendar or date picker to allow students to mark attendance for a specific date",
+        "Provide filters or sorting options for teachers to view attendance records by date, student, or class",
+        "Include a notification or alert system to inform teachers of low attendance or irregular attendance patterns",
+        "Display attendance statistics, such as total attendance, average attendance, or attendance percentage",
+        "Provide a search function to allow teachers to find specific student attendance records",
+        "Ensure a responsive design that adapts to different screen sizes and devices"
+      ],
+      "backend_endpoints": []
+    },
+    {
+      "page_name": "Profile Management",
+      "description": "User profile editing and updating",
+      "requirements": [
+        "Display user profile information",
+        "Allow users to edit their profile details",
+        "Validate user input for profile updates",
+        "Provide a save or update button for profile changes",
+        "Display a confirmation message after successful profile update",
+        "Include a profile picture upload option",
+        "Implement password change functionality",
+        "Show a profile management menu or navigation",
+        "Ensure accessibility and responsiveness for various devices and screen sizes",
+        "Display error messages for invalid input or failed updates"
+      ],
+      "backend_endpoints": []
+    },
+    {
+      "page_name": "Password Recovery",
+      "description": "Recovering forgotten passwords",
+      "requirements": [
+        "The page should have a clear and concise title, such as 'Password Recovery'",
+        "The page should contain a form with input fields for username or email address",
+        "The form should have a submit button with a clear label, such as 'Recover Password'",
+        "The page should display a success message after a successful password recovery request",
+        "The page should display an error message if the username or email address is not found",
+        "The page should have a link to return to the login page",
+        "The page should be accessible and usable on various devices, including desktops, laptops, tablets, and mobile phones",
+        "The page should follow a consistent design pattern and branding throughout the application",
+        "The page should validate user input to prevent SQL injection and cross-site scripting (XSS) attacks",
+        "The page should provide an option to resend the password recovery email if the user does not receive it"
+      ],
+      "backend_endpoints": []
+    },
+    {
+      "page_name": "Attendance Marking",
+      "description": "Students mark their daily attendance",
+      "requirements": [
+        "Display a calendar or date picker to select the date for attendance marking",
+        "Provide a button or checkbox to mark attendance as 'present' or 'absent'",
+        "Validate user authentication to ensure only authorized students can mark their attendance",
+        "Display student's name and other relevant details to confirm identity",
+        "Include a confirmation message after successful attendance marking",
+        "Option to add comments or reasons for absence (if applicable)",
+        "Attendance marking should be restricted to a specific time frame (e.g., within a day)",
+        "Error handling for cases like duplicate attendance marking or invalid date selection",
+        "Intuitive navigation to allow students to easily access the attendance marking page",
+        "Responsive design to accommodate various devices and screen sizes"
+      ],
+      "backend_endpoints": []
+    },
+    {
+      "page_name": "Attendance Records",
+      "description": "Teachers view student attendance records",
+      "requirements": [
+        "Display a list of all students",
+        "Show attendance records for each student",
+        "Filter attendance records by date range",
+        "Search functionality to find specific students",
+        "Sortable columns for student name and attendance percentage",
+        "View detailed attendance history for each student",
+        "Display attendance status (present/absent) for each day",
+        "Export attendance records to CSV or Excel",
+        "Pagination for large lists of students",
+        "User-friendly date picker for selecting date range"
+      ],
+      "backend_endpoints": []
+    },
+    {
+      "page_name": "Attendance History",
+      "description": "Detailed view of student attendance history",
+      "requirements": [
+        "Display student's attendance history in a tabular or calendar format",
+        "Include date range filter to view attendance history for a specific period",
+        "Show attendance status (present/absent) for each day",
+        "Provide a search function to find specific attendance records",
+        "Display total number of days present and absent",
+        "Include a summary or overview of attendance percentage",
+        "Allow teachers to export attendance history in CSV or PDF format",
+        "Implement pagination or scrolling for large attendance history datasets",
+        "Display student's profile information (name, ID, etc.) on the attendance history page",
+        "Ensure attendance history data is sorted in chronological order by default"
+      ],
+      "backend_endpoints": []
+    },
+    {
+      "page_name": "Settings",
+      "description": "Application settings and configuration",
+      "requirements": [
+        "Display application name and logo",
+        "Provide navigation menu with settings option",
+        "Include search functionality for settings",
+        "Display user profile information with edit option",
+        "Offer password change functionality",
+        "Provide option to manage account settings",
+        "Include option to configure notification preferences",
+        "Display option to manage user roles and permissions",
+        "Provide option to view and edit attendance settings",
+        "Include option to configure system defaults",
+        "Display save and cancel buttons for settings changes",
+        "Validate user input for settings changes",
+        "Display error messages for invalid settings changes",
+        "Provide option to reset settings to default values"
+      ],
+      "backend_endpoints": []
+    },
+    {
+      "page_name": "Forgot Password",
+      "description": "Initiating password recovery process",
+      "requirements": [
+        "The page should have a clear and concise title, such as 'Forgot Password'",
+        "The page should contain a form with input fields for username or email",
+        "The form should have a submit button to initiate the password recovery process",
+        "The page should display a notification or message after the password recovery process is initiated",
+        "The page should have a link to return to the login page",
+        "The page should be accessible from the login page",
+        "The page should validate user input to ensure it matches the username or email in the system",
+        "The page should send a password recovery email to the user's registered email address",
+        "The page should handle cases where the username or email is not found in the system",
+        "The page should follow the system's design and branding guidelines"
+      ],
+      "backend_endpoints": []
+    },
+    {
+      "page_name": "User Roles Management",
+      "description": "Managing user roles and access control",
+      "requirements": [
+        "Display a list of all existing user roles",
+        "Allow administrators to add new user roles",
+        "Allow administrators to edit existing user roles",
+        "Allow administrators to delete existing user roles",
+        "Display a list of all users with their assigned roles",
+        "Allow administrators to assign roles to users",
+        "Allow administrators to unassign roles from users",
+        "Validate user input for role creation and editing",
+        "Implement access control to restrict user role management to authorized administrators",
+        "Display role descriptions and permissions for clarity",
+        "Provide a search function to find specific users or roles",
+        "Implement pagination for large lists of users or roles",
+        "Display the total number of users and roles",
+        "Allow administrators to filter users by role",
+        "Allow administrators to sort users by name, role, or other relevant criteria"
+      ],
+      "backend_endpoints": []
+    },
+    {
+      "page_name": "Error 404 Page",
+      "description": "Handling invalid or non-existent page requests",
+      "requirements": [
+        "Display a clear 'Error 404' or 'Page Not Found' message",
+        "Provide a brief description of the error and possible causes",
+        "Include a link to the homepage or dashboard for easy navigation",
+        "Offer a search function to help users find what they are looking for",
+        "Display a 'Back to Previous Page' button to allow users to return to their previous location",
+        "Maintain a consistent design and layout with the rest of the application",
+        "Ensure accessibility and readability of the error page for all users",
+        "Include a contact or support link for users to report issues or request help"
+      ],
+      "backend_endpoints": []
+    },
+    {
+      "page_name": "Error 500 Page",
+      "description": "Handling internal server errors",
+      "requirements": [
+        "Display a clear and concise error message indicating that an internal server error has occurred",
+        "Provide a unique error code or identifier for debugging purposes",
+        "Include a button or link to return to the previous page or the dashboard",
+        "Offer an option to refresh the page or retry the action that caused the error",
+        "Display a contact link or email address for users to report the issue to the system administrators",
+        "Ensure the error page is accessible and follows the same branding as the rest of the application",
+        "Log the error on the server-side for further investigation and debugging",
+        "Do not reveal sensitive information about the server or application in the error message"
+      ],
+      "backend_endpoints": []
+    },
+    {
+      "page_name": "Attendance Analytics",
+      "description": "Teachers view attendance patterns and statistics",
+      "requirements": [
+        "Display attendance statistics for each student",
+        "Show attendance patterns over time (e.g., daily, weekly, monthly)",
+        "Provide filters for date range, student name, and class",
+        "Include a search bar to find specific students",
+        "Display student attendance percentage",
+        "Allow teachers to view attendance records for individual students",
+        "Show overall class attendance statistics",
+        "Enable sorting and pagination for attendance data",
+        "Display attendance status (e.g., present, absent, late) for each student",
+        "Include visualizations (e.g., charts, graphs) to represent attendance data"
+      ],
+      "backend_endpoints": []
+    },
+    {
+      "page_name": "Student Information",
+      "description": "Teachers view student information and details",
+      "requirements": [
+        "Display student profile information",
+        "Show student attendance records",
+        "Include student details such as name, class, and enrollment number",
+        "Provide a search function to find specific students",
+        "Allow teachers to filter students by class or attendance status",
+        "Display attendance history with dates and status",
+        "Include a dashboard view for teachers to overview student attendance",
+        "Enable teachers to view student profile pictures and contact information",
+        "Provide a link to view detailed attendance records for each student",
+        "Ensure user authentication and role-based access to secure student information"
+      ],
+      "backend_endpoints": []
+    }
+  ]
+}

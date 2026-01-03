@@ -1,8 +1,0 @@
-STAGE 1: PAGE LIST
-Timestamp: 20251202_084604
-============================================================
-
-1. Homepage - Displays the current date and time fetched from the Flask backend server.
-2. Error Page - Handles and displays any errors that occur during data fetching or application execution.
-3. About Page - Provides information about the application and its features.
-4. Loading Screen - Displays a loading animation while the application fetches data from the backend server.

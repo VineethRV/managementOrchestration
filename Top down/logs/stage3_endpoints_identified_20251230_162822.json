@@ -1,0 +1,1008 @@
+{
+  "stage": "Stage 3: Endpoints Identified",
+  "timestamp": "20251230_162822",
+  "pages_with_endpoints": [
+    {
+      "page_name": "Login Page",
+      "description": "User authentication with role-based access",
+      "requirements": [
+        "Username input field",
+        "Password input field",
+        "Login button",
+        "Forgot password link",
+        "Registration link for new users",
+        "Role selection option (student/teacher)",
+        "Error message display for invalid credentials",
+        "Loading animation for login process",
+        "Secure password input (password masking)",
+        "Username and password validation checks",
+        "Remember me checkbox",
+        "Login failure limit and timeout functionality"
+      ],
+      "backend_endpoints": [
+        {
+          "endpoint_name": "login",
+          "description": "Authenticate user credentials",
+          "method": "POST",
+          "path": "/api/auth/login"
+        },
+        {
+          "endpoint_name": "forgot_password",
+          "description": "Send password reset link to user",
+          "method": "POST",
+          "path": "/api/auth/forgot-password"
+        },
+        {
+          "endpoint_name": "register",
+          "description": "Create new user account",
+          "method": "POST",
+          "path": "/api/auth/register"
+        },
+        {
+          "endpoint_name": "validate_username",
+          "description": "Check if username is available",
+          "method": "GET",
+          "path": "/api/auth/validate-username"
+        },
+        {
+          "endpoint_name": "validate_password",
+          "description": "Check if password meets requirements",
+          "method": "POST",
+          "path": "/api/auth/validate-password"
+        },
+        {
+          "endpoint_name": "get_user_role",
+          "description": "Retrieve user role",
+          "method": "GET",
+          "path": "/api/auth/user-role"
+        },
+        {
+          "endpoint_name": "login_attempt",
+          "description": "Track login attempts and enforce login failure limit and timeout",
+          "method": "POST",
+          "path": "/api/auth/login-attempt"
+        }
+      ]
+    },
+    {
+      "page_name": "Registration Page",
+      "description": "User registration for students and teachers",
+      "requirements": [
+        "Username field for user input",
+        "Email field for user input",
+        "Password field for user input",
+        "Confirm password field for user input",
+        "Role selection dropdown/menu for student/teacher",
+        "Registration form submission button",
+        "Validation for empty fields",
+        "Validation for password mismatch",
+        "Validation for invalid email format",
+        "Error messages for invalid input",
+        "Success message for successful registration",
+        "Link to login page for existing users",
+        "Password strength indicator",
+        "Terms and conditions checkbox",
+        "Cancel/Back button to return to previous page"
+      ],
+      "backend_endpoints": [
+        {
+          "endpoint_name": "Register User",
+          "description": "Handles user registration",
+          "method": "POST",
+          "path": "/api/register"
+        },
+        {
+          "endpoint_name": "Validate Email",
+          "description": "Checks if an email is already in use",
+          "method": "GET",
+          "path": "/api/validate-email"
+        },
+        {
+          "endpoint_name": "Validate Username",
+          "description": "Checks if a username is already in use",
+          "method": "GET",
+          "path": "/api/validate-username"
+        },
+        {
+          "endpoint_name": "Get Roles",
+          "description": "Retrieves available roles for registration",
+          "method": "GET",
+          "path": "/api/roles"
+        },
+        {
+          "endpoint_name": "Get Terms and Conditions",
+          "description": "Retrieves terms and conditions for registration",
+          "method": "GET",
+          "path": "/api/terms-and-conditions"
+        },
+        {
+          "endpoint_name": "Check Password Strength",
+          "description": "Evaluates the strength of a given password",
+          "method": "POST",
+          "path": "/api/check-password-strength"
+        }
+      ]
+    },
+    {
+      "page_name": "Dashboard",
+      "description": "Main user interface for students and teachers",
+      "requirements": [
+        "Display user's role (student/teacher) and name on the dashboard",
+        "Provide a daily attendance marking feature for students",
+        "Display attendance records for teachers, including attendance history and patterns",
+        "Include a navigation menu or links to access other features such as profile management and password recovery",
+        "Display a calendar or date picker to allow students to mark attendance for a specific date",
+        "Provide filters or sorting options for teachers to view attendance records by date, student, or class",
+        "Include a notification or alert system to inform teachers of low attendance or irregular attendance patterns",
+        "Display attendance statistics, such as total attendance, average attendance, or attendance percentage",
+        "Provide a search function to allow teachers to find specific student attendance records",
+        "Ensure a responsive design that adapts to different screen sizes and devices"
+      ],
+      "backend_endpoints": [
+        {
+          "endpoint_name": "Get User Details",
+          "description": "Retrieve user's role and name",
+          "method": "GET",
+          "path": "/api/user/details"
+        },
+        {
+          "endpoint_name": "Mark Attendance",
+          "description": "Mark attendance for a student",
+          "method": "POST",
+          "path": "/api/attendance/mark"
+        },
+        {
+          "endpoint_name": "Get Attendance Records",
+          "description": "Retrieve attendance records for a teacher",
+          "method": "GET",
+          "path": "/api/attendance/records"
+        },
+        {
+          "endpoint_name": "Get Attendance History",
+          "description": "Retrieve attendance history for a student or class",
+          "method": "GET",
+          "path": "/api/attendance/history"
+        },
+        {
+          "endpoint_name": "Get Attendance Patterns",
+          "description": "Retrieve attendance patterns for a student or class",
+          "method": "GET",
+          "path": "/api/attendance/patterns"
+        },
+        {
+          "endpoint_name": "Get Navigation Menu",
+          "description": "Retrieve navigation menu items",
+          "method": "GET",
+          "path": "/api/menu/items"
+        },
+        {
+          "endpoint_name": "Get Calendar",
+          "description": "Retrieve calendar data",
+          "method": "GET",
+          "path": "/api/calendar/data"
+        },
+        {
+          "endpoint_name": "Filter Attendance Records",
+          "description": "Filter attendance records by date, student, or class",
+          "method": "GET",
+          "path": "/api/attendance/records/filter"
+        },
+        {
+          "endpoint_name": "Get Notifications",
+          "description": "Retrieve notifications for a teacher",
+          "method": "GET",
+          "path": "/api/notifications"
+        },
+        {
+          "endpoint_name": "Get Attendance Statistics",
+          "description": "Retrieve attendance statistics",
+          "method": "GET",
+          "path": "/api/attendance/statistics"
+        },
+        {
+          "endpoint_name": "Search Attendance Records",
+          "description": "Search attendance records for a specific student",
+          "method": "GET",
+          "path": "/api/attendance/records/search"
+        }
+      ]
+    },
+    {
+      "page_name": "Profile Management",
+      "description": "User profile editing and updating",
+      "requirements": [
+        "Display user profile information",
+        "Allow users to edit their profile details",
+        "Validate user input for profile updates",
+        "Provide a save or update button for profile changes",
+        "Display a confirmation message after successful profile update",
+        "Include a profile picture upload option",
+        "Implement password change functionality",
+        "Show a profile management menu or navigation",
+        "Ensure accessibility and responsiveness for various devices and screen sizes",
+        "Display error messages for invalid input or failed updates"
+      ],
+      "backend_endpoints": [
+        {
+          "endpoint_name": "Get User Profile",
+          "description": "Retrieve user profile information",
+          "method": "GET",
+          "path": "/api/profile"
+        },
+        {
+          "endpoint_name": "Update User Profile",
+          "description": "Update user profile details",
+          "method": "PUT",
+          "path": "/api/profile"
+        },
+        {
+          "endpoint_name": "Upload Profile Picture",
+          "description": "Upload a new profile picture",
+          "method": "POST",
+          "path": "/api/profile/picture"
+        },
+        {
+          "endpoint_name": "Change Password",
+          "description": "Change user password",
+          "method": "POST",
+          "path": "/api/profile/password"
+        },
+        {
+          "endpoint_name": "Validate Profile Updates",
+          "description": "Validate user input for profile updates",
+          "method": "POST",
+          "path": "/api/profile/validate"
+        }
+      ]
+    },
+    {
+      "page_name": "Password Recovery",
+      "description": "Recovering forgotten passwords",
+      "requirements": [
+        "The page should have a clear and concise title, such as 'Password Recovery'",
+        "The page should contain a form with input fields for username or email address",
+        "The form should have a submit button with a clear label, such as 'Recover Password'",
+        "The page should display a success message after a successful password recovery request",
+        "The page should display an error message if the username or email address is not found",
+        "The page should have a link to return to the login page",
+        "The page should be accessible and usable on various devices, including desktops, laptops, tablets, and mobile phones",
+        "The page should follow a consistent design pattern and branding throughout the application",
+        "The page should validate user input to prevent SQL injection and cross-site scripting (XSS) attacks",
+        "The page should provide an option to resend the password recovery email if the user does not receive it"
+      ],
+      "backend_endpoints": [
+        {
+          "endpoint_name": "Send Password Recovery Email",
+          "description": "Sends a password recovery email to the user",
+          "method": "POST",
+          "path": "/api/password-recovery/send-email"
+        },
+        {
+          "endpoint_name": "Validate Username or Email",
+          "description": "Validates if the username or email address exists in the database",
+          "method": "POST",
+          "path": "/api/password-recovery/validate-credentials"
+        },
+        {
+          "endpoint_name": "Resend Password Recovery Email",
+          "description": "Resends the password recovery email if the user does not receive it",
+          "method": "POST",
+          "path": "/api/password-recovery/resend-email"
+        },
+        {
+          "endpoint_name": "Reset Password",
+          "description": "Resets the user's password",
+          "method": "PUT",
+          "path": "/api/password-recovery/reset-password"
+        },
+        {
+          "endpoint_name": "Verify Password Recovery Token",
+          "description": "Verifies the password recovery token sent in the email",
+          "method": "GET",
+          "path": "/api/password-recovery/verify-token"
+        }
+      ]
+    },
+    {
+      "page_name": "Attendance Marking",
+      "description": "Students mark their daily attendance",
+      "requirements": [
+        "Display a calendar or date picker to select the date for attendance marking",
+        "Provide a button or checkbox to mark attendance as 'present' or 'absent'",
+        "Validate user authentication to ensure only authorized students can mark their attendance",
+        "Display student's name and other relevant details to confirm identity",
+        "Include a confirmation message after successful attendance marking",
+        "Option to add comments or reasons for absence (if applicable)",
+        "Attendance marking should be restricted to a specific time frame (e.g., within a day)",
+        "Error handling for cases like duplicate attendance marking or invalid date selection",
+        "Intuitive navigation to allow students to easily access the attendance marking page",
+        "Responsive design to accommodate various devices and screen sizes"
+      ],
+      "backend_endpoints": [
+        {
+          "endpoint_name": "Get Student Details",
+          "description": "Retrieve student details to confirm identity",
+          "method": "GET",
+          "path": "/api/student/details"
+        },
+        {
+          "endpoint_name": "Get Attendance Calendar",
+          "description": "Fetch calendar data for attendance marking",
+          "method": "GET",
+          "path": "/api/attendance/calendar"
+        },
+        {
+          "endpoint_name": "Mark Attendance",
+          "description": "Mark student attendance as 'present' or 'absent'",
+          "method": "POST",
+          "path": "/api/attendance/mark"
+        },
+        {
+          "endpoint_name": "Add Attendance Comment",
+          "description": "Add comments or reasons for absence",
+          "method": "POST",
+          "path": "/api/attendance/comment"
+        },
+        {
+          "endpoint_name": "Check Attendance Status",
+          "description": "Check if attendance is already marked for the day",
+          "method": "GET",
+          "path": "/api/attendance/status"
+        },
+        {
+          "endpoint_name": "Validate Attendance Time Frame",
+          "description": "Check if attendance marking is within the allowed time frame",
+          "method": "GET",
+          "path": "/api/attendance/timeframe"
+        },
+        {
+          "endpoint_name": "Authenticate Student",
+          "description": "Validate user authentication to ensure only authorized students can mark their attendance",
+          "method": "POST",
+          "path": "/api/authenticate/student"
+        },
+        {
+          "endpoint_name": "Get Attendance History",
+          "description": "Fetch attendance history for the student",
+          "method": "GET",
+          "path": "/api/attendance/history"
+        }
+      ]
+    },
+    {
+      "page_name": "Attendance Records",
+      "description": "Teachers view student attendance records",
+      "requirements": [
+        "Display a list of all students",
+        "Show attendance records for each student",
+        "Filter attendance records by date range",
+        "Search functionality to find specific students",
+        "Sortable columns for student name and attendance percentage",
+        "View detailed attendance history for each student",
+        "Display attendance status (present/absent) for each day",
+        "Export attendance records to CSV or Excel",
+        "Pagination for large lists of students",
+        "User-friendly date picker for selecting date range"
+      ],
+      "backend_endpoints": [
+        {
+          "endpoint_name": "Get All Students",
+          "description": "Retrieve a list of all students",
+          "method": "GET",
+          "path": "/api/students"
+        },
+        {
+          "endpoint_name": "Get Student Attendance Records",
+          "description": "Retrieve attendance records for a specific student",
+          "method": "GET",
+          "path": "/api/students/{studentId}/attendance"
+        },
+        {
+          "endpoint_name": "Filter Attendance Records By Date Range",
+          "description": "Retrieve attendance records for a specific date range",
+          "method": "GET",
+          "path": "/api/students/{studentId}/attendance?startDate={startDate}&endDate={endDate}"
+        },
+        {
+          "endpoint_name": "Search Students",
+          "description": "Search for specific students by name or ID",
+          "method": "GET",
+          "path": "/api/students/search?q={query}"
+        },
+        {
+          "endpoint_name": "Get Detailed Attendance History",
+          "description": "Retrieve detailed attendance history for a specific student",
+          "method": "GET",
+          "path": "/api/students/{studentId}/attendance/history"
+        },
+        {
+          "endpoint_name": "Export Attendance Records To CSV",
+          "description": "Export attendance records to CSV",
+          "method": "GET",
+          "path": "/api/students/attendance/export/csv"
+        },
+        {
+          "endpoint_name": "Export Attendance Records To Excel",
+          "description": "Export attendance records to Excel",
+          "method": "GET",
+          "path": "/api/students/attendance/export/excel"
+        },
+        {
+          "endpoint_name": "Get Paginated Students List",
+          "description": "Retrieve a paginated list of students",
+          "method": "GET",
+          "path": "/api/students?page={page}&size={size}"
+        }
+      ]
+    },
+    {
+      "page_name": "Attendance History",
+      "description": "Detailed view of student attendance history",
+      "requirements": [
+        "Display student's attendance history in a tabular or calendar format",
+        "Include date range filter to view attendance history for a specific period",
+        "Show attendance status (present/absent) for each day",
+        "Provide a search function to find specific attendance records",
+        "Display total number of days present and absent",
+        "Include a summary or overview of attendance percentage",
+        "Allow teachers to export attendance history in CSV or PDF format",
+        "Implement pagination or scrolling for large attendance history datasets",
+        "Display student's profile information (name, ID, etc.) on the attendance history page",
+        "Ensure attendance history data is sorted in chronological order by default"
+      ],
+      "backend_endpoints": [
+        {
+          "endpoint_name": "Get Student Profile",
+          "description": "Retrieve student's profile information",
+          "method": "GET",
+          "path": "/api/students/{studentId}/profile"
+        },
+        {
+          "endpoint_name": "Get Attendance History",
+          "description": "Retrieve student's attendance history",
+          "method": "GET",
+          "path": "/api/students/{studentId}/attendance/history"
+        },
+        {
+          "endpoint_name": "Get Attendance History By Date Range",
+          "description": "Retrieve student's attendance history for a specific date range",
+          "method": "GET",
+          "path": "/api/students/{studentId}/attendance/history/byDateRange"
+        },
+        {
+          "endpoint_name": "Search Attendance Records",
+          "description": "Search for specific attendance records",
+          "method": "GET",
+          "path": "/api/students/{studentId}/attendance/history/search"
+        },
+        {
+          "endpoint_name": "Export Attendance History",
+          "description": "Export student's attendance history in CSV or PDF format",
+          "method": "GET",
+          "path": "/api/students/{studentId}/attendance/history/export"
+        },
+        {
+          "endpoint_name": "Get Attendance Summary",
+          "description": "Retrieve student's attendance summary (total days present, absent, percentage)",
+          "method": "GET",
+          "path": "/api/students/{studentId}/attendance/summary"
+        }
+      ]
+    },
+    {
+      "page_name": "Settings",
+      "description": "Application settings and configuration",
+      "requirements": [
+        "Display application name and logo",
+        "Provide navigation menu with settings option",
+        "Include search functionality for settings",
+        "Display user profile information with edit option",
+        "Offer password change functionality",
+        "Provide option to manage account settings",
+        "Include option to configure notification preferences",
+        "Display option to manage user roles and permissions",
+        "Provide option to view and edit attendance settings",
+        "Include option to configure system defaults",
+        "Display save and cancel buttons for settings changes",
+        "Validate user input for settings changes",
+        "Display error messages for invalid settings changes",
+        "Provide option to reset settings to default values"
+      ],
+      "backend_endpoints": [
+        {
+          "endpoint_name": "Get Application Info",
+          "description": "Retrieve application name and logo",
+          "method": "GET",
+          "path": "/api/app-info"
+        },
+        {
+          "endpoint_name": "Get Navigation Menu",
+          "description": "Retrieve navigation menu with settings option",
+          "method": "GET",
+          "path": "/api/navigation-menu"
+        },
+        {
+          "endpoint_name": "Search Settings",
+          "description": "Search for settings options",
+          "method": "GET",
+          "path": "/api/settings/search"
+        },
+        {
+          "endpoint_name": "Get User Profile",
+          "description": "Retrieve user profile information",
+          "method": "GET",
+          "path": "/api/user-profile"
+        },
+        {
+          "endpoint_name": "Update User Profile",
+          "description": "Update user profile information",
+          "method": "PUT",
+          "path": "/api/user-profile"
+        },
+        {
+          "endpoint_name": "Change Password",
+          "description": "Change user password",
+          "method": "PUT",
+          "path": "/api/user-profile/password"
+        },
+        {
+          "endpoint_name": "Get Account Settings",
+          "description": "Retrieve account settings",
+          "method": "GET",
+          "path": "/api/account-settings"
+        },
+        {
+          "endpoint_name": "Update Account Settings",
+          "description": "Update account settings",
+          "method": "PUT",
+          "path": "/api/account-settings"
+        },
+        {
+          "endpoint_name": "Get Notification Preferences",
+          "description": "Retrieve notification preferences",
+          "method": "GET",
+          "path": "/api/notification-preferences"
+        },
+        {
+          "endpoint_name": "Update Notification Preferences",
+          "description": "Update notification preferences",
+          "method": "PUT",
+          "path": "/api/notification-preferences"
+        },
+        {
+          "endpoint_name": "Get User Roles and Permissions",
+          "description": "Retrieve user roles and permissions",
+          "method": "GET",
+          "path": "/api/user-roles"
+        },
+        {
+          "endpoint_name": "Update User Roles and Permissions",
+          "description": "Update user roles and permissions",
+          "method": "PUT",
+          "path": "/api/user-roles"
+        },
+        {
+          "endpoint_name": "Get Attendance Settings",
+          "description": "Retrieve attendance settings",
+          "method": "GET",
+          "path": "/api/attendance-settings"
+        },
+        {
+          "endpoint_name": "Update Attendance Settings",
+          "description": "Update attendance settings",
+          "method": "PUT",
+          "path": "/api/attendance-settings"
+        },
+        {
+          "endpoint_name": "Get System Defaults",
+          "description": "Retrieve system default settings",
+          "method": "GET",
+          "path": "/api/system-defaults"
+        },
+        {
+          "endpoint_name": "Update System Defaults",
+          "description": "Update system default settings",
+          "method": "PUT",
+          "path": "/api/system-defaults"
+        },
+        {
+          "endpoint_name": "Reset Settings to Default",
+          "description": "Reset settings to default values",
+          "method": "POST",
+          "path": "/api/settings/reset"
+        },
+        {
+          "endpoint_name": "Save Settings Changes",
+          "description": "Save settings changes",
+          "method": "POST",
+          "path": "/api/settings/save"
+        },
+        {
+          "endpoint_name": "Validate Settings Changes",
+          "description": "Validate settings changes",
+          "method": "POST",
+          "path": "/api/settings/validate"
+        }
+      ]
+    },
+    {
+      "page_name": "Forgot Password",
+      "description": "Initiating password recovery process",
+      "requirements": [
+        "The page should have a clear and concise title, such as 'Forgot Password'",
+        "The page should contain a form with input fields for username or email",
+        "The form should have a submit button to initiate the password recovery process",
+        "The page should display a notification or message after the password recovery process is initiated",
+        "The page should have a link to return to the login page",
+        "The page should be accessible from the login page",
+        "The page should validate user input to ensure it matches the username or email in the system",
+        "The page should send a password recovery email to the user's registered email address",
+        "The page should handle cases where the username or email is not found in the system",
+        "The page should follow the system's design and branding guidelines"
+      ],
+      "backend_endpoints": [
+        {
+          "endpoint_name": "Initiate Password Recovery",
+          "description": "Initiate password recovery process by sending a recovery email to the user's registered email address",
+          "method": "POST",
+          "path": "/api/forgot-password"
+        },
+        {
+          "endpoint_name": "Validate User Credentials",
+          "description": "Validate user input to ensure it matches the username or email in the system",
+          "method": "POST",
+          "path": "/api/validate-credentials"
+        },
+        {
+          "endpoint_name": "Send Recovery Email",
+          "description": "Send a password recovery email to the user's registered email address",
+          "method": "POST",
+          "path": "/api/send-recovery-email"
+        },
+        {
+          "endpoint_name": "Check Username or Email Availability",
+          "description": "Check if the username or email exists in the system",
+          "method": "GET",
+          "path": "/api/check-username-email"
+        }
+      ]
+    },
+    {
+      "page_name": "User Roles Management",
+      "description": "Managing user roles and access control",
+      "requirements": [
+        "Display a list of all existing user roles",
+        "Allow administrators to add new user roles",
+        "Allow administrators to edit existing user roles",
+        "Allow administrators to delete existing user roles",
+        "Display a list of all users with their assigned roles",
+        "Allow administrators to assign roles to users",
+        "Allow administrators to unassign roles from users",
+        "Validate user input for role creation and editing",
+        "Implement access control to restrict user role management to authorized administrators",
+        "Display role descriptions and permissions for clarity",
+        "Provide a search function to find specific users or roles",
+        "Implement pagination for large lists of users or roles",
+        "Display the total number of users and roles",
+        "Allow administrators to filter users by role",
+        "Allow administrators to sort users by name, role, or other relevant criteria"
+      ],
+      "backend_endpoints": [
+        {
+          "endpoint_name": "Get All User Roles",
+          "description": "Display a list of all existing user roles",
+          "method": "GET",
+          "path": "/api/user-roles"
+        },
+        {
+          "endpoint_name": "Create New User Role",
+          "description": "Allow administrators to add new user roles",
+          "method": "POST",
+          "path": "/api/user-roles"
+        },
+        {
+          "endpoint_name": "Get User Role By ID",
+          "description": "Retrieve a specific user role by ID for editing",
+          "method": "GET",
+          "path": "/api/user-roles/{roleId}"
+        },
+        {
+          "endpoint_name": "Update User Role",
+          "description": "Allow administrators to edit existing user roles",
+          "method": "PUT",
+          "path": "/api/user-roles/{roleId}"
+        },
+        {
+          "endpoint_name": "Delete User Role",
+          "description": "Allow administrators to delete existing user roles",
+          "method": "DELETE",
+          "path": "/api/user-roles/{roleId}"
+        },
+        {
+          "endpoint_name": "Get All Users With Roles",
+          "description": "Display a list of all users with their assigned roles",
+          "method": "GET",
+          "path": "/api/users"
+        },
+        {
+          "endpoint_name": "Assign Role To User",
+          "description": "Allow administrators to assign roles to users",
+          "method": "POST",
+          "path": "/api/users/{userId}/roles"
+        },
+        {
+          "endpoint_name": "Unassign Role From User",
+          "description": "Allow administrators to unassign roles from users",
+          "method": "DELETE",
+          "path": "/api/users/{userId}/roles/{roleId}"
+        },
+        {
+          "endpoint_name": "Search Users Or Roles",
+          "description": "Provide a search function to find specific users or roles",
+          "method": "GET",
+          "path": "/api/search"
+        },
+        {
+          "endpoint_name": "Get Paginated Users",
+          "description": "Implement pagination for large lists of users",
+          "method": "GET",
+          "path": "/api/users/paginated"
+        },
+        {
+          "endpoint_name": "Get Paginated User Roles",
+          "description": "Implement pagination for large lists of user roles",
+          "method": "GET",
+          "path": "/api/user-roles/paginated"
+        },
+        {
+          "endpoint_name": "Get User Count And Role Count",
+          "description": "Display the total number of users and roles",
+          "method": "GET",
+          "path": "/api/stats"
+        },
+        {
+          "endpoint_name": "Get Users By Role",
+          "description": "Allow administrators to filter users by role",
+          "method": "GET",
+          "path": "/api/users/by-role/{roleId}"
+        },
+        {
+          "endpoint_name": "Get Sorted Users",
+          "description": "Allow administrators to sort users by name, role, or other relevant criteria",
+          "method": "GET",
+          "path": "/api/users/sorted"
+        }
+      ]
+    },
+    {
+      "page_name": "Error 404 Page",
+      "description": "Handling invalid or non-existent page requests",
+      "requirements": [
+        "Display a clear 'Error 404' or 'Page Not Found' message",
+        "Provide a brief description of the error and possible causes",
+        "Include a link to the homepage or dashboard for easy navigation",
+        "Offer a search function to help users find what they are looking for",
+        "Display a 'Back to Previous Page' button to allow users to return to their previous location",
+        "Maintain a consistent design and layout with the rest of the application",
+        "Ensure accessibility and readability of the error page for all users",
+        "Include a contact or support link for users to report issues or request help"
+      ],
+      "backend_endpoints": [
+        {
+          "endpoint_name": "Get Homepage Link",
+          "description": "Retrieve the link to the homepage",
+          "method": "GET",
+          "path": "/api/homepage"
+        },
+        {
+          "endpoint_name": "Get Dashboard Link",
+          "description": "Retrieve the link to the dashboard",
+          "method": "GET",
+          "path": "/api/dashboard"
+        },
+        {
+          "endpoint_name": "Search",
+          "description": "Perform a search based on user input",
+          "method": "GET",
+          "path": "/api/search"
+        },
+        {
+          "endpoint_name": "Get Previous Page",
+          "description": "Retrieve the link to the previous page",
+          "method": "GET",
+          "path": "/api/previous-page"
+        },
+        {
+          "endpoint_name": "Get Contact Link",
+          "description": "Retrieve the link to the contact or support page",
+          "method": "GET",
+          "path": "/api/contact"
+        },
+        {
+          "endpoint_name": "Report Issue",
+          "description": "Allow users to report issues or request help",
+          "method": "POST",
+          "path": "/api/report-issue"
+        }
+      ]
+    },
+    {
+      "page_name": "Error 500 Page",
+      "description": "Handling internal server errors",
+      "requirements": [
+        "Display a clear and concise error message indicating that an internal server error has occurred",
+        "Provide a unique error code or identifier for debugging purposes",
+        "Include a button or link to return to the previous page or the dashboard",
+        "Offer an option to refresh the page or retry the action that caused the error",
+        "Display a contact link or email address for users to report the issue to the system administrators",
+        "Ensure the error page is accessible and follows the same branding as the rest of the application",
+        "Log the error on the server-side for further investigation and debugging",
+        "Do not reveal sensitive information about the server or application in the error message"
+      ],
+      "backend_endpoints": [
+        {
+          "endpoint_name": "Log Error",
+          "description": "Log the error on the server-side for further investigation and debugging",
+          "method": "POST",
+          "path": "/api/errors"
+        },
+        {
+          "endpoint_name": "Get Error Details",
+          "description": "Retrieve error details including a unique error code or identifier",
+          "method": "GET",
+          "path": "/api/errors/{errorId}"
+        },
+        {
+          "endpoint_name": "Report Issue",
+          "description": "Send a report of the issue to the system administrators",
+          "method": "POST",
+          "path": "/api/errors/{errorId}/report"
+        }
+      ]
+    },
+    {
+      "page_name": "Attendance Analytics",
+      "description": "Teachers view attendance patterns and statistics",
+      "requirements": [
+        "Display attendance statistics for each student",
+        "Show attendance patterns over time (e.g., daily, weekly, monthly)",
+        "Provide filters for date range, student name, and class",
+        "Include a search bar to find specific students",
+        "Display student attendance percentage",
+        "Allow teachers to view attendance records for individual students",
+        "Show overall class attendance statistics",
+        "Enable sorting and pagination for attendance data",
+        "Display attendance status (e.g., present, absent, late) for each student",
+        "Include visualizations (e.g., charts, graphs) to represent attendance data"
+      ],
+      "backend_endpoints": [
+        {
+          "endpoint_name": "Get Attendance Statistics",
+          "description": "Retrieve attendance statistics for each student",
+          "method": "GET",
+          "path": "/api/attendance/statistics"
+        },
+        {
+          "endpoint_name": "Get Attendance Patterns",
+          "description": "Retrieve attendance patterns over time",
+          "method": "GET",
+          "path": "/api/attendance/patterns"
+        },
+        {
+          "endpoint_name": "Get Student Attendance Records",
+          "description": "Retrieve attendance records for an individual student",
+          "method": "GET",
+          "path": "/api/attendance/records/:studentId"
+        },
+        {
+          "endpoint_name": "Get Class Attendance Statistics",
+          "description": "Retrieve overall class attendance statistics",
+          "method": "GET",
+          "path": "/api/attendance/class-statistics"
+        },
+        {
+          "endpoint_name": "Search Students",
+          "description": "Search for students by name",
+          "method": "GET",
+          "path": "/api/students/search"
+        },
+        {
+          "endpoint_name": "Get Attendance Data",
+          "description": "Retrieve attendance data with filters and sorting",
+          "method": "GET",
+          "path": "/api/attendance/data"
+        },
+        {
+          "endpoint_name": "Get Attendance Visualization Data",
+          "description": "Retrieve data for visualizing attendance patterns",
+          "method": "GET",
+          "path": "/api/attendance/visualization-data"
+        },
+        {
+          "endpoint_name": "Get Student Attendance Percentage",
+          "description": "Retrieve attendance percentage for an individual student",
+          "method": "GET",
+          "path": "/api/attendance/percentage/:studentId"
+        }
+      ]
+    },
+    {
+      "page_name": "Student Information",
+      "description": "Teachers view student information and details",
+      "requirements": [
+        "Display student profile information",
+        "Show student attendance records",
+        "Include student details such as name, class, and enrollment number",
+        "Provide a search function to find specific students",
+        "Allow teachers to filter students by class or attendance status",
+        "Display attendance history with dates and status",
+        "Include a dashboard view for teachers to overview student attendance",
+        "Enable teachers to view student profile pictures and contact information",
+        "Provide a link to view detailed attendance records for each student",
+        "Ensure user authentication and role-based access to secure student information"
+      ],
+      "backend_endpoints": [
+        {
+          "endpoint_name": "Get Student Profile",
+          "description": "Retrieve student profile information",
+          "method": "GET",
+          "path": "/api/students/{studentId}/profile"
+        },
+        {
+          "endpoint_name": "Get Student Attendance Records",
+          "description": "Retrieve student attendance records",
+          "method": "GET",
+          "path": "/api/students/{studentId}/attendance"
+        },
+        {
+          "endpoint_name": "Search Students",
+          "description": "Search for specific students",
+          "method": "GET",
+          "path": "/api/students/search"
+        },
+        {
+          "endpoint_name": "Filter Students",
+          "description": "Filter students by class or attendance status",
+          "method": "GET",
+          "path": "/api/students/filter"
+        },
+        {
+          "endpoint_name": "Get Student Attendance History",
+          "description": "Retrieve student attendance history with dates and status",
+          "method": "GET",
+          "path": "/api/students/{studentId}/attendance/history"
+        },
+        {
+          "endpoint_name": "Get Student Dashboard",
+          "description": "Retrieve dashboard view for teachers to overview student attendance",
+          "method": "GET",
+          "path": "/api/students/dashboard"
+        },
+        {
+          "endpoint_name": "Get Student Profile Picture",
+          "description": "Retrieve student profile picture",
+          "method": "GET",
+          "path": "/api/students/{studentId}/profile-picture"
+        },
+        {
+          "endpoint_name": "Get Student Contact Information",
+          "description": "Retrieve student contact information",
+          "method": "GET",
+          "path": "/api/students/{studentId}/contact-info"
+        },
+        {
+          "endpoint_name": "Get Detailed Attendance Records",
+          "description": "Retrieve detailed attendance records for a student",
+          "method": "GET",
+          "path": "/api/students/{studentId}/attendance/details"
+        },
+        {
+          "endpoint_name": "Authenticate Teacher",
+          "description": "Authenticate teacher and authorize access to student information",
+          "method": "POST",
+          "path": "/api/auth/teacher/login"
+        }
+      ]
+    }
+  ]
+}

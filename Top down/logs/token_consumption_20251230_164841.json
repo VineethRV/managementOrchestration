@@ -1,0 +1,83 @@
+{
+  "session_start": "2025-12-30T16:28:22.177817",
+  "session_duration": "0:20:19.351659",
+  "conversation_tokens": {
+    "input_tokens": 20441,
+    "output_tokens": 19875,
+    "total_tokens": 40316,
+    "calls": 72
+  },
+  "coding_tokens": {
+    "input_tokens": 29176,
+    "output_tokens": 31823,
+    "total_tokens": 60999,
+    "calls": 23
+  },
+  "total": {
+    "input_tokens": 49617,
+    "output_tokens": 51698,
+    "total_tokens": 101315,
+    "calls": 95
+  },
+  "breakdown": {
+    "conversation": {
+      "requirements_gathering": {
+        "input": 0,
+        "output": 0,
+        "calls": 0
+      },
+      "page_listing": {
+        "input": 237,
+        "output": 176,
+        "calls": 1
+      },
+      "page_requirements": {
+        "input": 3446,
+        "output": 2094,
+        "calls": 15
+      },
+      "endpoint_identification": {
+        "input": 3458,
+        "output": 5112,
+        "calls": 15
+      },
+      "api_specification": {
+        "input": 13021,
+        "output": 12447,
+        "calls": 40
+      },
+      "page_grouping": {
+        "input": 279,
+        "output": 46,
+        "calls": 1
+      }
+    },
+    "coding": {
+      "frontend_implementation": {
+        "input": 22683,
+        "output": 22336,
+        "calls": 15
+      },
+      "backend_implementation": {
+        "input": 6493,
+        "output": 9487,
+        "calls": 8
+      },
+      "database_setup": {
+        "input": 0,
+        "output": 0,
+        "calls": 0
+      },
+      "backend_debugging": {
+        "input": 0,
+        "output": 0,
+        "calls": 0
+      },
+      "file_operations": {
+        "input": 0,
+        "output": 0,
+        "calls": 0
+      }
+    }
+  }
+}

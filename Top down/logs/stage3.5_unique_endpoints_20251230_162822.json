@@ -1,0 +1,990 @@
+{
+  "stage": "Stage 3.5: Endpoint Deduplication",
+  "timestamp": "20251230_162822",
+  "total_endpoints_before": 120,
+  "unique_endpoints": 109,
+  "duplicates_removed": 11,
+  "endpoints": [
+    {
+      "endpoint_name": "login",
+      "description": "Authenticate user credentials",
+      "method": "POST",
+      "path": "/api/auth/login",
+      "request_body": "",
+      "response": "",
+      "page_context": "Login Page"
+    },
+    {
+      "endpoint_name": "forgot_password",
+      "description": "Send password reset link to user",
+      "method": "POST",
+      "path": "/api/auth/forgot-password",
+      "request_body": "",
+      "response": "",
+      "page_context": "Login Page"
+    },
+    {
+      "endpoint_name": "register",
+      "description": "Create new user account",
+      "method": "POST",
+      "path": "/api/auth/register",
+      "request_body": "",
+      "response": "",
+      "page_context": "Login Page"
+    },
+    {
+      "endpoint_name": "validate_username",
+      "description": "Check if username is available",
+      "method": "GET",
+      "path": "/api/auth/validate-username",
+      "request_body": "",
+      "response": "",
+      "page_context": "Login Page"
+    },
+    {
+      "endpoint_name": "validate_password",
+      "description": "Check if password meets requirements",
+      "method": "POST",
+      "path": "/api/auth/validate-password",
+      "request_body": "",
+      "response": "",
+      "page_context": "Login Page"
+    },
+    {
+      "endpoint_name": "get_user_role",
+      "description": "Retrieve user role",
+      "method": "GET",
+      "path": "/api/auth/user-role",
+      "request_body": "",
+      "response": "",
+      "page_context": "Login Page"
+    },
+    {
+      "endpoint_name": "login_attempt",
+      "description": "Track login attempts and enforce login failure limit and timeout",
+      "method": "POST",
+      "path": "/api/auth/login-attempt",
+      "request_body": "",
+      "response": "",
+      "page_context": "Login Page"
+    },
+    {
+      "endpoint_name": "Register User",
+      "description": "Handles user registration",
+      "method": "POST",
+      "path": "/api/register",
+      "request_body": "",
+      "response": "",
+      "page_context": "Registration Page"
+    },
+    {
+      "endpoint_name": "Validate Email",
+      "description": "Checks if an email is already in use",
+      "method": "GET",
+      "path": "/api/validate-email",
+      "request_body": "",
+      "response": "",
+      "page_context": "Registration Page"
+    },
+    {
+      "endpoint_name": "Validate Username",
+      "description": "Checks if a username is already in use",
+      "method": "GET",
+      "path": "/api/validate-username",
+      "request_body": "",
+      "response": "",
+      "page_context": "Registration Page"
+    },
+    {
+      "endpoint_name": "Get Roles",
+      "description": "Retrieves available roles for registration",
+      "method": "GET",
+      "path": "/api/roles",
+      "request_body": "",
+      "response": "",
+      "page_context": "Registration Page"
+    },
+    {
+      "endpoint_name": "Get Terms and Conditions",
+      "description": "Retrieves terms and conditions for registration",
+      "method": "GET",
+      "path": "/api/terms-and-conditions",
+      "request_body": "",
+      "response": "",
+      "page_context": "Registration Page"
+    },
+    {
+      "endpoint_name": "Check Password Strength",
+      "description": "Evaluates the strength of a given password",
+      "method": "POST",
+      "path": "/api/check-password-strength",
+      "request_body": "",
+      "response": "",
+      "page_context": "Registration Page"
+    },
+    {
+      "endpoint_name": "Get User Details",
+      "description": "Retrieve user's role and name",
+      "method": "GET",
+      "path": "/api/user/details",
+      "request_body": "",
+      "response": "",
+      "page_context": "Dashboard"
+    },
+    {
+      "endpoint_name": "Mark Attendance",
+      "description": "Mark attendance for a student",
+      "method": "POST",
+      "path": "/api/attendance/mark",
+      "request_body": "",
+      "response": "",
+      "page_context": "Dashboard, Attendance Marking"
+    },
+    {
+      "endpoint_name": "Get Attendance Records",
+      "description": "Retrieve attendance records for a teacher",
+      "method": "GET",
+      "path": "/api/attendance/records",
+      "request_body": "",
+      "response": "",
+      "page_context": "Dashboard"
+    },
+    {
+      "endpoint_name": "Get Attendance History",
+      "description": "Retrieve attendance history for a student or class",
+      "method": "GET",
+      "path": "/api/attendance/history",
+      "request_body": "",
+      "response": "",
+      "page_context": "Dashboard, Attendance Marking"
+    },
+    {
+      "endpoint_name": "Get Attendance Patterns",
+      "description": "Retrieve attendance patterns for a student or class",
+      "method": "GET",
+      "path": "/api/attendance/patterns",
+      "request_body": "",
+      "response": "",
+      "page_context": "Dashboard, Attendance Analytics"
+    },
+    {
+      "endpoint_name": "Get Navigation Menu",
+      "description": "Retrieve navigation menu items",
+      "method": "GET",
+      "path": "/api/menu/items",
+      "request_body": "",
+      "response": "",
+      "page_context": "Dashboard"
+    },
+    {
+      "endpoint_name": "Get Calendar",
+      "description": "Retrieve calendar data",
+      "method": "GET",
+      "path": "/api/calendar/data",
+      "request_body": "",
+      "response": "",
+      "page_context": "Dashboard"
+    },
+    {
+      "endpoint_name": "Filter Attendance Records",
+      "description": "Filter attendance records by date, student, or class",
+      "method": "GET",
+      "path": "/api/attendance/records/filter",
+      "request_body": "",
+      "response": "",
+      "page_context": "Dashboard"
+    },
+    {
+      "endpoint_name": "Get Notifications",
+      "description": "Retrieve notifications for a teacher",
+      "method": "GET",
+      "path": "/api/notifications",
+      "request_body": "",
+      "response": "",
+      "page_context": "Dashboard"
+    },
+    {
+      "endpoint_name": "Get Attendance Statistics",
+      "description": "Retrieve attendance statistics",
+      "method": "GET",
+      "path": "/api/attendance/statistics",
+      "request_body": "",
+      "response": "",
+      "page_context": "Dashboard, Attendance Analytics"
+    },
+    {
+      "endpoint_name": "Search Attendance Records",
+      "description": "Search attendance records for a specific student",
+      "method": "GET",
+      "path": "/api/attendance/records/search",
+      "request_body": "",
+      "response": "",
+      "page_context": "Dashboard"
+    },
+    {
+      "endpoint_name": "Get User Profile",
+      "description": "Retrieve user profile information",
+      "method": "GET",
+      "path": "/api/profile",
+      "request_body": "",
+      "response": "",
+      "page_context": "Profile Management"
+    },
+    {
+      "endpoint_name": "Update User Profile",
+      "description": "Update user profile details",
+      "method": "PUT",
+      "path": "/api/profile",
+      "request_body": "",
+      "response": "",
+      "page_context": "Profile Management"
+    },
+    {
+      "endpoint_name": "Upload Profile Picture",
+      "description": "Upload a new profile picture",
+      "method": "POST",
+      "path": "/api/profile/picture",
+      "request_body": "",
+      "response": "",
+      "page_context": "Profile Management"
+    },
+    {
+      "endpoint_name": "Change Password",
+      "description": "Change user password",
+      "method": "POST",
+      "path": "/api/profile/password",
+      "request_body": "",
+      "response": "",
+      "page_context": "Profile Management"
+    },
+    {
+      "endpoint_name": "Validate Profile Updates",
+      "description": "Validate user input for profile updates",
+      "method": "POST",
+      "path": "/api/profile/validate",
+      "request_body": "",
+      "response": "",
+      "page_context": "Profile Management"
+    },
+    {
+      "endpoint_name": "Send Password Recovery Email",
+      "description": "Sends a password recovery email to the user",
+      "method": "POST",
+      "path": "/api/password-recovery/send-email",
+      "request_body": "",
+      "response": "",
+      "page_context": "Password Recovery"
+    },
+    {
+      "endpoint_name": "Validate Username or Email",
+      "description": "Validates if the username or email address exists in the database",
+      "method": "POST",
+      "path": "/api/password-recovery/validate-credentials",
+      "request_body": "",
+      "response": "",
+      "page_context": "Password Recovery"
+    },
+    {
+      "endpoint_name": "Resend Password Recovery Email",
+      "description": "Resends the password recovery email if the user does not receive it",
+      "method": "POST",
+      "path": "/api/password-recovery/resend-email",
+      "request_body": "",
+      "response": "",
+      "page_context": "Password Recovery"
+    },
+    {
+      "endpoint_name": "Reset Password",
+      "description": "Resets the user's password",
+      "method": "PUT",
+      "path": "/api/password-recovery/reset-password",
+      "request_body": "",
+      "response": "",
+      "page_context": "Password Recovery"
+    },
+    {
+      "endpoint_name": "Verify Password Recovery Token",
+      "description": "Verifies the password recovery token sent in the email",
+      "method": "GET",
+      "path": "/api/password-recovery/verify-token",
+      "request_body": "",
+      "response": "",
+      "page_context": "Password Recovery"
+    },
+    {
+      "endpoint_name": "Get Student Details",
+      "description": "Retrieve student details to confirm identity",
+      "method": "GET",
+      "path": "/api/student/details",
+      "request_body": "",
+      "response": "",
+      "page_context": "Attendance Marking"
+    },
+    {
+      "endpoint_name": "Get Attendance Calendar",
+      "description": "Fetch calendar data for attendance marking",
+      "method": "GET",
+      "path": "/api/attendance/calendar",
+      "request_body": "",
+      "response": "",
+      "page_context": "Attendance Marking"
+    },
+    {
+      "endpoint_name": "Add Attendance Comment",
+      "description": "Add comments or reasons for absence",
+      "method": "POST",
+      "path": "/api/attendance/comment",
+      "request_body": "",
+      "response": "",
+      "page_context": "Attendance Marking"
+    },
+    {
+      "endpoint_name": "Check Attendance Status",
+      "description": "Check if attendance is already marked for the day",
+      "method": "GET",
+      "path": "/api/attendance/status",
+      "request_body": "",
+      "response": "",
+      "page_context": "Attendance Marking"
+    },
+    {
+      "endpoint_name": "Validate Attendance Time Frame",
+      "description": "Check if attendance marking is within the allowed time frame",
+      "method": "GET",
+      "path": "/api/attendance/timeframe",
+      "request_body": "",
+      "response": "",
+      "page_context": "Attendance Marking"
+    },
+    {
+      "endpoint_name": "Authenticate Student",
+      "description": "Validate user authentication to ensure only authorized students can mark their attendance",
+      "method": "POST",
+      "path": "/api/authenticate/student",
+      "request_body": "",
+      "response": "",
+      "page_context": "Attendance Marking"
+    },
+    {
+      "endpoint_name": "Get All Students",
+      "description": "Retrieve a list of all students",
+      "method": "GET",
+      "path": "/api/students",
+      "request_body": "",
+      "response": "",
+      "page_context": "Attendance Records"
+    },
+    {
+      "endpoint_name": "Get Student Attendance Records",
+      "description": "Retrieve attendance records for a specific student",
+      "method": "GET",
+      "path": "/api/students/{studentId}/attendance",
+      "request_body": "",
+      "response": "",
+      "page_context": "Attendance Records, Student Information"
+    },
+    {
+      "endpoint_name": "Filter Attendance Records By Date Range",
+      "description": "Retrieve attendance records for a specific date range",
+      "method": "GET",
+      "path": "/api/students/{studentId}/attendance?startDate={startDate}&endDate={endDate}",
+      "request_body": "",
+      "response": "",
+      "page_context": "Attendance Records"
+    },
+    {
+      "endpoint_name": "Search Students",
+      "description": "Search for specific students by name or ID",
+      "method": "GET",
+      "path": "/api/students/search?q={query}",
+      "request_body": "",
+      "response": "",
+      "page_context": "Attendance Records"
+    },
+    {
+      "endpoint_name": "Get Detailed Attendance History",
+      "description": "Retrieve detailed attendance history for a specific student",
+      "method": "GET",
+      "path": "/api/students/{studentId}/attendance/history",
+      "request_body": "",
+      "response": "",
+      "page_context": "Attendance Records, Attendance History, Student Information"
+    },
+    {
+      "endpoint_name": "Export Attendance Records To CSV",
+      "description": "Export attendance records to CSV",
+      "method": "GET",
+      "path": "/api/students/attendance/export/csv",
+      "request_body": "",
+      "response": "",
+      "page_context": "Attendance Records"
+    },
+    {
+      "endpoint_name": "Export Attendance Records To Excel",
+      "description": "Export attendance records to Excel",
+      "method": "GET",
+      "path": "/api/students/attendance/export/excel",
+      "request_body": "",
+      "response": "",
+      "page_context": "Attendance Records"
+    },
+    {
+      "endpoint_name": "Get Paginated Students List",
+      "description": "Retrieve a paginated list of students",
+      "method": "GET",
+      "path": "/api/students?page={page}&size={size}",
+      "request_body": "",
+      "response": "",
+      "page_context": "Attendance Records"
+    },
+    {
+      "endpoint_name": "Get Student Profile",
+      "description": "Retrieve student's profile information",
+      "method": "GET",
+      "path": "/api/students/{studentId}/profile",
+      "request_body": "",
+      "response": "",
+      "page_context": "Attendance History, Student Information"
+    },
+    {
+      "endpoint_name": "Get Attendance History By Date Range",
+      "description": "Retrieve student's attendance history for a specific date range",
+      "method": "GET",
+      "path": "/api/students/{studentId}/attendance/history/byDateRange",
+      "request_body": "",
+      "response": "",
+      "page_context": "Attendance History"
+    },
+    {
+      "endpoint_name": "Search Attendance Records",
+      "description": "Search for specific attendance records",
+      "method": "GET",
+      "path": "/api/students/{studentId}/attendance/history/search",
+      "request_body": "",
+      "response": "",
+      "page_context": "Attendance History"
+    },
+    {
+      "endpoint_name": "Export Attendance History",
+      "description": "Export student's attendance history in CSV or PDF format",
+      "method": "GET",
+      "path": "/api/students/{studentId}/attendance/history/export",
+      "request_body": "",
+      "response": "",
+      "page_context": "Attendance History"
+    },
+    {
+      "endpoint_name": "Get Attendance Summary",
+      "description": "Retrieve student's attendance summary (total days present, absent, percentage)",
+      "method": "GET",
+      "path": "/api/students/{studentId}/attendance/summary",
+      "request_body": "",
+      "response": "",
+      "page_context": "Attendance History"
+    },
+    {
+      "endpoint_name": "Get Application Info",
+      "description": "Retrieve application name and logo",
+      "method": "GET",
+      "path": "/api/app-info",
+      "request_body": "",
+      "response": "",
+      "page_context": "Settings"
+    },
+    {
+      "endpoint_name": "Get Navigation Menu",
+      "description": "Retrieve navigation menu with settings option",
+      "method": "GET",
+      "path": "/api/navigation-menu",
+      "request_body": "",
+      "response": "",
+      "page_context": "Settings"
+    },
+    {
+      "endpoint_name": "Search Settings",
+      "description": "Search for settings options",
+      "method": "GET",
+      "path": "/api/settings/search",
+      "request_body": "",
+      "response": "",
+      "page_context": "Settings"
+    },
+    {
+      "endpoint_name": "Get User Profile",
+      "description": "Retrieve user profile information",
+      "method": "GET",
+      "path": "/api/user-profile",
+      "request_body": "",
+      "response": "",
+      "page_context": "Settings"
+    },
+    {
+      "endpoint_name": "Update User Profile",
+      "description": "Update user profile information",
+      "method": "PUT",
+      "path": "/api/user-profile",
+      "request_body": "",
+      "response": "",
+      "page_context": "Settings"
+    },
+    {
+      "endpoint_name": "Change Password",
+      "description": "Change user password",
+      "method": "PUT",
+      "path": "/api/user-profile/password",
+      "request_body": "",
+      "response": "",
+      "page_context": "Settings"
+    },
+    {
+      "endpoint_name": "Get Account Settings",
+      "description": "Retrieve account settings",
+      "method": "GET",
+      "path": "/api/account-settings",
+      "request_body": "",
+      "response": "",
+      "page_context": "Settings"
+    },
+    {
+      "endpoint_name": "Update Account Settings",
+      "description": "Update account settings",
+      "method": "PUT",
+      "path": "/api/account-settings",
+      "request_body": "",
+      "response": "",
+      "page_context": "Settings"
+    },
+    {
+      "endpoint_name": "Get Notification Preferences",
+      "description": "Retrieve notification preferences",
+      "method": "GET",
+      "path": "/api/notification-preferences",
+      "request_body": "",
+      "response": "",
+      "page_context": "Settings"
+    },
+    {
+      "endpoint_name": "Update Notification Preferences",
+      "description": "Update notification preferences",
+      "method": "PUT",
+      "path": "/api/notification-preferences",
+      "request_body": "",
+      "response": "",
+      "page_context": "Settings"
+    },
+    {
+      "endpoint_name": "Get User Roles and Permissions",
+      "description": "Retrieve user roles and permissions",
+      "method": "GET",
+      "path": "/api/user-roles",
+      "request_body": "",
+      "response": "",
+      "page_context": "Settings, User Roles Management"
+    },
+    {
+      "endpoint_name": "Update User Roles and Permissions",
+      "description": "Update user roles and permissions",
+      "method": "PUT",
+      "path": "/api/user-roles",
+      "request_body": "",
+      "response": "",
+      "page_context": "Settings"
+    },
+    {
+      "endpoint_name": "Get Attendance Settings",
+      "description": "Retrieve attendance settings",
+      "method": "GET",
+      "path": "/api/attendance-settings",
+      "request_body": "",
+      "response": "",
+      "page_context": "Settings"
+    },
+    {
+      "endpoint_name": "Update Attendance Settings",
+      "description": "Update attendance settings",
+      "method": "PUT",
+      "path": "/api/attendance-settings",
+      "request_body": "",
+      "response": "",
+      "page_context": "Settings"
+    },
+    {
+      "endpoint_name": "Get System Defaults",
+      "description": "Retrieve system default settings",
+      "method": "GET",
+      "path": "/api/system-defaults",
+      "request_body": "",
+      "response": "",
+      "page_context": "Settings"
+    },
+    {
+      "endpoint_name": "Update System Defaults",
+      "description": "Update system default settings",
+      "method": "PUT",
+      "path": "/api/system-defaults",
+      "request_body": "",
+      "response": "",
+      "page_context": "Settings"
+    },
+    {
+      "endpoint_name": "Reset Settings to Default",
+      "description": "Reset settings to default values",
+      "method": "POST",
+      "path": "/api/settings/reset",
+      "request_body": "",
+      "response": "",
+      "page_context": "Settings"
+    },
+    {
+      "endpoint_name": "Save Settings Changes",
+      "description": "Save settings changes",
+      "method": "POST",
+      "path": "/api/settings/save",
+      "request_body": "",
+      "response": "",
+      "page_context": "Settings"
+    },
+    {
+      "endpoint_name": "Validate Settings Changes",
+      "description": "Validate settings changes",
+      "method": "POST",
+      "path": "/api/settings/validate",
+      "request_body": "",
+      "response": "",
+      "page_context": "Settings"
+    },
+    {
+      "endpoint_name": "Initiate Password Recovery",
+      "description": "Initiate password recovery process by sending a recovery email to the user's registered email address",
+      "method": "POST",
+      "path": "/api/forgot-password",
+      "request_body": "",
+      "response": "",
+      "page_context": "Forgot Password"
+    },
+    {
+      "endpoint_name": "Validate User Credentials",
+      "description": "Validate user input to ensure it matches the username or email in the system",
+      "method": "POST",
+      "path": "/api/validate-credentials",
+      "request_body": "",
+      "response": "",
+      "page_context": "Forgot Password"
+    },
+    {
+      "endpoint_name": "Send Recovery Email",
+      "description": "Send a password recovery email to the user's registered email address",
+      "method": "POST",
+      "path": "/api/send-recovery-email",
+      "request_body": "",
+      "response": "",
+      "page_context": "Forgot Password"
+    },
+    {
+      "endpoint_name": "Check Username or Email Availability",
+      "description": "Check if the username or email exists in the system",
+      "method": "GET",
+      "path": "/api/check-username-email",
+      "request_body": "",
+      "response": "",
+      "page_context": "Forgot Password"
+    },
+    {
+      "endpoint_name": "Create New User Role",
+      "description": "Allow administrators to add new user roles",
+      "method": "POST",
+      "path": "/api/user-roles",
+      "request_body": "",
+      "response": "",
+      "page_context": "User Roles Management"
+    },
+    {
+      "endpoint_name": "Get User Role By ID",
+      "description": "Retrieve a specific user role by ID for editing",
+      "method": "GET",
+      "path": "/api/user-roles/{roleId}",
+      "request_body": "",
+      "response": "",
+      "page_context": "User Roles Management"
+    },
+    {
+      "endpoint_name": "Update User Role",
+      "description": "Allow administrators to edit existing user roles",
+      "method": "PUT",
+      "path": "/api/user-roles/{roleId}",
+      "request_body": "",
+      "response": "",
+      "page_context": "User Roles Management"
+    },
+    {
+      "endpoint_name": "Delete User Role",
+      "description": "Allow administrators to delete existing user roles",
+      "method": "DELETE",
+      "path": "/api/user-roles/{roleId}",
+      "request_body": "",
+      "response": "",
+      "page_context": "User Roles Management"
+    },
+    {
+      "endpoint_name": "Get All Users With Roles",
+      "description": "Display a list of all users with their assigned roles",
+      "method": "GET",
+      "path": "/api/users",
+      "request_body": "",
+      "response": "",
+      "page_context": "User Roles Management"
+    },
+    {
+      "endpoint_name": "Assign Role To User",
+      "description": "Allow administrators to assign roles to users",
+      "method": "POST",
+      "path": "/api/users/{userId}/roles",
+      "request_body": "",
+      "response": "",
+      "page_context": "User Roles Management"
+    },
+    {
+      "endpoint_name": "Unassign Role From User",
+      "description": "Allow administrators to unassign roles from users",
+      "method": "DELETE",
+      "path": "/api/users/{userId}/roles/{roleId}",
+      "request_body": "",
+      "response": "",
+      "page_context": "User Roles Management"
+    },
+    {
+      "endpoint_name": "Search Users Or Roles",
+      "description": "Provide a search function to find specific users or roles",
+      "method": "GET",
+      "path": "/api/search",
+      "request_body": "",
+      "response": "",
+      "page_context": "User Roles Management, Error 404 Page"
+    },
+    {
+      "endpoint_name": "Get Paginated Users",
+      "description": "Implement pagination for large lists of users",
+      "method": "GET",
+      "path": "/api/users/paginated",
+      "request_body": "",
+      "response": "",
+      "page_context": "User Roles Management"
+    },
+    {
+      "endpoint_name": "Get Paginated User Roles",
+      "description": "Implement pagination for large lists of user roles",
+      "method": "GET",
+      "path": "/api/user-roles/paginated",
+      "request_body": "",
+      "response": "",
+      "page_context": "User Roles Management"
+    },
+    {
+      "endpoint_name": "Get User Count And Role Count",
+      "description": "Display the total number of users and roles",
+      "method": "GET",
+      "path": "/api/stats",
+      "request_body": "",
+      "response": "",
+      "page_context": "User Roles Management"
+    },
+    {
+      "endpoint_name": "Get Users By Role",
+      "description": "Allow administrators to filter users by role",
+      "method": "GET",
+      "path": "/api/users/by-role/{roleId}",
+      "request_body": "",
+      "response": "",
+      "page_context": "User Roles Management"
+    },
+    {
+      "endpoint_name": "Get Sorted Users",
+      "description": "Allow administrators to sort users by name, role, or other relevant criteria",
+      "method": "GET",
+      "path": "/api/users/sorted",
+      "request_body": "",
+      "response": "",
+      "page_context": "User Roles Management"
+    },
+    {
+      "endpoint_name": "Get Homepage Link",
+      "description": "Retrieve the link to the homepage",
+      "method": "GET",
+      "path": "/api/homepage",
+      "request_body": "",
+      "response": "",
+      "page_context": "Error 404 Page"
+    },
+    {
+      "endpoint_name": "Get Dashboard Link",
+      "description": "Retrieve the link to the dashboard",
+      "method": "GET",
+      "path": "/api/dashboard",
+      "request_body": "",
+      "response": "",
+      "page_context": "Error 404 Page"
+    },
+    {
+      "endpoint_name": "Get Previous Page",
+      "description": "Retrieve the link to the previous page",
+      "method": "GET",
+      "path": "/api/previous-page",
+      "request_body": "",
+      "response": "",
+      "page_context": "Error 404 Page"
+    },
+    {
+      "endpoint_name": "Get Contact Link",
+      "description": "Retrieve the link to the contact or support page",
+      "method": "GET",
+      "path": "/api/contact",
+      "request_body": "",
+      "response": "",
+      "page_context": "Error 404 Page"
+    },
+    {
+      "endpoint_name": "Report Issue",
+      "description": "Allow users to report issues or request help",
+      "method": "POST",
+      "path": "/api/report-issue",
+      "request_body": "",
+      "response": "",
+      "page_context": "Error 404 Page"
+    },
+    {
+      "endpoint_name": "Log Error",
+      "description": "Log the error on the server-side for further investigation and debugging",
+      "method": "POST",
+      "path": "/api/errors",
+      "request_body": "",
+      "response": "",
+      "page_context": "Error 500 Page"
+    },
+    {
+      "endpoint_name": "Get Error Details",
+      "description": "Retrieve error details including a unique error code or identifier",
+      "method": "GET",
+      "path": "/api/errors/{errorId}",
+      "request_body": "",
+      "response": "",
+      "page_context": "Error 500 Page"
+    },
+    {
+      "endpoint_name": "Report Issue",
+      "description": "Send a report of the issue to the system administrators",
+      "method": "POST",
+      "path": "/api/errors/{errorId}/report",
+      "request_body": "",
+      "response": "",
+      "page_context": "Error 500 Page"
+    },
+    {
+      "endpoint_name": "Get Student Attendance Records",
+      "description": "Retrieve attendance records for an individual student",
+      "method": "GET",
+      "path": "/api/attendance/records/:studentId",
+      "request_body": "",
+      "response": "",
+      "page_context": "Attendance Analytics"
+    },
+    {
+      "endpoint_name": "Get Class Attendance Statistics",
+      "description": "Retrieve overall class attendance statistics",
+      "method": "GET",
+      "path": "/api/attendance/class-statistics",
+      "request_body": "",
+      "response": "",
+      "page_context": "Attendance Analytics"
+    },
+    {
+      "endpoint_name": "Search Students",
+      "description": "Search for students by name",
+      "method": "GET",
+      "path": "/api/students/search",
+      "request_body": "",
+      "response": "",
+      "page_context": "Attendance Analytics, Student Information"
+    },
+    {
+      "endpoint_name": "Get Attendance Data",
+      "description": "Retrieve attendance data with filters and sorting",
+      "method": "GET",
+      "path": "/api/attendance/data",
+      "request_body": "",
+      "response": "",
+      "page_context": "Attendance Analytics"
+    },
+    {
+      "endpoint_name": "Get Attendance Visualization Data",
+      "description": "Retrieve data for visualizing attendance patterns",
+      "method": "GET",
+      "path": "/api/attendance/visualization-data",
+      "request_body": "",
+      "response": "",
+      "page_context": "Attendance Analytics"
+    },
+    {
+      "endpoint_name": "Get Student Attendance Percentage",
+      "description": "Retrieve attendance percentage for an individual student",
+      "method": "GET",
+      "path": "/api/attendance/percentage/:studentId",
+      "request_body": "",
+      "response": "",
+      "page_context": "Attendance Analytics"
+    },
+    {
+      "endpoint_name": "Filter Students",
+      "description": "Filter students by class or attendance status",
+      "method": "GET",
+      "path": "/api/students/filter",
+      "request_body": "",
+      "response": "",
+      "page_context": "Student Information"
+    },
+    {
+      "endpoint_name": "Get Student Dashboard",
+      "description": "Retrieve dashboard view for teachers to overview student attendance",
+      "method": "GET",
+      "path": "/api/students/dashboard",
+      "request_body": "",
+      "response": "",
+      "page_context": "Student Information"
+    },
+    {
+      "endpoint_name": "Get Student Profile Picture",
+      "description": "Retrieve student profile picture",
+      "method": "GET",
+      "path": "/api/students/{studentId}/profile-picture",
+      "request_body": "",
+      "response": "",
+      "page_context": "Student Information"
+    },
+    {
+      "endpoint_name": "Get Student Contact Information",
+      "description": "Retrieve student contact information",
+      "method": "GET",
+      "path": "/api/students/{studentId}/contact-info",
+      "request_body": "",
+      "response": "",
+      "page_context": "Student Information"
+    },
+    {
+      "endpoint_name": "Get Detailed Attendance Records",
+      "description": "Retrieve detailed attendance records for a student",
+      "method": "GET",
+      "path": "/api/students/{studentId}/attendance/details",
+      "request_body": "",
+      "response": "",
+      "page_context": "Student Information"
+    },
+    {
+      "endpoint_name": "Authenticate Teacher",
+      "description": "Authenticate teacher and authorize access to student information",
+      "method": "POST",
+      "path": "/api/auth/teacher/login",
+      "request_body": "",
+      "response": "",
+      "page_context": "Student Information"
+    }
+  ]
+}

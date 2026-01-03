@@ -1,0 +1,2088 @@
+{
+  "stage": "Stage 4: API Specifications",
+  "timestamp": "20251230_162822",
+  "resource_groups": 40,
+  "total_endpoints": 109,
+  "batch_interactions": [
+    {
+      "resource": "auth",
+      "endpoints_count": 8,
+      "request": "Create full API specifications for ALL endpoints in the /auth resource.\n\nApplication Context: A Student Attendance Management System that allows students to mark their daily attendance \nand teachers to view and manage attendance records. The system includes user authentication \nwith separate roles for students and teachers, profile management, and password recovery features.\nStudents can log in to mark their attendance daily, while teachers can view attendance records \nand track student attendance patterns. The system provides a clean, intuitive interface for \nboth user types.\n\nEndpoints to specify:\n\n1. Endpoint: login\n   Method: POST\n   Path: /api/auth/login\n   Description: Authenticate user credentials\n   Used by pages: Login Page\n2. Endpoint: forgot_password\n   Method: POST\n   Path: /api/auth/forgot-password\n   Description: Send password reset link to user\n   Used by pages: Login Page\n3. Endpoint: register\n   Method: POST\n   Path: /api/auth/register\n   Description: Create new user account\n   Used by pages: Login Page\n4. Endpoint: validate_username\n   Method: GET\n   Path: /api/auth/validate-username\n   Description: Check if username is available\n   Used by pages: Login Page\n5. Endpoint: validate_password\n   Method: POST\n   Path: /api/auth/validate-password\n   Description: Check if password meets requirements\n   Used by pages: Login Page\n6. Endpoint: get_user_role\n   Method: GET\n   Path: /api/auth/user-role\n   Description: Retrieve user role\n   Used by pages: Login Page\n7. Endpoint: login_attempt\n   Method: POST\n   Path: /api/auth/login-attempt\n   Description: Track login attempts and enforce login failure limit and timeout\n   Used by pages: Login Page\n8. Endpoint: Authenticate Teacher\n   Method: POST\n   Path: /api/auth/teacher/login\n   Description: Authenticate teacher and authorize access to student information\n   Used by pages: Student Information\n\nReturn a JSON array with specifications for each endpoint in order:\n[\n  {\"request_body\": \"describe parameters/body for endpoint 1\", \"response\": \"describe response structure for endpoint 1\"},\n  {\"request_body\": \"describe parameters/body for endpoint 2\", \"response\": \"describe response structure for endpoint 2\"},\n  ...\n]\n\nJSON array only:",
+      "response": "[\n  {\n    \"request_body\": {\n      \"username\": \"string, required\",\n      \"password\": \"string, required\"\n    },\n    \"response\": {\n      \"token\": \"string, authentication token\",\n      \"role\": \"string, user role (student/teacher)\",\n      \"user_id\": \"integer, unique user identifier\"\n    }\n  },\n  {\n    \"request_body\": {\n      \"email\": \"string, required, user email address\"\n    },\n    \"response\": {\n      \"message\": \"string, password reset link sent successfully or error message\"\n    }\n  },\n  {\n    \"request_body\": {\n      \"username\": \"string, required, unique username\",\n      \"email\": \"string, required, user email address\",\n      \"password\": \"string, required, user password\",\n      \"role\": \"string, required, user role (student/teacher)\"\n    },\n    \"response\": {\n      \"message\": \"string, user created successfully or error message\",\n      \"user_id\": \"integer, unique user identifier\"\n    }\n  },\n  {\n    \"request_body\": {},\n    \"response\": {\n      \"available\": \"boolean, true if username is available, false otherwise\"\n    },\n    \"query_params\": {\n      \"username\": \"string, required, username to validate\"\n    }\n  },\n  {\n    \"request_body\": {\n      \"password\": \"string, required, password to validate\"\n    },\n    \"response\": {\n      \"valid\": \"boolean, true if password meets requirements, false otherwise\",\n      \"message\": \"string, password validation message\"\n    }\n  },\n  {\n    \"request_body\": {},\n    \"response\": {\n      \"role\": \"string, user role (student/teacher)\"\n    },\n    \"headers\": {\n      \"Authorization\": \"string, required, authentication token\"\n    }\n  },\n  {\n    \"request_body\": {\n      \"username\": \"string, required\",\n      \"password\": \"string, required\"\n    },\n    \"response\": {\n      \"attempt\": \"integer, number of login attempts\",\n      \"locked\": \"boolean, true if account is locked due to excessive login attempts, false otherwise\",\n      \"message\": \"string, login attempt message\"\n    }\n  },\n  {\n    \"request_body\": {\n      \"teacher_id\": \"integer, required, unique teacher identifier\",\n      \"password\": \"string, required, teacher password\"\n    },\n    \"response\": {\n      \"token\": \"string, authentication token\",\n      \"authorized\": \"boolean, true if teacher is authorized, false otherwise\",\n      \"message\": \"string, authentication message\"\n    }\n  }\n]",
+      "success": true
+    },
+    {
+      "resource": "register",
+      "endpoints_count": 1,
+      "request": "Create full API specifications for ALL endpoints in the /register resource.\n\nApplication Context: A Student Attendance Management System that allows students to mark their daily attendance \nand teachers to view and manage attendance records. The system includes user authentication \nwith separate roles for students and teachers, profile management, and password recovery features.\nStudents can log in to mark their attendance daily, while teachers can view attendance records \nand track student attendance patterns. The system provides a clean, intuitive interface for \nboth user types.\n\nEndpoints to specify:\n\n1. Endpoint: Register User\n   Method: POST\n   Path: /api/register\n   Description: Handles user registration\n   Used by pages: Registration Page\n\nReturn a JSON array with specifications for each endpoint in order:\n[\n  {\"request_body\": \"describe parameters/body for endpoint 1\", \"response\": \"describe response structure for endpoint 1\"},\n  {\"request_body\": \"describe parameters/body for endpoint 2\", \"response\": \"describe response structure for endpoint 2\"},\n  ...\n]\n\nJSON array only:",
+      "response": "[\n  {\n    \"request_body\": {\n      \"username\": \"string, required, unique username chosen by the user\",\n      \"email\": \"string, required, unique email address of the user\",\n      \"password\": \"string, required, password for the user account\",\n      \"role\": \"string, required, either 'student' or 'teacher' to determine user role\",\n      \"name\": \"string, required, full name of the user\"\n    },\n    \"response\": {\n      \"token\": \"string, JWT token for authenticated user\",\n      \"user\": {\n        \"id\": \"integer, unique user ID\",\n        \"username\": \"string, username chosen by the user\",\n        \"email\": \"string, email address of the user\",\n        \"role\": \"string, user role, either 'student' or 'teacher'\"\n      }\n    }\n  }\n]",
+      "success": true
+    },
+    {
+      "resource": "validate-email",
+      "endpoints_count": 1,
+      "request": "Create full API specifications for ALL endpoints in the /validate-email resource.\n\nApplication Context: A Student Attendance Management System that allows students to mark their daily attendance \nand teachers to view and manage attendance records. The system includes user authentication \nwith separate roles for students and teachers, profile management, and password recovery features.\nStudents can log in to mark their attendance daily, while teachers can view attendance records \nand track student attendance patterns. The system provides a clean, intuitive interface for \nboth user types.\n\nEndpoints to specify:\n\n1. Endpoint: Validate Email\n   Method: GET\n   Path: /api/validate-email\n   Description: Checks if an email is already in use\n   Used by pages: Registration Page\n\nReturn a JSON array with specifications for each endpoint in order:\n[\n  {\"request_body\": \"describe parameters/body for endpoint 1\", \"response\": \"describe response structure for endpoint 1\"},\n  {\"request_body\": \"describe parameters/body for endpoint 2\", \"response\": \"describe response structure for endpoint 2\"},\n  ...\n]\n\nJSON array only:",
+      "response": "[\n  {\n    \"request_body\": \"The request body should contain a JSON object with a single property 'email' which is the email to be validated. Example: {\\\"email\\\": \\\"example@example.com\\\"}\",\n    \"response\": \"The response will be a JSON object with a boolean property 'isAvailable' indicating whether the email is available or not, and a string property 'message' with a descriptive message. Example: {\\\"isAvailable\\\": true, \\\"message\\\": \\\"Email is available\\\"} or {\\\"isAvailable\\\": false, \\\"message\\\": \\\"Email is already in use\\\"}\"\n  }\n]",
+      "success": true
+    },
+    {
+      "resource": "validate-username",
+      "endpoints_count": 1,
+      "request": "Create full API specifications for ALL endpoints in the /validate-username resource.\n\nApplication Context: A Student Attendance Management System that allows students to mark their daily attendance \nand teachers to view and manage attendance records. The system includes user authentication \nwith separate roles for students and teachers, profile management, and password recovery features.\nStudents can log in to mark their attendance daily, while teachers can view attendance records \nand track student attendance patterns. The system provides a clean, intuitive interface for \nboth user types.\n\nEndpoints to specify:\n\n1. Endpoint: Validate Username\n   Method: GET\n   Path: /api/validate-username\n   Description: Checks if a username is already in use\n   Used by pages: Registration Page\n\nReturn a JSON array with specifications for each endpoint in order:\n[\n  {\"request_body\": \"describe parameters/body for endpoint 1\", \"response\": \"describe response structure for endpoint 1\"},\n  {\"request_body\": \"describe parameters/body for endpoint 2\", \"response\": \"describe response structure for endpoint 2\"},\n  ...\n]\n\nJSON array only:",
+      "response": "[\n  {\n    \"request_body\": \"The endpoint accepts a query parameter 'username' which is the username to be validated. For example: GET /api/validate-username?username=johndoe\",\n    \"response\": \"The endpoint returns a JSON object with a boolean property 'isAvailable' indicating whether the username is available or not. For example: { 'isAvailable': true } or { 'isAvailable': false }\"\n  }\n]",
+      "success": true
+    },
+    {
+      "resource": "roles",
+      "endpoints_count": 1,
+      "request": "Create full API specifications for ALL endpoints in the /roles resource.\n\nApplication Context: A Student Attendance Management System that allows students to mark their daily attendance \nand teachers to view and manage attendance records. The system includes user authentication \nwith separate roles for students and teachers, profile management, and password recovery features.\nStudents can log in to mark their attendance daily, while teachers can view attendance records \nand track student attendance patterns. The system provides a clean, intuitive interface for \nboth user types.\n\nEndpoints to specify:\n\n1. Endpoint: Get Roles\n   Method: GET\n   Path: /api/roles\n   Description: Retrieves available roles for registration\n   Used by pages: Registration Page\n\nReturn a JSON array with specifications for each endpoint in order:\n[\n  {\"request_body\": \"describe parameters/body for endpoint 1\", \"response\": \"describe response structure for endpoint 1\"},\n  {\"request_body\": \"describe parameters/body for endpoint 2\", \"response\": \"describe response structure for endpoint 2\"},\n  ...\n]\n\nJSON array only:",
+      "response": "[\n  {\n    \"request_body\": \"None, no parameters or body required\",\n    \"response\": \"JSON array of role objects, each containing 'id' and 'name' properties, e.g. [{\\\"id\\\": 1, \\\"name\\\": \\\"Student\\\"}, {\\\"id\\\": 2, \\\"name\\\": \\\"Teacher\\\"}]\"\n  }\n]",
+      "success": true
+    },
+    {
+      "resource": "terms-and-conditions",
+      "endpoints_count": 1,
+      "request": "Create full API specifications for ALL endpoints in the /terms-and-conditions resource.\n\nApplication Context: A Student Attendance Management System that allows students to mark their daily attendance \nand teachers to view and manage attendance records. The system includes user authentication \nwith separate roles for students and teachers, profile management, and password recovery features.\nStudents can log in to mark their attendance daily, while teachers can view attendance records \nand track student attendance patterns. The system provides a clean, intuitive interface for \nboth user types.\n\nEndpoints to specify:\n\n1. Endpoint: Get Terms and Conditions\n   Method: GET\n   Path: /api/terms-and-conditions\n   Description: Retrieves terms and conditions for registration\n   Used by pages: Registration Page\n\nReturn a JSON array with specifications for each endpoint in order:\n[\n  {\"request_body\": \"describe parameters/body for endpoint 1\", \"response\": \"describe response structure for endpoint 1\"},\n  {\"request_body\": \"describe parameters/body for endpoint 2\", \"response\": \"describe response structure for endpoint 2\"},\n  ...\n]\n\nJSON array only:",
+      "response": "[\n  {\n    \"request_body\": \"None, no parameters or body required for this endpoint\",\n    \"response\": {\n      \"status_code\": 200,\n      \"data\": {\n        \"terms_and_conditions\": \"string, contains the terms and conditions for registration\"\n      }\n    }\n  }\n]",
+      "success": true
+    },
+    {
+      "resource": "check-password-strength",
+      "endpoints_count": 1,
+      "request": "Create full API specifications for ALL endpoints in the /check-password-strength resource.\n\nApplication Context: A Student Attendance Management System that allows students to mark their daily attendance \nand teachers to view and manage attendance records. The system includes user authentication \nwith separate roles for students and teachers, profile management, and password recovery features.\nStudents can log in to mark their attendance daily, while teachers can view attendance records \nand track student attendance patterns. The system provides a clean, intuitive interface for \nboth user types.\n\nEndpoints to specify:\n\n1. Endpoint: Check Password Strength\n   Method: POST\n   Path: /api/check-password-strength\n   Description: Evaluates the strength of a given password\n   Used by pages: Registration Page\n\nReturn a JSON array with specifications for each endpoint in order:\n[\n  {\"request_body\": \"describe parameters/body for endpoint 1\", \"response\": \"describe response structure for endpoint 1\"},\n  {\"request_body\": \"describe parameters/body for endpoint 2\", \"response\": \"describe response structure for endpoint 2\"},\n  ...\n]\n\nJSON array only:",
+      "response": "[\n  {\n    \"request_body\": {\n      \"password\": \"string (required) - the password to be evaluated\"\n    },\n    \"response\": {\n      \"strength\": \"string (required) - the strength of the password (e.g. weak, medium, strong)\",\n      \"score\": \"integer (required) - a numerical score representing the password strength (e.g. 0-100)\",\n      \"feedback\": \"array of strings (optional) - suggestions for improving the password strength\"\n    }\n  }\n]",
+      "success": true
+    },
+    {
+      "resource": "user",
+      "endpoints_count": 1,
+      "request": "Create full API specifications for ALL endpoints in the /user resource.\n\nApplication Context: A Student Attendance Management System that allows students to mark their daily attendance \nand teachers to view and manage attendance records. The system includes user authentication \nwith separate roles for students and teachers, profile management, and password recovery features.\nStudents can log in to mark their attendance daily, while teachers can view attendance records \nand track student attendance patterns. The system provides a clean, intuitive interface for \nboth user types.\n\nEndpoints to specify:\n\n1. Endpoint: Get User Details\n   Method: GET\n   Path: /api/user/details\n   Description: Retrieve user's role and name\n   Used by pages: Dashboard\n\nReturn a JSON array with specifications for each endpoint in order:\n[\n  {\"request_body\": \"describe parameters/body for endpoint 1\", \"response\": \"describe response structure for endpoint 1\"},\n  {\"request_body\": \"describe parameters/body for endpoint 2\", \"response\": \"describe response structure for endpoint 2\"},\n  ...\n]\n\nJSON array only:",
+      "response": "[\n  {\n    \"request_body\": \"No request body required. Authentication token must be provided in the headers for authorization.\",\n    \"response\": \"JSON object containing user's role and name, e.g., {\\\"role\\\": \\\"student\\\" or \\\"teacher\\\", \\\"name\\\": \\\"John Doe\\\"}\"\n  },\n  {\n    \"request_body\": \"No request body required. Authentication token must be provided in the headers for authorization.\",\n    \"response\": \"JSON object containing user's profile information, e.g., {\\\"id\\\": 1, \\\"name\\\": \\\"John Doe\\\", \\\"email\\\": \\\"john@example.com\\\", \\\"role\\\": \\\"student\\\" or \\\"teacher\\\"}\"\n  },\n  {\n    \"request_body\": \"{\\\"currentPassword\\\": \\\"string\\\", \\\"newPassword\\\": \\\"string\\\"}\",\n    \"response\": \"JSON object with a success message, e.g., {\\\"message\\\": \\\"Password updated successfully\\\"}\"\n  },\n  {\n    \"request_body\": \"{\\\"email\\\": \\\"string\\\"}\",\n    \"response\": \"JSON object with a success message and password reset token, e.g., {\\\"message\\\": \\\"Password reset link sent to your email\\\", \\\"token\\\": \\\"reset-token\\\"}\"\n  },\n  {\n    \"request_body\": \"{\\\"token\\\": \\\"string\\\", \\\"newPassword\\\": \\\"string\\\"}\",\n    \"response\": \"JSON object with a success message, e.g., {\\\"message\\\": \\\"Password reset successfully\\\"}\"\n  },\n  {\n    \"request_body\": \"No request body required. Authentication token must be provided in the headers for authorization.\",\n    \"response\": \"JSON object containing user's attendance records, e.g., [{\\\"date\\\": \\\"2022-01-01\\\", \\\"status\\\": \\\"present\\\" or \\\"absent\\\"}, {\\\"date\\\": \\\"2022-01-02\\\", \\\"status\\\": \\\"present\\\" or \\\"absent\\\"}]\"\n  },\n  {\n    \"request_body\": \"{\\\"date\\\": \\\"string\\\"}\",\n    \"response\": \"JSON object with a success message, e.g., {\\\"message\\\": \\\"Attendance marked successfully\\\"}\"\n  },\n  {\n    \"request_body\": \"No request body required. Authentication token must be provided in the headers for authorization. Query parameters: ?startDate=string&endDate=string\",\n    \"response\": \"JSON object containing attendance records for the specified date range, e.g., [{\\\"date\\\": \\\"2022-01-01\\\", \\\"status\\\": \\\"present\\\" or \\\"absent\\\"}, {\\\"date\\\": \\\"2022-01-02\\\", \\\"status\\\": \\\"present\\\" or \\\"absent\\\"}]\"\n  },\n  {\n    \"request_body\": \"No request body required. Authentication token must be provided in the headers for authorization. Query parameters: ?studentId=integer\",\n    \"response\": \"JSON object containing attendance records for the specified student, e.g., [{\\\"date\\\": \\\"2022-01-01\\\", \\\"status\\\": \\\"present\\\" or \\\"absent\\\"}, {\\\"date\\\": \\\"2022-01-02\\\", \\\"status\\\": \\\"present\\\" or \\\"absent\\\"}]\"\n  }\n]",
+      "success": true
+    },
+    {
+      "resource": "attendance",
+      "endpoints_count": 16,
+      "request": "Create full API specifications for ALL endpoints in the /attendance resource.\n\nApplication Context: A Student Attendance Management System that allows students to mark their daily attendance \nand teachers to view and manage attendance records. The system includes user authentication \nwith separate roles for students and teachers, profile management, and password recovery features.\nStudents can log in to mark their attendance daily, while teachers can view attendance records \nand track student attendance patterns. The system provides a clean, intuitive interface for \nboth user types.\n\nEndpoints to specify:\n\n1. Endpoint: Mark Attendance\n   Method: POST\n   Path: /api/attendance/mark\n   Description: Mark attendance for a student\n   Used by pages: Dashboard, Attendance Marking\n2. Endpoint: Get Attendance Records\n   Method: GET\n   Path: /api/attendance/records\n   Description: Retrieve attendance records for a teacher\n   Used by pages: Dashboard\n3. Endpoint: Get Attendance History\n   Method: GET\n   Path: /api/attendance/history\n   Description: Retrieve attendance history for a student or class\n   Used by pages: Dashboard, Attendance Marking\n4. Endpoint: Get Attendance Patterns\n   Method: GET\n   Path: /api/attendance/patterns\n   Description: Retrieve attendance patterns for a student or class\n   Used by pages: Dashboard, Attendance Analytics\n5. Endpoint: Filter Attendance Records\n   Method: GET\n   Path: /api/attendance/records/filter\n   Description: Filter attendance records by date, student, or class\n   Used by pages: Dashboard\n6. Endpoint: Get Attendance Statistics\n   Method: GET\n   Path: /api/attendance/statistics\n   Description: Retrieve attendance statistics\n   Used by pages: Dashboard, Attendance Analytics\n7. Endpoint: Search Attendance Records\n   Method: GET\n   Path: /api/attendance/records/search\n   Description: Search attendance records for a specific student\n   Used by pages: Dashboard\n8. Endpoint: Get Attendance Calendar\n   Method: GET\n   Path: /api/attendance/calendar\n   Description: Fetch calendar data for attendance marking\n   Used by pages: Attendance Marking\n9. Endpoint: Add Attendance Comment\n   Method: POST\n   Path: /api/attendance/comment\n   Description: Add comments or reasons for absence\n   Used by pages: Attendance Marking\n10. Endpoint: Check Attendance Status\n   Method: GET\n   Path: /api/attendance/status\n   Description: Check if attendance is already marked for the day\n   Used by pages: Attendance Marking\n11. Endpoint: Validate Attendance Time Frame\n   Method: GET\n   Path: /api/attendance/timeframe\n   Description: Check if attendance marking is within the allowed time frame\n   Used by pages: Attendance Marking\n12. Endpoint: Get Student Attendance Records\n   Method: GET\n   Path: /api/attendance/records/:studentId\n   Description: Retrieve attendance records for an individual student\n   Used by pages: Attendance Analytics\n13. Endpoint: Get Class Attendance Statistics\n   Method: GET\n   Path: /api/attendance/class-statistics\n   Description: Retrieve overall class attendance statistics\n   Used by pages: Attendance Analytics\n14. Endpoint: Get Attendance Data\n   Method: GET\n   Path: /api/attendance/data\n   Description: Retrieve attendance data with filters and sorting\n   Used by pages: Attendance Analytics\n15. Endpoint: Get Attendance Visualization Data\n   Method: GET\n   Path: /api/attendance/visualization-data\n   Description: Retrieve data for visualizing attendance patterns\n   Used by pages: Attendance Analytics\n16. Endpoint: Get Student Attendance Percentage\n   Method: GET\n   Path: /api/attendance/percentage/:studentId\n   Description: Retrieve attendance percentage for an individual student\n   Used by pages: Attendance Analytics\n\nReturn a JSON array with specifications for each endpoint in order:\n[\n  {\"request_body\": \"describe parameters/body for endpoint 1\", \"response\": \"describe response structure for endpoint 1\"},\n  {\"request_body\": \"describe parameters/body for endpoint 2\", \"response\": \"describe response structure for endpoint 2\"},\n  ...\n]\n\nJSON array only:",
+      "response": "[\n  {\n    \"request_body\": {\n      \"student_id\": \"integer, required\",\n      \"date\": \"date, required\",\n      \"attendance_status\": \"string (present/absent), required\"\n    },\n    \"response\": {\n      \"status\": \"boolean, indicating success or failure\",\n      \"message\": \"string, describing the outcome of the request\"\n    }\n  },\n  {\n    \"request_body\": {},\n    \"response\": {\n      \"attendance_records\": [\n        {\n          \"student_id\": \"integer\",\n          \"date\": \"date\",\n          \"attendance_status\": \"string (present/absent)\"\n        }\n      ]\n    }\n  },\n  {\n    \"request_body\": {\n      \"student_id\": \"integer, optional\",\n      \"class_id\": \"integer, optional\",\n      \"start_date\": \"date, optional\",\n      \"end_date\": \"date, optional\"\n    },\n    \"response\": {\n      \"attendance_history\": [\n        {\n          \"date\": \"date\",\n          \"attendance_status\": \"string (present/absent)\"\n        }\n      ]\n    }\n  },\n  {\n    \"request_body\": {\n      \"student_id\": \"integer, optional\",\n      \"class_id\": \"integer, optional\",\n      \"start_date\": \"date, optional\",\n      \"end_date\": \"date, optional\"\n    },\n    \"response\": {\n      \"attendance_patterns\": {\n        \"present_count\": \"integer\",\n        \"absent_count\": \"integer\",\n        \"percentage\": \"float\"\n      }\n    }\n  },\n  {\n    \"request_body\": {\n      \"date\": \"date, optional\",\n      \"student_id\": \"integer, optional\",\n      \"class_id\": \"integer, optional\"\n    },\n    \"response\": {\n      \"filtered_records\": [\n        {\n          \"student_id\": \"integer\",\n          \"date\": \"date\",\n          \"attendance_status\": \"string (present/absent)\"\n        }\n      ]\n    }\n  },\n  {\n    \"request_body\": {},\n    \"response\": {\n      \"attendance_statistics\": {\n        \"total_students\": \"integer\",\n        \"present_count\": \"integer\",\n        \"absent_count\": \"integer\",\n        \"percentage\": \"float\"\n      }\n    }\n  },\n  {\n    \"request_body\": {\n      \"student_id\": \"integer, required\"\n    },\n    \"response\": {\n      \"attendance_records\": [\n        {\n          \"date\": \"date\",\n          \"attendance_status\": \"string (present/absent)\"\n        }\n      ]\n    }\n  },\n  {\n    \"request_body\": {},\n    \"response\": {\n      \"calendar_data\": [\n        {\n          \"date\": \"date\",\n          \"is_holiday\": \"boolean\"\n        }\n      ]\n    }\n  },\n  {\n    \"request_body\": {\n      \"student_id\": \"integer, required\",\n      \"date\": \"date, required\",\n      \"comment\": \"string, required\"\n    },\n    \"response\": {\n      \"status\": \"boolean, indicating success or failure\",\n      \"message\": \"string, describing the outcome of the request\"\n    }\n  },\n  {\n    \"request_body\": {},\n    \"response\": {\n      \"attendance_status\": \"boolean, indicating if attendance is already marked\"\n    }\n  },\n  {\n    \"request_body\": {},\n    \"response\": {\n      \"is_within_timeframe\": \"boolean, indicating if attendance marking is within the allowed time frame\"\n    }\n  },\n  {\n    \"request_body\": {},\n    \"response\": {\n      \"attendance_records\": [\n        {\n          \"date\": \"date\",\n          \"attendance_status\": \"string (present/absent)\"\n        }\n      ]\n    }\n  },\n  {\n    \"request_body\": {},\n    \"response\": {\n      \"class_statistics\": {\n        \"total_students\": \"integer\",\n        \"present_count\": \"integer\",\n        \"absent_count\": \"integer\",\n        \"percentage\": \"float\"\n      }\n    }\n  },\n  {\n    \"request_body\": {\n      \"filter_by\": \"string (date/student/class), optional\",\n      \"sort_by\": \"string (date/attendance_status), optional\"\n    },\n    \"response\": {\n      \"attendance_data\": [\n        {\n          \"student_id\": \"integer\",\n          \"date\": \"date\",\n          \"attendance_status\": \"string (present/absent)\"\n        }\n      ]\n    }\n  },\n  {\n    \"request_body\": {},\n    \"response\": {\n      \"visualization_data\": {\n        \"labels\": [\"string\"],\n        \"data\": [\"integer\"]\n      }\n    }\n  },\n  {\n    \"request_body\": {},\n    \"response\": {\n      \"attendance_percentage\": \"float\"\n    }\n  }\n]",
+      "success": true
+    },
+    {
+      "resource": "menu",
+      "endpoints_count": 1,
+      "request": "Create full API specifications for ALL endpoints in the /menu resource.\n\nApplication Context: A Student Attendance Management System that allows students to mark their daily attendance \nand teachers to view and manage attendance records. The system includes user authentication \nwith separate roles for students and teachers, profile management, and password recovery features.\nStudents can log in to mark their attendance daily, while teachers can view attendance records \nand track student attendance patterns. The system provides a clean, intuitive interface for \nboth user types.\n\nEndpoints to specify:\n\n1. Endpoint: Get Navigation Menu\n   Method: GET\n   Path: /api/menu/items\n   Description: Retrieve navigation menu items\n   Used by pages: Dashboard\n\nReturn a JSON array with specifications for each endpoint in order:\n[\n  {\"request_body\": \"describe parameters/body for endpoint 1\", \"response\": \"describe response structure for endpoint 1\"},\n  {\"request_body\": \"describe parameters/body for endpoint 2\", \"response\": \"describe response structure for endpoint 2\"},\n  ...\n]\n\nJSON array only:",
+      "response": "[\n  {\n    \"request_body\": \"No request body required. Query parameters: none\",\n    \"response\": \"JSON array of navigation menu items. Each item contains: id (integer), name (string), url (string), icon (string), roles (array of strings), parentId (integer), order (integer)\"\n  }\n]",
+      "success": true
+    },
+    {
+      "resource": "calendar",
+      "endpoints_count": 1,
+      "request": "Create full API specifications for ALL endpoints in the /calendar resource.\n\nApplication Context: A Student Attendance Management System that allows students to mark their daily attendance \nand teachers to view and manage attendance records. The system includes user authentication \nwith separate roles for students and teachers, profile management, and password recovery features.\nStudents can log in to mark their attendance daily, while teachers can view attendance records \nand track student attendance patterns. The system provides a clean, intuitive interface for \nboth user types.\n\nEndpoints to specify:\n\n1. Endpoint: Get Calendar\n   Method: GET\n   Path: /api/calendar/data\n   Description: Retrieve calendar data\n   Used by pages: Dashboard\n\nReturn a JSON array with specifications for each endpoint in order:\n[\n  {\"request_body\": \"describe parameters/body for endpoint 1\", \"response\": \"describe response structure for endpoint 1\"},\n  {\"request_body\": \"describe parameters/body for endpoint 2\", \"response\": \"describe response structure for endpoint 2\"},\n  ...\n]\n\nJSON array only:",
+      "response": "[\n  {\n    \"request_body\": \"No request body required. Query parameters: start_date (string, format: YYYY-MM-DD), end_date (string, format: YYYY-MM-DD), Optional: student_id (integer) if teacher wants to view specific student's calendar\",\n    \"response\": \"JSON object containing calendar data: { 'dates': [array of date strings in YYYY-MM-DD format], 'attendance_records': [array of objects with student_id, date, attendance_status (present/absent)] }\"\n  },\n  {\n    \"request_body\": \"No request body required. Query parameters: date (string, format: YYYY-MM-DD), student_id (integer)\",\n    \"response\": \"JSON object containing attendance status for the specified date and student: { 'attendance_status': 'present' or 'absent' }\"\n  },\n  {\n    \"request_body\": \"JSON object with date (string, format: YYYY-MM-DD), student_id (integer), attendance_status (present/absent)\",\n    \"response\": \"JSON object with success message: { 'message': 'Attendance marked successfully' }\"\n  },\n  {\n    \"request_body\": \"No request body required. Query parameters: start_date (string, format: YYYY-MM-DD), end_date (string, format: YYYY-MM-DD), student_id (integer)\",\n    \"response\": \"JSON object containing attendance summary for the specified date range and student: { 'total_days': integer, 'present_days': integer, 'absent_days': integer }\"\n  },\n  {\n    \"request_body\": \"No request body required. Query parameters: date (string, format: YYYY-MM-DD)\",\n    \"response\": \"JSON object containing list of students who were present/absent on the specified date: { 'present_students': [array of student_ids], 'absent_students': [array of student_ids] }\"\n  },\n  {\n    \"request_body\": \"JSON object with date (string, format: YYYY-MM-DD), student_id (integer), attendance_status (present/absent)\",\n    \"response\": \"JSON object with success message: { 'message': 'Attendance updated successfully' }\"\n  },\n  {\n    \"request_body\": \"No request body required. Query parameters: student_id (integer), date (string, format: YYYY-MM-DD)\",\n    \"response\": \"JSON object containing attendance record for the specified student and date: { 'attendance_status': 'present' or 'absent' }\"\n  },\n  {\n    \"request_body\": \"No request body required. Query parameters: start_date (string, format: YYYY-MM-DD), end_date (string, format: YYYY-MM-DD)\",\n    \"response\": \"JSON object containing calendar data for all students: { 'dates': [array of date strings in YYYY-MM-DD format], 'attendance_records': [array of objects with student_id, date, attendance_status (present/absent)] }\"\n  }\n]",
+      "success": true
+    },
+    {
+      "resource": "notifications",
+      "endpoints_count": 1,
+      "request": "Create full API specifications for ALL endpoints in the /notifications resource.\n\nApplication Context: A Student Attendance Management System that allows students to mark their daily attendance \nand teachers to view and manage attendance records. The system includes user authentication \nwith separate roles for students and teachers, profile management, and password recovery features.\nStudents can log in to mark their attendance daily, while teachers can view attendance records \nand track student attendance patterns. The system provides a clean, intuitive interface for \nboth user types.\n\nEndpoints to specify:\n\n1. Endpoint: Get Notifications\n   Method: GET\n   Path: /api/notifications\n   Description: Retrieve notifications for a teacher\n   Used by pages: Dashboard\n\nReturn a JSON array with specifications for each endpoint in order:\n[\n  {\"request_body\": \"describe parameters/body for endpoint 1\", \"response\": \"describe response structure for endpoint 1\"},\n  {\"request_body\": \"describe parameters/body for endpoint 2\", \"response\": \"describe response structure for endpoint 2\"},\n  ...\n]\n\nJSON array only:",
+      "response": "[\n  {\n    \"request_body\": \"No request body required. Authentication token must be provided in the Authorization header.\",\n    \"response\": \"A JSON array of notification objects. Each object contains the following properties: id (unique identifier), title, message, timestamp (date and time the notification was created), and read (boolean indicating whether the notification has been read). Example: [{id: 1, title: 'New Attendance Record', message: 'A new attendance record has been submitted.', timestamp: '2024-09-16T10:00:00.000Z', read: false}]\"\n  }\n]",
+      "success": true
+    },
+    {
+      "resource": "profile",
+      "endpoints_count": 5,
+      "request": "Create full API specifications for ALL endpoints in the /profile resource.\n\nApplication Context: A Student Attendance Management System that allows students to mark their daily attendance \nand teachers to view and manage attendance records. The system includes user authentication \nwith separate roles for students and teachers, profile management, and password recovery features.\nStudents can log in to mark their attendance daily, while teachers can view attendance records \nand track student attendance patterns. The system provides a clean, intuitive interface for \nboth user types.\n\nEndpoints to specify:\n\n1. Endpoint: Get User Profile\n   Method: GET\n   Path: /api/profile\n   Description: Retrieve user profile information\n   Used by pages: Profile Management\n2. Endpoint: Update User Profile\n   Method: PUT\n   Path: /api/profile\n   Description: Update user profile details\n   Used by pages: Profile Management\n3. Endpoint: Upload Profile Picture\n   Method: POST\n   Path: /api/profile/picture\n   Description: Upload a new profile picture\n   Used by pages: Profile Management\n4. Endpoint: Change Password\n   Method: POST\n   Path: /api/profile/password\n   Description: Change user password\n   Used by pages: Profile Management\n5. Endpoint: Validate Profile Updates\n   Method: POST\n   Path: /api/profile/validate\n   Description: Validate user input for profile updates\n   Used by pages: Profile Management\n\nReturn a JSON array with specifications for each endpoint in order:\n[\n  {\"request_body\": \"describe parameters/body for endpoint 1\", \"response\": \"describe response structure for endpoint 1\"},\n  {\"request_body\": \"describe parameters/body for endpoint 2\", \"response\": \"describe response structure for endpoint 2\"},\n  ...\n]\n\nJSON array only:",
+      "response": "[\n  {\n    \"request_body\": \"No request body required. Authentication token must be provided in the Authorization header.\",\n    \"response\": {\n      \"status_code\": 200,\n      \"structure\": {\n        \"id\": \"integer\",\n        \"name\": \"string\",\n        \"email\": \"string\",\n        \"role\": \"string\",\n        \"picture\": \"string (URL of the profile picture)\"\n      }\n    }\n  },\n  {\n    \"request_body\": {\n      \"name\": \"string\",\n      \"email\": \"string\"\n    },\n    \"response\": {\n      \"status_code\": 200,\n      \"structure\": {\n        \"message\": \"string (success message)\",\n        \"updated_profile\": {\n          \"id\": \"integer\",\n          \"name\": \"string\",\n          \"email\": \"string\",\n          \"role\": \"string\",\n          \"picture\": \"string (URL of the profile picture)\"\n        }\n      }\n    }\n  },\n  {\n    \"request_body\": \"multipart/form-data with a 'picture' field containing the profile picture file\",\n    \"response\": {\n      \"status_code\": 200,\n      \"structure\": {\n        \"message\": \"string (success message)\",\n        \"picture_url\": \"string (URL of the uploaded profile picture)\"\n      }\n    }\n  },\n  {\n    \"request_body\": {\n      \"old_password\": \"string\",\n      \"new_password\": \"string\",\n      \"confirm_password\": \"string\"\n    },\n    \"response\": {\n      \"status_code\": 200,\n      \"structure\": {\n        \"message\": \"string (success message)\"\n      }\n    }\n  },\n  {\n    \"request_body\": {\n      \"name\": \"string\",\n      \"email\": \"string\"\n    },\n    \"response\": {\n      \"status_code\": 200,\n      \"structure\": {\n        \"valid\": \"boolean\",\n        \"errors\": {\n          \"name\": \"string (error message)\",\n          \"email\": \"string (error message)\"\n        }\n      }\n    }\n  }\n]",
+      "success": true
+    },
+    {
+      "resource": "password-recovery",
+      "endpoints_count": 5,
+      "request": "Create full API specifications for ALL endpoints in the /password-recovery resource.\n\nApplication Context: A Student Attendance Management System that allows students to mark their daily attendance \nand teachers to view and manage attendance records. The system includes user authentication \nwith separate roles for students and teachers, profile management, and password recovery features.\nStudents can log in to mark their attendance daily, while teachers can view attendance records \nand track student attendance patterns. The system provides a clean, intuitive interface for \nboth user types.\n\nEndpoints to specify:\n\n1. Endpoint: Send Password Recovery Email\n   Method: POST\n   Path: /api/password-recovery/send-email\n   Description: Sends a password recovery email to the user\n   Used by pages: Password Recovery\n2. Endpoint: Validate Username or Email\n   Method: POST\n   Path: /api/password-recovery/validate-credentials\n   Description: Validates if the username or email address exists in the database\n   Used by pages: Password Recovery\n3. Endpoint: Resend Password Recovery Email\n   Method: POST\n   Path: /api/password-recovery/resend-email\n   Description: Resends the password recovery email if the user does not receive it\n   Used by pages: Password Recovery\n4. Endpoint: Reset Password\n   Method: PUT\n   Path: /api/password-recovery/reset-password\n   Description: Resets the user's password\n   Used by pages: Password Recovery\n5. Endpoint: Verify Password Recovery Token\n   Method: GET\n   Path: /api/password-recovery/verify-token\n   Description: Verifies the password recovery token sent in the email\n   Used by pages: Password Recovery\n\nReturn a JSON array with specifications for each endpoint in order:\n[\n  {\"request_body\": \"describe parameters/body for endpoint 1\", \"response\": \"describe response structure for endpoint 1\"},\n  {\"request_body\": \"describe parameters/body for endpoint 2\", \"response\": \"describe response structure for endpoint 2\"},\n  ...\n]\n\nJSON array only:",
+      "response": "[\n  {\n    \"request_body\": {\n      \"username_or_email\": \"string (required) - The username or email address of the user\",\n      \"client_url\": \"string (required) - The URL of the client application to redirect the user after password recovery\"\n    },\n    \"response\": {\n      \"success\": \"boolean (required) - Indicates whether the password recovery email was sent successfully\",\n      \"message\": \"string (optional) - A message describing the result of the operation\",\n      \"token\": \"string (optional) - The password recovery token\"\n    }\n  },\n  {\n    \"request_body\": {\n      \"username_or_email\": \"string (required) - The username or email address to validate\"\n    },\n    \"response\": {\n      \"valid\": \"boolean (required) - Indicates whether the username or email address exists in the database\",\n      \"message\": \"string (optional) - A message describing the result of the operation\"\n    }\n  },\n  {\n    \"request_body\": {\n      \"username_or_email\": \"string (required) - The username or email address of the user\",\n      \"client_url\": \"string (required) - The URL of the client application to redirect the user after password recovery\"\n    },\n    \"response\": {\n      \"success\": \"boolean (required) - Indicates whether the password recovery email was resent successfully\",\n      \"message\": \"string (optional) - A message describing the result of the operation\"\n    }\n  },\n  {\n    \"request_body\": {\n      \"token\": \"string (required) - The password recovery token\",\n      \"new_password\": \"string (required) - The new password for the user\",\n      \"confirm_password\": \"string (required) - The confirmation of the new password\"\n    },\n    \"response\": {\n      \"success\": \"boolean (required) - Indicates whether the password was reset successfully\",\n      \"message\": \"string (optional) - A message describing the result of the operation\"\n    }\n  },\n  {\n    \"request_params\": {\n      \"token\": \"string (required) - The password recovery token to verify\"\n    },\n    \"response\": {\n      \"valid\": \"boolean (required) - Indicates whether the password recovery token is valid\",\n      \"message\": \"string (optional) - A message describing the result of the operation\",\n      \"user_id\": \"integer (optional) - The ID of the user associated with the token\"\n    }\n  }\n]",
+      "success": true
+    },
+    {
+      "resource": "student",
+      "endpoints_count": 1,
+      "request": "Create full API specifications for ALL endpoints in the /student resource.\n\nApplication Context: A Student Attendance Management System that allows students to mark their daily attendance \nand teachers to view and manage attendance records. The system includes user authentication \nwith separate roles for students and teachers, profile management, and password recovery features.\nStudents can log in to mark their attendance daily, while teachers can view attendance records \nand track student attendance patterns. The system provides a clean, intuitive interface for \nboth user types.\n\nEndpoints to specify:\n\n1. Endpoint: Get Student Details\n   Method: GET\n   Path: /api/student/details\n   Description: Retrieve student details to confirm identity\n   Used by pages: Attendance Marking\n\nReturn a JSON array with specifications for each endpoint in order:\n[\n  {\"request_body\": \"describe parameters/body for endpoint 1\", \"response\": \"describe response structure for endpoint 1\"},\n  {\"request_body\": \"describe parameters/body for endpoint 2\", \"response\": \"describe response structure for endpoint 2\"},\n  ...\n]\n\nJSON array only:",
+      "response": "[\n  {\n    \"request_body\": \"No request body required. Authentication token must be provided in the Authorization header.\",\n    \"response\": {\n      \"status_code\": 200,\n      \"structure\": {\n        \"student_id\": \"integer\",\n        \"name\": \"string\",\n        \"email\": \"string\",\n        \"role\": \"string\"\n      },\n      \"description\": \"Returns student details in JSON format\"\n    }\n  },\n  {\n    \"request_body\": \"No request body required. Authentication token must be provided in the Authorization header.\",\n    \"response\": {\n      \"status_code\": 401,\n      \"structure\": {\n        \"error\": \"string\",\n        \"message\": \"string\"\n      },\n      \"description\": \"Returns error message if authentication fails\"\n    }\n  },\n  {\n    \"request_body\": \"No request body required. Authentication token must be provided in the Authorization header.\",\n    \"response\": {\n      \"status_code\": 404,\n      \"structure\": {\n        \"error\": \"string\",\n        \"message\": \"string\"\n      },\n      \"description\": \"Returns error message if student details are not found\"\n    }\n  },\n  {\n    \"request_body\": {\n      \"student_id\": \"integer\",\n      \"date\": \"date string (YYYY-MM-DD)\"\n    },\n    \"response\": {\n      \"status_code\": 200,\n      \"structure\": {\n        \"attendance_status\": \"boolean\",\n        \"date\": \"date string (YYYY-MM-DD)\"\n      },\n      \"description\": \"Returns attendance status for the given date\"\n    }\n  },\n  {\n    \"request_body\": {\n      \"student_id\": \"integer\",\n      \"date\": \"date string (YYYY-MM-DD)\",\n      \"attendance_status\": \"boolean\"\n    },\n    \"response\": {\n      \"status_code\": 201,\n      \"structure\": {\n        \"message\": \"string\"\n      },\n      \"description\": \"Marks attendance for the given date\"\n    }\n  },\n  {\n    \"request_body\": {\n      \"student_id\": \"integer\",\n      \"start_date\": \"date string (YYYY-MM-DD)\",\n      \"end_date\": \"date string (YYYY-MM-DD)\"\n    },\n    \"response\": {\n      \"status_code\": 200,\n      \"structure\": {\n        \"attendance_records\": [\n          {\n            \"date\": \"date string (YYYY-MM-DD)\",\n            \"attendance_status\": \"boolean\"\n          }\n        ]\n      },\n      \"description\": \"Returns attendance records for the given date range\"\n    }\n  },\n  {\n    \"request_body\": {\n      \"student_id\": \"integer\"\n    },\n    \"response\": {\n      \"status_code\": 200,\n      \"structure\": {\n        \"attendance_summary\": {\n          \"total_classes\": \"integer\",\n          \"attended_classes\": \"integer\",\n          \"absent_classes\": \"integer\"\n        }\n      },\n      \"description\": \"Returns attendance summary for the student\"\n    }\n  }\n]",
+      "success": true
+    },
+    {
+      "resource": "authenticate",
+      "endpoints_count": 1,
+      "request": "Create full API specifications for ALL endpoints in the /authenticate resource.\n\nApplication Context: A Student Attendance Management System that allows students to mark their daily attendance \nand teachers to view and manage attendance records. The system includes user authentication \nwith separate roles for students and teachers, profile management, and password recovery features.\nStudents can log in to mark their attendance daily, while teachers can view attendance records \nand track student attendance patterns. The system provides a clean, intuitive interface for \nboth user types.\n\nEndpoints to specify:\n\n1. Endpoint: Authenticate Student\n   Method: POST\n   Path: /api/authenticate/student\n   Description: Validate user authentication to ensure only authorized students can mark their attendance\n   Used by pages: Attendance Marking\n\nReturn a JSON array with specifications for each endpoint in order:\n[\n  {\"request_body\": \"describe parameters/body for endpoint 1\", \"response\": \"describe response structure for endpoint 1\"},\n  {\"request_body\": \"describe parameters/body for endpoint 2\", \"response\": \"describe response structure for endpoint 2\"},\n  ...\n]\n\nJSON array only:",
+      "response": "[\n  {\n    \"request_body\": \"The request body for this endpoint should contain the student's username and password in JSON format, e.g., {\\\"username\\\": \\\"student123\\\", \\\"password\\\": \\\"password123\\\"}.\",\n    \"response\": \"The response will be a JSON object containing a token for authenticated students, e.g., {\\\"token\\\": \\\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c\\\", \\\"role\\\": \\\"student\\\"}. If authentication fails, it will return a JSON object with an error message, e.g., {\\\"error\\\": \\\"Invalid username or password\\\"}.\"\n  },\n  {\n    \"request_body\": \"The request body for this endpoint should contain the teacher's username and password in JSON format, e.g., {\\\"username\\\": \\\"teacher123\\\", \\\"password\\\": \\\"password123\\\"}.\",\n    \"response\": \"The response will be a JSON object containing a token for authenticated teachers, e.g., {\\\"token\\\": \\\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c\\\", \\\"role\\\": \\\"teacher\\\"}. If authentication fails, it will return a JSON object with an error message, e.g., {\\\"error\\\": \\\"Invalid username or password\\\"}.\"\n  },\n  {\n    \"request_body\": \"The request body for this endpoint should contain the user's email address in JSON format, e.g., {\\\"email\\\": \\\"user@example.com\\\"}.\",\n    \"response\": \"The response will be a JSON object with a password recovery link or code sent to the user's email, e.g., {\\\"message\\\": \\\"Password recovery link sent to your email\\\"}. If the email is not found, it will return a JSON object with an error message, e.g., {\\\"error\\\": \\\"Email not found\\\"}.\"\n  },\n  {\n    \"request_body\": \"The request body for this endpoint should contain the user's current password, new password, and confirm new password in JSON format, e.g., {\\\"currentPassword\\\": \\\"password123\\\", \\\"newPassword\\\": \\\"newPassword123\\\", \\\"confirmNewPassword\\\": \\\"newPassword123\\\"}.\",\n    \"response\": \"The response will be a JSON object with a success message, e.g., {\\\"message\\\": \\\"Password changed successfully\\\"}. If the current password is incorrect or the new passwords do not match, it will return a JSON object with an error message, e.g., {\\\"error\\\": \\\"Current password is incorrect\\\"} or {\\\"error\\\": \\\"New passwords do not match\\\"}.\"\n  },\n  {\n    \"request_body\": \"The request body for this endpoint should contain the user's token in JSON format, e.g., {\\\"token\\\": \\\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c\\\"}.\",\n    \"response\": \"The response will be a JSON object with the user's profile information, e.g., {\\\"username\\\": \\\"student123\\\", \\\"email\\\": \\\"student@example.com\\\", \\\"role\\\": \\\"student\\\"}. If the token is invalid, it will return a JSON object with an error message, e.g., {\\\"error\\\": \\\"Invalid token\\\"}.\"\n  },\n  {\n    \"request_body\": \"The request body for this endpoint should contain the user's token and updated profile information in JSON format, e.g., {\\\"token\\\": \\\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c\\\", \\\"username\\\": \\\"updatedStudent123\\\", \\\"email\\\": \\\"updatedStudent@example.com\\\"}.\",\n    \"response\": \"The response will be a JSON object with a success message, e.g., {\\\"message\\\": \\\"Profile updated successfully\\\"}. If the token is invalid or the updated information is invalid, it will return a JSON object with an error message, e.g., {\\\"error\\\": \\\"Invalid token\\\"} or {\\\"error\\\": \\\"Invalid updated information\\\"}.\"\n  }\n]",
+      "success": true
+    },
+    {
+      "resource": "students",
+      "endpoints_count": 18,
+      "request": "Create full API specifications for ALL endpoints in the /students resource.\n\nApplication Context: A Student Attendance Management System that allows students to mark their daily attendance \nand teachers to view and manage attendance records. The system includes user authentication \nwith separate roles for students and teachers, profile management, and password recovery features.\nStudents can log in to mark their attendance daily, while teachers can view attendance records \nand track student attendance patterns. The system provides a clean, intuitive interface for \nboth user types.\n\nEndpoints to specify:\n\n1. Endpoint: Get All Students\n   Method: GET\n   Path: /api/students\n   Description: Retrieve a list of all students\n   Used by pages: Attendance Records\n2. Endpoint: Get Student Attendance Records\n   Method: GET\n   Path: /api/students/{studentId}/attendance\n   Description: Retrieve attendance records for a specific student\n   Used by pages: Attendance Records, Student Information\n3. Endpoint: Filter Attendance Records By Date Range\n   Method: GET\n   Path: /api/students/{studentId}/attendance?startDate={startDate}&endDate={endDate}\n   Description: Retrieve attendance records for a specific date range\n   Used by pages: Attendance Records\n4. Endpoint: Search Students\n   Method: GET\n   Path: /api/students/search?q={query}\n   Description: Search for specific students by name or ID\n   Used by pages: Attendance Records\n5. Endpoint: Get Detailed Attendance History\n   Method: GET\n   Path: /api/students/{studentId}/attendance/history\n   Description: Retrieve detailed attendance history for a specific student\n   Used by pages: Attendance Records, Attendance History, Student Information\n6. Endpoint: Export Attendance Records To CSV\n   Method: GET\n   Path: /api/students/attendance/export/csv\n   Description: Export attendance records to CSV\n   Used by pages: Attendance Records\n7. Endpoint: Export Attendance Records To Excel\n   Method: GET\n   Path: /api/students/attendance/export/excel\n   Description: Export attendance records to Excel\n   Used by pages: Attendance Records\n8. Endpoint: Get Student Profile\n   Method: GET\n   Path: /api/students/{studentId}/profile\n   Description: Retrieve student's profile information\n   Used by pages: Attendance History, Student Information\n9. Endpoint: Get Attendance History By Date Range\n   Method: GET\n   Path: /api/students/{studentId}/attendance/history/byDateRange\n   Description: Retrieve student's attendance history for a specific date range\n   Used by pages: Attendance History\n10. Endpoint: Search Attendance Records\n   Method: GET\n   Path: /api/students/{studentId}/attendance/history/search\n   Description: Search for specific attendance records\n   Used by pages: Attendance History\n11. Endpoint: Export Attendance History\n   Method: GET\n   Path: /api/students/{studentId}/attendance/history/export\n   Description: Export student's attendance history in CSV or PDF format\n   Used by pages: Attendance History\n12. Endpoint: Get Attendance Summary\n   Method: GET\n   Path: /api/students/{studentId}/attendance/summary\n   Description: Retrieve student's attendance summary (total days present, absent, percentage)\n   Used by pages: Attendance History\n13. Endpoint: Search Students\n   Method: GET\n   Path: /api/students/search\n   Description: Search for students by name\n   Used by pages: Attendance Analytics, Student Information\n14. Endpoint: Filter Students\n   Method: GET\n   Path: /api/students/filter\n   Description: Filter students by class or attendance status\n   Used by pages: Student Information\n15. Endpoint: Get Student Dashboard\n   Method: GET\n   Path: /api/students/dashboard\n   Description: Retrieve dashboard view for teachers to overview student attendance\n   Used by pages: Student Information\n16. Endpoint: Get Student Profile Picture\n   Method: GET\n   Path: /api/students/{studentId}/profile-picture\n   Description: Retrieve student profile picture\n   Used by pages: Student Information\n17. Endpoint: Get Student Contact Information\n   Method: GET\n   Path: /api/students/{studentId}/contact-info\n   Description: Retrieve student contact information\n   Used by pages: Student Information\n18. Endpoint: Get Detailed Attendance Records\n   Method: GET\n   Path: /api/students/{studentId}/attendance/details\n   Description: Retrieve detailed attendance records for a student\n   Used by pages: Student Information\n\nReturn a JSON array with specifications for each endpoint in order:\n[\n  {\"request_body\": \"describe parameters/body for endpoint 1\", \"response\": \"describe response structure for endpoint 1\"},\n  {\"request_body\": \"describe parameters/body for endpoint 2\", \"response\": \"describe response structure for endpoint 2\"},\n  ...\n]\n\nJSON array only:",
+      "response": "[\n  {\n    \"request_body\": \"None\",\n    \"response\": {\n      \"status_code\": 200,\n      \"data\": [\n        {\n          \"id\": \"integer\",\n          \"name\": \"string\",\n          \"email\": \"string\"\n        }\n      ]\n    },\n    \"description\": \"Retrieve a list of all students\",\n    \"method\": \"GET\",\n    \"path\": \"/api/students\"\n  },\n  {\n    \"request_body\": \"None\",\n    \"response\": {\n      \"status_code\": 200,\n      \"data\": [\n        {\n          \"date\": \"date\",\n          \"status\": \"string\"\n        }\n      ]\n    },\n    \"description\": \"Retrieve attendance records for a specific student\",\n    \"method\": \"GET\",\n    \"path\": \"/api/students/{studentId}/attendance\",\n    \"parameters\": {\n      \"studentId\": \"integer\"\n    }\n  },\n  {\n    \"request_body\": \"None\",\n    \"response\": {\n      \"status_code\": 200,\n      \"data\": [\n        {\n          \"date\": \"date\",\n          \"status\": \"string\"\n        }\n      ]\n    },\n    \"description\": \"Retrieve attendance records for a specific date range\",\n    \"method\": \"GET\",\n    \"path\": \"/api/students/{studentId}/attendance\",\n    \"parameters\": {\n      \"studentId\": \"integer\",\n      \"startDate\": \"date\",\n      \"endDate\": \"date\"\n    }\n  },\n  {\n    \"request_body\": \"None\",\n    \"response\": {\n      \"status_code\": 200,\n      \"data\": [\n        {\n          \"id\": \"integer\",\n          \"name\": \"string\",\n          \"email\": \"string\"\n        }\n      ]\n    },\n    \"description\": \"Search for specific students by name or ID\",\n    \"method\": \"GET\",\n    \"path\": \"/api/students/search\",\n    \"parameters\": {\n      \"q\": \"string\"\n    }\n  },\n  {\n    \"request_body\": \"None\",\n    \"response\": {\n      \"status_code\": 200,\n      \"data\": [\n        {\n          \"date\": \"date\",\n          \"status\": \"string\"\n        }\n      ]\n    },\n    \"description\": \"Retrieve detailed attendance history for a specific student\",\n    \"method\": \"GET\",\n    \"path\": \"/api/students/{studentId}/attendance/history\",\n    \"parameters\": {\n      \"studentId\": \"integer\"\n    }\n  },\n  {\n    \"request_body\": \"None\",\n    \"response\": {\n      \"status_code\": 200,\n      \"data\": \"csv file\"\n    },\n    \"description\": \"Export attendance records to CSV\",\n    \"method\": \"GET\",\n    \"path\": \"/api/students/attendance/export/csv\"\n  },\n  {\n    \"request_body\": \"None\",\n    \"response\": {\n      \"status_code\": 200,\n      \"data\": \"excel file\"\n    },\n    \"description\": \"Export attendance records to Excel\",\n    \"method\": \"GET\",\n    \"path\": \"/api/students/attendance/export/excel\"\n  },\n  {\n    \"request_body\": \"None\",\n    \"response\": {\n      \"status_code\": 200,\n      \"data\": {\n        \"id\": \"integer\",\n        \"name\": \"string\",\n        \"email\": \"string\"\n      }\n    },\n    \"description\": \"Retrieve student's profile information\",\n    \"method\": \"GET\",\n    \"path\": \"/api/students/{studentId}/profile\",\n    \"parameters\": {\n      \"studentId\": \"integer\"\n    }\n  },\n  {\n    \"request_body\": \"None\",\n    \"response\": {\n      \"status_code\": 200,\n      \"data\": [\n        {\n          \"date\": \"date\",\n          \"status\": \"string\"\n        }\n      ]\n    },\n    \"description\": \"Retrieve student's attendance history for a specific date range\",\n    \"method\": \"GET\",\n    \"path\": \"/api/students/{studentId}/attendance/history/byDateRange\",\n    \"parameters\": {\n      \"studentId\": \"integer\",\n      \"startDate\": \"date\",\n      \"endDate\": \"date\"\n    }\n  },\n  {\n    \"request_body\": \"None\",\n    \"response\": {\n      \"status_code\": 200,\n      \"data\": [\n        {\n          \"date\": \"date\",\n          \"status\": \"string\"\n        }\n      ]\n    },\n    \"description\": \"Search for specific attendance records\",\n    \"method\": \"GET\",\n    \"path\": \"/api/students/{studentId}/attendance/history/search\",\n    \"parameters\": {\n      \"studentId\": \"integer\",\n      \"q\": \"string\"\n    }\n  },\n  {\n    \"request_body\": \"None\",\n    \"response\": {\n      \"status_code\": 200,\n      \"data\": \"csv or pdf file\"\n    },\n    \"description\": \"Export student's attendance history in CSV or PDF format\",\n    \"method\": \"GET\",\n    \"path\": \"/api/students/{studentId}/attendance/history/export\",\n    \"parameters\": {\n      \"studentId\": \"integer\"\n    }\n  },\n  {\n    \"request_body\": \"None\",\n    \"response\": {\n      \"status_code\": 200,\n      \"data\": {\n        \"totalDaysPresent\": \"integer\",\n        \"totalDaysAbsent\": \"integer\",\n        \"attendancePercentage\": \"float\"\n      }\n    },\n    \"description\": \"Retrieve student's attendance summary\",\n    \"method\": \"GET\",\n    \"path\": \"/api/students/{studentId}/attendance/summary\",\n    \"parameters\": {\n      \"studentId\": \"integer\"\n    }\n  },\n  {\n    \"request_body\": \"None\",\n    \"response\": {\n      \"status_code\": 200,\n      \"data\": [\n        {\n          \"id\": \"integer\",\n          \"name\": \"string\",\n          \"email\": \"string\"\n        }\n      ]\n    },\n    \"description\": \"Search for students by name\",\n    \"method\": \"GET\",\n    \"path\": \"/api/students/search\",\n    \"parameters\": {\n      \"q\": \"string\"\n    }\n  },\n  {\n    \"request_body\": \"None\",\n    \"response\": {\n      \"status_code\": 200,\n      \"data\": [\n        {\n          \"id\": \"integer\",\n          \"name\": \"string\",\n          \"email\": \"string\"\n        }\n      ]\n    },\n    \"description\": \"Filter students by class or attendance status\",\n    \"method\": \"GET\",\n    \"path\": \"/api/students/filter\",\n    \"parameters\": {\n      \"class\": \"string\",\n      \"attendanceStatus\": \"string\"\n    }\n  },\n  {\n    \"request_body\": \"None\",\n    \"response\": {\n      \"status_code\": 200,\n      \"data\": {\n        \"students\": [\n          {\n            \"id\": \"integer\",\n            \"name\": \"string\",\n            \"email\": \"string\"\n          }\n        ]\n      }\n    },\n    \"description\": \"Retrieve dashboard view for teachers to overview student attendance\",\n    \"method\": \"GET\",\n    \"path\": \"/api/students/dashboard\"\n  },\n  {\n    \"request_body\": \"None\",\n    \"response\": {\n      \"status_code\": 200,\n      \"data\": \"image file\"\n    },\n    \"description\": \"Retrieve student profile picture\",\n    \"method\": \"GET\",\n    \"path\": \"/api/students/{studentId}/profile-picture\",\n    \"parameters\": {\n      \"studentId\": \"integer\"\n    }\n  },\n  {\n    \"request_body\": \"None\",\n    \"response\": {\n      \"status_code\": 200,\n      \"data\": {\n        \"phone\": \"string\",\n        \"email\": \"string\"\n      }\n    },\n    \"description\": \"Retrieve student contact information\",\n    \"method\": \"GET\",\n    \"path\": \"/api/students/{studentId}/contact-info\",\n    \"parameters\": {\n      \"studentId\": \"integer\"\n    }\n  },\n  {\n    \"request_body\": \"None\",\n    \"response\": {\n      \"status_code\": 200,\n      \"data\": [\n        {\n          \"date\": \"date\",\n          \"status\": \"string\"\n        }\n      ]\n    },\n    \"description\": \"Retrieve detailed attendance records for a student\",\n    \"method\": \"GET\",\n    \"path\": \"/api/students/{studentId}/attendance/details\",\n    \"parameters\": {\n      \"studentId\": \"integer\"\n    }\n  }\n]",
+      "success": true
+    },
+    {
+      "resource": "students?page={page}&size={size}",
+      "endpoints_count": 1,
+      "request": "Create full API specifications for ALL endpoints in the /students?page={page}&size={size} resource.\n\nApplication Context: A Student Attendance Management System that allows students to mark their daily attendance \nand teachers to view and manage attendance records. The system includes user authentication \nwith separate roles for students and teachers, profile management, and password recovery features.\nStudents can log in to mark their attendance daily, while teachers can view attendance records \nand track student attendance patterns. The system provides a clean, intuitive interface for \nboth user types.\n\nEndpoints to specify:\n\n1. Endpoint: Get Paginated Students List\n   Method: GET\n   Path: /api/students?page={page}&size={size}\n   Description: Retrieve a paginated list of students\n   Used by pages: Attendance Records\n\nReturn a JSON array with specifications for each endpoint in order:\n[\n  {\"request_body\": \"describe parameters/body for endpoint 1\", \"response\": \"describe response structure for endpoint 1\"},\n  {\"request_body\": \"describe parameters/body for endpoint 2\", \"response\": \"describe response structure for endpoint 2\"},\n  ...\n]\n\nJSON array only:",
+      "response": "[\n  {\n    \"request_body\": \"Query Parameters: page (integer, required) - the page number to retrieve, size (integer, required) - the number of students per page\",\n    \"response\": \"JSON Object with properties: content (array of student objects), pageNumber (integer), pageSize (integer), totalPages (integer), totalElements (integer). Student object properties: id (integer), name (string), email (string), role (string)\"\n  }\n]",
+      "success": true
+    },
+    {
+      "resource": "app-info",
+      "endpoints_count": 1,
+      "request": "Create full API specifications for ALL endpoints in the /app-info resource.\n\nApplication Context: A Student Attendance Management System that allows students to mark their daily attendance \nand teachers to view and manage attendance records. The system includes user authentication \nwith separate roles for students and teachers, profile management, and password recovery features.\nStudents can log in to mark their attendance daily, while teachers can view attendance records \nand track student attendance patterns. The system provides a clean, intuitive interface for \nboth user types.\n\nEndpoints to specify:\n\n1. Endpoint: Get Application Info\n   Method: GET\n   Path: /api/app-info\n   Description: Retrieve application name and logo\n   Used by pages: Settings\n\nReturn a JSON array with specifications for each endpoint in order:\n[\n  {\"request_body\": \"describe parameters/body for endpoint 1\", \"response\": \"describe response structure for endpoint 1\"},\n  {\"request_body\": \"describe parameters/body for endpoint 2\", \"response\": \"describe response structure for endpoint 2\"},\n  ...\n]\n\nJSON array only:",
+      "response": "[\n  {\n    \"request_body\": \"None. This endpoint does not require any parameters or request body.\",\n    \"response\": {\n      \"application_name\": \"string\",\n      \"application_logo\": \"string (URL)\"\n    }\n  }\n]",
+      "success": true
+    },
+    {
+      "resource": "navigation-menu",
+      "endpoints_count": 1,
+      "request": "Create full API specifications for ALL endpoints in the /navigation-menu resource.\n\nApplication Context: A Student Attendance Management System that allows students to mark their daily attendance \nand teachers to view and manage attendance records. The system includes user authentication \nwith separate roles for students and teachers, profile management, and password recovery features.\nStudents can log in to mark their attendance daily, while teachers can view attendance records \nand track student attendance patterns. The system provides a clean, intuitive interface for \nboth user types.\n\nEndpoints to specify:\n\n1. Endpoint: Get Navigation Menu\n   Method: GET\n   Path: /api/navigation-menu\n   Description: Retrieve navigation menu with settings option\n   Used by pages: Settings\n\nReturn a JSON array with specifications for each endpoint in order:\n[\n  {\"request_body\": \"describe parameters/body for endpoint 1\", \"response\": \"describe response structure for endpoint 1\"},\n  {\"request_body\": \"describe parameters/body for endpoint 2\", \"response\": \"describe response structure for endpoint 2\"},\n  ...\n]\n\nJSON array only:",
+      "response": "[\n  {\n    \"request_body\": \"None, this endpoint does not require any parameters in the request body\",\n    \"response\": {\n      \"status_code\": 200,\n      \"data\": {\n        \"menu_items\": [\n          {\n            \"id\": \"integer, unique identifier for the menu item\",\n            \"name\": \"string, name of the menu item\",\n            \"url\": \"string, URL linked to the menu item\",\n            \"icon\": \"string, icon for the menu item\",\n            \"role\": \"string, role required to access the menu item (e.g. student, teacher)\"\n          }\n        ]\n      }\n    }\n  }\n]",
+      "success": true
+    },
+    {
+      "resource": "settings",
+      "endpoints_count": 4,
+      "request": "Create full API specifications for ALL endpoints in the /settings resource.\n\nApplication Context: A Student Attendance Management System that allows students to mark their daily attendance \nand teachers to view and manage attendance records. The system includes user authentication \nwith separate roles for students and teachers, profile management, and password recovery features.\nStudents can log in to mark their attendance daily, while teachers can view attendance records \nand track student attendance patterns. The system provides a clean, intuitive interface for \nboth user types.\n\nEndpoints to specify:\n\n1. Endpoint: Search Settings\n   Method: GET\n   Path: /api/settings/search\n   Description: Search for settings options\n   Used by pages: Settings\n2. Endpoint: Reset Settings to Default\n   Method: POST\n   Path: /api/settings/reset\n   Description: Reset settings to default values\n   Used by pages: Settings\n3. Endpoint: Save Settings Changes\n   Method: POST\n   Path: /api/settings/save\n   Description: Save settings changes\n   Used by pages: Settings\n4. Endpoint: Validate Settings Changes\n   Method: POST\n   Path: /api/settings/validate\n   Description: Validate settings changes\n   Used by pages: Settings\n\nReturn a JSON array with specifications for each endpoint in order:\n[\n  {\"request_body\": \"describe parameters/body for endpoint 1\", \"response\": \"describe response structure for endpoint 1\"},\n  {\"request_body\": \"describe parameters/body for endpoint 2\", \"response\": \"describe response structure for endpoint 2\"},\n  ...\n]\n\nJSON array only:",
+      "response": "[\n  {\n    \"request_body\": \"Optional query parameters: { 'key': string, 'value': string }. Example: GET /api/settings/search?key=attendance&value=daily\",\n    \"response\": \"JSON object with settings options: { 'settings': [ { 'key': string, 'value': string, 'description': string } ] }\"\n  },\n  {\n    \"request_body\": \"No request body required. Resets all settings to default values.\",\n    \"response\": \"JSON object with success message: { 'message': 'Settings reset to default values' }\"\n  },\n  {\n    \"request_body\": \"JSON object with updated settings: { 'settings': [ { 'key': string, 'value': string } ] }. Example: { 'settings': [ { 'key': 'attendance', 'value': 'daily' } ] }\",\n    \"response\": \"JSON object with success message: { 'message': 'Settings updated successfully' }\"\n  },\n  {\n    \"request_body\": \"JSON object with updated settings: { 'settings': [ { 'key': string, 'value': string } ] }. Example: { 'settings': [ { 'key': 'attendance', 'value': 'daily' } ] }\",\n    \"response\": \"JSON object with validation result: { 'valid': boolean, 'errors': [ { 'key': string, 'message': string } ] }\"\n  }\n]",
+      "success": true
+    },
+    {
+      "resource": "user-profile",
+      "endpoints_count": 3,
+      "request": "Create full API specifications for ALL endpoints in the /user-profile resource.\n\nApplication Context: A Student Attendance Management System that allows students to mark their daily attendance \nand teachers to view and manage attendance records. The system includes user authentication \nwith separate roles for students and teachers, profile management, and password recovery features.\nStudents can log in to mark their attendance daily, while teachers can view attendance records \nand track student attendance patterns. The system provides a clean, intuitive interface for \nboth user types.\n\nEndpoints to specify:\n\n1. Endpoint: Get User Profile\n   Method: GET\n   Path: /api/user-profile\n   Description: Retrieve user profile information\n   Used by pages: Settings\n2. Endpoint: Update User Profile\n   Method: PUT\n   Path: /api/user-profile\n   Description: Update user profile information\n   Used by pages: Settings\n3. Endpoint: Change Password\n   Method: PUT\n   Path: /api/user-profile/password\n   Description: Change user password\n   Used by pages: Settings\n\nReturn a JSON array with specifications for each endpoint in order:\n[\n  {\"request_body\": \"describe parameters/body for endpoint 1\", \"response\": \"describe response structure for endpoint 1\"},\n  {\"request_body\": \"describe parameters/body for endpoint 2\", \"response\": \"describe response structure for endpoint 2\"},\n  ...\n]\n\nJSON array only:",
+      "response": "[\n  {\n    \"request_body\": \"None, authentication token required in headers for authorization\",\n    \"response\": {\n      \"status_code\": 200,\n      \"data\": {\n        \"id\": \"integer, unique user identifier\",\n        \"name\": \"string, user name\",\n        \"email\": \"string, user email\",\n        \"role\": \"string, user role (student/teacher)\",\n        \"created_at\": \"timestamp, user account creation date\"\n      }\n    }\n  },\n  {\n    \"request_body\": {\n      \"name\": \"string, updated user name\",\n      \"email\": \"string, updated user email\"\n    },\n    \"response\": {\n      \"status_code\": 200,\n      \"data\": {\n        \"id\": \"integer, unique user identifier\",\n        \"name\": \"string, updated user name\",\n        \"email\": \"string, updated user email\",\n        \"role\": \"string, user role (student/teacher)\",\n        \"created_at\": \"timestamp, user account creation date\"\n      }\n    }\n  },\n  {\n    \"request_body\": {\n      \"current_password\": \"string, current user password\",\n      \"new_password\": \"string, new user password\",\n      \"confirm_password\": \"string, confirmation of new user password\"\n    },\n    \"response\": {\n      \"status_code\": 200,\n      \"message\": \"string, password updated successfully\"\n    }\n  }\n]",
+      "success": true
+    },
+    {
+      "resource": "account-settings",
+      "endpoints_count": 2,
+      "request": "Create full API specifications for ALL endpoints in the /account-settings resource.\n\nApplication Context: A Student Attendance Management System that allows students to mark their daily attendance \nand teachers to view and manage attendance records. The system includes user authentication \nwith separate roles for students and teachers, profile management, and password recovery features.\nStudents can log in to mark their attendance daily, while teachers can view attendance records \nand track student attendance patterns. The system provides a clean, intuitive interface for \nboth user types.\n\nEndpoints to specify:\n\n1. Endpoint: Get Account Settings\n   Method: GET\n   Path: /api/account-settings\n   Description: Retrieve account settings\n   Used by pages: Settings\n2. Endpoint: Update Account Settings\n   Method: PUT\n   Path: /api/account-settings\n   Description: Update account settings\n   Used by pages: Settings\n\nReturn a JSON array with specifications for each endpoint in order:\n[\n  {\"request_body\": \"describe parameters/body for endpoint 1\", \"response\": \"describe response structure for endpoint 1\"},\n  {\"request_body\": \"describe parameters/body for endpoint 2\", \"response\": \"describe response structure for endpoint 2\"},\n  ...\n]\n\nJSON array only:",
+      "response": "[\n  {\n    \"request_body\": \"None, no parameters required in the request body\",\n    \"response\": {\n      \"status_code\": 200,\n      \"data\": {\n        \"account_settings\": {\n          \"notification_preferences\": {\n            \"email_notifications\": \"boolean\",\n            \"sms_notifications\": \"boolean\"\n          },\n          \"theme\": \"string\",\n          \"language\": \"string\"\n        }\n      }\n    }\n  },\n  {\n    \"request_body\": {\n      \"notification_preferences\": {\n        \"email_notifications\": \"boolean\",\n        \"sms_notifications\": \"boolean\"\n      },\n      \"theme\": \"string\",\n      \"language\": \"string\"\n    },\n    \"response\": {\n      \"status_code\": 200,\n      \"data\": {\n        \"message\": \"Account settings updated successfully\"\n      }\n    }\n  }\n]",
+      "success": true
+    },
+    {
+      "resource": "notification-preferences",
+      "endpoints_count": 2,
+      "request": "Create full API specifications for ALL endpoints in the /notification-preferences resource.\n\nApplication Context: A Student Attendance Management System that allows students to mark their daily attendance \nand teachers to view and manage attendance records. The system includes user authentication \nwith separate roles for students and teachers, profile management, and password recovery features.\nStudents can log in to mark their attendance daily, while teachers can view attendance records \nand track student attendance patterns. The system provides a clean, intuitive interface for \nboth user types.\n\nEndpoints to specify:\n\n1. Endpoint: Get Notification Preferences\n   Method: GET\n   Path: /api/notification-preferences\n   Description: Retrieve notification preferences\n   Used by pages: Settings\n2. Endpoint: Update Notification Preferences\n   Method: PUT\n   Path: /api/notification-preferences\n   Description: Update notification preferences\n   Used by pages: Settings\n\nReturn a JSON array with specifications for each endpoint in order:\n[\n  {\"request_body\": \"describe parameters/body for endpoint 1\", \"response\": \"describe response structure for endpoint 1\"},\n  {\"request_body\": \"describe parameters/body for endpoint 2\", \"response\": \"describe response structure for endpoint 2\"},\n  ...\n]\n\nJSON array only:",
+      "response": "[\n  {\n    \"request_body\": \"None, no parameters or body required\",\n    \"response\": {\n      \"status_code\": 200,\n      \"structure\": {\n        \"notification_preferences\": {\n          \"attendance_reminders\": \"boolean\",\n          \"low_attendance_warnings\": \"boolean\",\n          \"absence_notifications\": \"boolean\"\n        }\n      },\n      \"description\": \"Retrieve notification preferences for the current user\"\n    }\n  },\n  {\n    \"request_body\": {\n      \"structure\": {\n        \"attendance_reminders\": \"boolean\",\n        \"low_attendance_warnings\": \"boolean\",\n        \"absence_notifications\": \"boolean\"\n      },\n      \"description\": \"Update notification preferences for the current user\"\n    },\n    \"response\": {\n      \"status_code\": 200,\n      \"structure\": {\n        \"message\": \"string\",\n        \"notification_preferences\": {\n          \"attendance_reminders\": \"boolean\",\n          \"low_attendance_warnings\": \"boolean\",\n          \"absence_notifications\": \"boolean\"\n        }\n      },\n      \"description\": \"Update notification preferences successfully\"\n    }\n  }\n]",
+      "success": true
+    },
+    {
+      "resource": "user-roles",
+      "endpoints_count": 7,
+      "request": "Create full API specifications for ALL endpoints in the /user-roles resource.\n\nApplication Context: A Student Attendance Management System that allows students to mark their daily attendance \nand teachers to view and manage attendance records. The system includes user authentication \nwith separate roles for students and teachers, profile management, and password recovery features.\nStudents can log in to mark their attendance daily, while teachers can view attendance records \nand track student attendance patterns. The system provides a clean, intuitive interface for \nboth user types.\n\nEndpoints to specify:\n\n1. Endpoint: Get User Roles and Permissions\n   Method: GET\n   Path: /api/user-roles\n   Description: Retrieve user roles and permissions\n   Used by pages: Settings, User Roles Management\n2. Endpoint: Update User Roles and Permissions\n   Method: PUT\n   Path: /api/user-roles\n   Description: Update user roles and permissions\n   Used by pages: Settings\n3. Endpoint: Create New User Role\n   Method: POST\n   Path: /api/user-roles\n   Description: Allow administrators to add new user roles\n   Used by pages: User Roles Management\n4. Endpoint: Get User Role By ID\n   Method: GET\n   Path: /api/user-roles/{roleId}\n   Description: Retrieve a specific user role by ID for editing\n   Used by pages: User Roles Management\n5. Endpoint: Update User Role\n   Method: PUT\n   Path: /api/user-roles/{roleId}\n   Description: Allow administrators to edit existing user roles\n   Used by pages: User Roles Management\n6. Endpoint: Delete User Role\n   Method: DELETE\n   Path: /api/user-roles/{roleId}\n   Description: Allow administrators to delete existing user roles\n   Used by pages: User Roles Management\n7. Endpoint: Get Paginated User Roles\n   Method: GET\n   Path: /api/user-roles/paginated\n   Description: Implement pagination for large lists of user roles\n   Used by pages: User Roles Management\n\nReturn a JSON array with specifications for each endpoint in order:\n[\n  {\"request_body\": \"describe parameters/body for endpoint 1\", \"response\": \"describe response structure for endpoint 1\"},\n  {\"request_body\": \"describe parameters/body for endpoint 2\", \"response\": \"describe response structure for endpoint 2\"},\n  ...\n]\n\nJSON array only:",
+      "response": "[\n  {\n    \"request_body\": \"None\",\n    \"response\": {\n      \"status_code\": 200,\n      \"data\": [\n        {\n          \"roleId\": \"integer\",\n          \"roleName\": \"string\",\n          \"permissions\": [\n            {\n              \"permissionId\": \"integer\",\n              \"permissionName\": \"string\"\n            }\n          ]\n        }\n      ]\n    }\n  },\n  {\n    \"request_body\": {\n      \"roleId\": \"integer\",\n      \"roleName\": \"string\",\n      \"permissions\": [\n        {\n          \"permissionId\": \"integer\",\n          \"permissionName\": \"string\"\n        }\n      ]\n    },\n    \"response\": {\n      \"status_code\": 200,\n      \"message\": \"User roles and permissions updated successfully\"\n    }\n  },\n  {\n    \"request_body\": {\n      \"roleName\": \"string\",\n      \"permissions\": [\n        {\n          \"permissionId\": \"integer\",\n          \"permissionName\": \"string\"\n        }\n      ]\n    },\n    \"response\": {\n      \"status_code\": 201,\n      \"data\": {\n        \"roleId\": \"integer\",\n        \"roleName\": \"string\",\n        \"permissions\": [\n          {\n            \"permissionId\": \"integer\",\n            \"permissionName\": \"string\"\n          }\n        ]\n      }\n    }\n  },\n  {\n    \"request_body\": \"None\",\n    \"response\": {\n      \"status_code\": 200,\n      \"data\": {\n        \"roleId\": \"integer\",\n        \"roleName\": \"string\",\n        \"permissions\": [\n          {\n            \"permissionId\": \"integer\",\n            \"permissionName\": \"string\"\n          }\n        ]\n      }\n    }\n  },\n  {\n    \"request_body\": {\n      \"roleName\": \"string\",\n      \"permissions\": [\n        {\n          \"permissionId\": \"integer\",\n          \"permissionName\": \"string\"\n        }\n      ]\n    },\n    \"response\": {\n      \"status_code\": 200,\n      \"message\": \"User role updated successfully\"\n    }\n  },\n  {\n    \"request_body\": \"None\",\n    \"response\": {\n      \"status_code\": 200,\n      \"message\": \"User role deleted successfully\"\n    }\n  },\n  {\n    \"request_body\": {\n      \"pageNumber\": \"integer\",\n      \"pageSize\": \"integer\"\n    },\n    \"response\": {\n      \"status_code\": 200,\n      \"data\": {\n        \"totalPages\": \"integer\",\n        \"totalRecords\": \"integer\",\n        \"userRoles\": [\n          {\n            \"roleId\": \"integer\",\n            \"roleName\": \"string\",\n            \"permissions\": [\n              {\n                \"permissionId\": \"integer\",\n                \"permissionName\": \"string\"\n              }\n            ]\n          }\n        ]\n      }\n    }\n  }\n]",
+      "success": true
+    },
+    {
+      "resource": "attendance-settings",
+      "endpoints_count": 2,
+      "request": "Create full API specifications for ALL endpoints in the /attendance-settings resource.\n\nApplication Context: A Student Attendance Management System that allows students to mark their daily attendance \nand teachers to view and manage attendance records. The system includes user authentication \nwith separate roles for students and teachers, profile management, and password recovery features.\nStudents can log in to mark their attendance daily, while teachers can view attendance records \nand track student attendance patterns. The system provides a clean, intuitive interface for \nboth user types.\n\nEndpoints to specify:\n\n1. Endpoint: Get Attendance Settings\n   Method: GET\n   Path: /api/attendance-settings\n   Description: Retrieve attendance settings\n   Used by pages: Settings\n2. Endpoint: Update Attendance Settings\n   Method: PUT\n   Path: /api/attendance-settings\n   Description: Update attendance settings\n   Used by pages: Settings\n\nReturn a JSON array with specifications for each endpoint in order:\n[\n  {\"request_body\": \"describe parameters/body for endpoint 1\", \"response\": \"describe response structure for endpoint 1\"},\n  {\"request_body\": \"describe parameters/body for endpoint 2\", \"response\": \"describe response structure for endpoint 2\"},\n  ...\n]\n\nJSON array only:",
+      "response": "[\n  {\n    \"request_body\": \"None, this endpoint does not require a request body\",\n    \"response\": {\n      \"status_code\": 200,\n      \"description\": \"Attendance settings retrieved successfully\",\n      \"structure\": {\n        \"attendance_settings\": {\n          \"id\": \"integer, unique identifier for attendance settings\",\n          \"mark_attendance_time_limit\": \"integer, time limit in minutes for marking attendance\",\n          \"attendance_grace_period\": \"integer, grace period in minutes for marking attendance\",\n          \"max_allowed_absences\": \"integer, maximum allowed absences per semester\"\n        }\n      }\n    }\n  },\n  {\n    \"request_body\": {\n      \"attendance_settings\": {\n        \"mark_attendance_time_limit\": \"integer, time limit in minutes for marking attendance\",\n        \"attendance_grace_period\": \"integer, grace period in minutes for marking attendance\",\n        \"max_allowed_absences\": \"integer, maximum allowed absences per semester\"\n      }\n    },\n    \"response\": {\n      \"status_code\": 200,\n      \"description\": \"Attendance settings updated successfully\",\n      \"structure\": {\n        \"message\": \"string, success message\",\n        \"attendance_settings\": {\n          \"id\": \"integer, unique identifier for attendance settings\",\n          \"mark_attendance_time_limit\": \"integer, time limit in minutes for marking attendance\",\n          \"attendance_grace_period\": \"integer, grace period in minutes for marking attendance\",\n          \"max_allowed_absences\": \"integer, maximum allowed absences per semester\"\n        }\n      }\n    }\n  }\n]",
+      "success": true
+    },
+    {
+      "resource": "system-defaults",
+      "endpoints_count": 2,
+      "request": "Create full API specifications for ALL endpoints in the /system-defaults resource.\n\nApplication Context: A Student Attendance Management System that allows students to mark their daily attendance \nand teachers to view and manage attendance records. The system includes user authentication \nwith separate roles for students and teachers, profile management, and password recovery features.\nStudents can log in to mark their attendance daily, while teachers can view attendance records \nand track student attendance patterns. The system provides a clean, intuitive interface for \nboth user types.\n\nEndpoints to specify:\n\n1. Endpoint: Get System Defaults\n   Method: GET\n   Path: /api/system-defaults\n   Description: Retrieve system default settings\n   Used by pages: Settings\n2. Endpoint: Update System Defaults\n   Method: PUT\n   Path: /api/system-defaults\n   Description: Update system default settings\n   Used by pages: Settings\n\nReturn a JSON array with specifications for each endpoint in order:\n[\n  {\"request_body\": \"describe parameters/body for endpoint 1\", \"response\": \"describe response structure for endpoint 1\"},\n  {\"request_body\": \"describe parameters/body for endpoint 2\", \"response\": \"describe response structure for endpoint 2\"},\n  ...\n]\n\nJSON array only:",
+      "response": "[\n  {\n    \"request_body\": \"None, this endpoint does not require a request body\",\n    \"response\": {\n      \"status_code\": 200,\n      \"data\": {\n        \"default_attendance_marking_time\": \"string\",\n        \"default_attendance_marking_days\": \"array of strings\",\n        \"default_attendance_grace_period\": \"integer\",\n        \"default_attendance_notification_frequency\": \"string\",\n        \"default_attendance_notification_recipients\": \"array of strings\"\n      }\n    }\n  },\n  {\n    \"request_body\": {\n      \"default_attendance_marking_time\": \"string\",\n      \"default_attendance_marking_days\": \"array of strings\",\n      \"default_attendance_grace_period\": \"integer\",\n      \"default_attendance_notification_frequency\": \"string\",\n      \"default_attendance_notification_recipients\": \"array of strings\"\n    },\n    \"response\": {\n      \"status_code\": 200,\n      \"message\": \"System defaults updated successfully\"\n    }\n  }\n]",
+      "success": true
+    },
+    {
+      "resource": "forgot-password",
+      "endpoints_count": 1,
+      "request": "Create full API specifications for ALL endpoints in the /forgot-password resource.\n\nApplication Context: A Student Attendance Management System that allows students to mark their daily attendance \nand teachers to view and manage attendance records. The system includes user authentication \nwith separate roles for students and teachers, profile management, and password recovery features.\nStudents can log in to mark their attendance daily, while teachers can view attendance records \nand track student attendance patterns. The system provides a clean, intuitive interface for \nboth user types.\n\nEndpoints to specify:\n\n1. Endpoint: Initiate Password Recovery\n   Method: POST\n   Path: /api/forgot-password\n   Description: Initiate password recovery process by sending a recovery email to the user's registered email address\n   Used by pages: Forgot Password\n\nReturn a JSON array with specifications for each endpoint in order:\n[\n  {\"request_body\": \"describe parameters/body for endpoint 1\", \"response\": \"describe response structure for endpoint 1\"},\n  {\"request_body\": \"describe parameters/body for endpoint 2\", \"response\": \"describe response structure for endpoint 2\"},\n  ...\n]\n\nJSON array only:",
+      "response": "[\n  {\n    \"request_body\": {\n      \"email\": \"string (required) - the email address of the user who wants to recover their password\"\n    },\n    \"response\": {\n      \"status\": \"string - success or error\",\n      \"message\": \"string - a message indicating whether the password recovery email was sent successfully\",\n      \"data\": \"object (optional) - additional data, such as a recovery token\"\n    }\n  }\n]",
+      "success": true
+    },
+    {
+      "resource": "validate-credentials",
+      "endpoints_count": 1,
+      "request": "Create full API specifications for ALL endpoints in the /validate-credentials resource.\n\nApplication Context: A Student Attendance Management System that allows students to mark their daily attendance \nand teachers to view and manage attendance records. The system includes user authentication \nwith separate roles for students and teachers, profile management, and password recovery features.\nStudents can log in to mark their attendance daily, while teachers can view attendance records \nand track student attendance patterns. The system provides a clean, intuitive interface for \nboth user types.\n\nEndpoints to specify:\n\n1. Endpoint: Validate User Credentials\n   Method: POST\n   Path: /api/validate-credentials\n   Description: Validate user input to ensure it matches the username or email in the system\n   Used by pages: Forgot Password\n\nReturn a JSON array with specifications for each endpoint in order:\n[\n  {\"request_body\": \"describe parameters/body for endpoint 1\", \"response\": \"describe response structure for endpoint 1\"},\n  {\"request_body\": \"describe parameters/body for endpoint 2\", \"response\": \"describe response structure for endpoint 2\"},\n  ...\n]\n\nJSON array only:",
+      "response": "[\n  {\n    \"request_body\": {\n      \"username_or_email\": \"string (required) - the username or email to validate\",\n      \"password\": \"string (required) - the password to validate\"\n    },\n    \"response\": {\n      \"status\": \"boolean (required) - whether the credentials are valid\",\n      \"message\": \"string (optional) - error message if credentials are invalid\",\n      \"user_id\": \"integer (optional) - the ID of the user if credentials are valid\"\n    }\n  }\n]",
+      "success": true
+    },
+    {
+      "resource": "send-recovery-email",
+      "endpoints_count": 1,
+      "request": "Create full API specifications for ALL endpoints in the /send-recovery-email resource.\n\nApplication Context: A Student Attendance Management System that allows students to mark their daily attendance \nand teachers to view and manage attendance records. The system includes user authentication \nwith separate roles for students and teachers, profile management, and password recovery features.\nStudents can log in to mark their attendance daily, while teachers can view attendance records \nand track student attendance patterns. The system provides a clean, intuitive interface for \nboth user types.\n\nEndpoints to specify:\n\n1. Endpoint: Send Recovery Email\n   Method: POST\n   Path: /api/send-recovery-email\n   Description: Send a password recovery email to the user's registered email address\n   Used by pages: Forgot Password\n\nReturn a JSON array with specifications for each endpoint in order:\n[\n  {\"request_body\": \"describe parameters/body for endpoint 1\", \"response\": \"describe response structure for endpoint 1\"},\n  {\"request_body\": \"describe parameters/body for endpoint 2\", \"response\": \"describe response structure for endpoint 2\"},\n  ...\n]\n\nJSON array only:",
+      "response": "[\n  {\n    \"request_body\": {\n      \"email\": \"The email address of the user who forgot their password (string, required)\"\n    },\n    \"response\": {\n      \"status\": \"The status of the request (string, e.g. 'success' or 'error')\",\n      \"message\": \"A message describing the outcome of the request (string, e.g. 'Recovery email sent successfully' or 'User not found')\",\n      \"data\": \"Optional data returned with the response, e.g. a token or a link (object or null)\"\n    }\n  }\n]",
+      "success": true
+    },
+    {
+      "resource": "check-username-email",
+      "endpoints_count": 1,
+      "request": "Create full API specifications for ALL endpoints in the /check-username-email resource.\n\nApplication Context: A Student Attendance Management System that allows students to mark their daily attendance \nand teachers to view and manage attendance records. The system includes user authentication \nwith separate roles for students and teachers, profile management, and password recovery features.\nStudents can log in to mark their attendance daily, while teachers can view attendance records \nand track student attendance patterns. The system provides a clean, intuitive interface for \nboth user types.\n\nEndpoints to specify:\n\n1. Endpoint: Check Username or Email Availability\n   Method: GET\n   Path: /api/check-username-email\n   Description: Check if the username or email exists in the system\n   Used by pages: Forgot Password\n\nReturn a JSON array with specifications for each endpoint in order:\n[\n  {\"request_body\": \"describe parameters/body for endpoint 1\", \"response\": \"describe response structure for endpoint 1\"},\n  {\"request_body\": \"describe parameters/body for endpoint 2\", \"response\": \"describe response structure for endpoint 2\"},\n  ...\n]\n\nJSON array only:",
+      "response": "[\n  {\n    \"request_body\": \"The GET request should include two query parameters: 'username' and 'email'. The 'username' parameter checks if the username is available, and the 'email' parameter checks if the email is available. Both parameters are optional, but at least one of them should be provided.\",\n    \"response\": \"The response will be a JSON object with two properties: 'usernameAvailable' and 'emailAvailable'. The 'usernameAvailable' property will be a boolean indicating whether the username is available, and the 'emailAvailable' property will be a boolean indicating whether the email is available. If the 'username' or 'email' parameter is not provided, the corresponding property in the response will be null.\"\n  }\n]",
+      "success": true
+    },
+    {
+      "resource": "users",
+      "endpoints_count": 6,
+      "request": "Create full API specifications for ALL endpoints in the /users resource.\n\nApplication Context: A Student Attendance Management System that allows students to mark their daily attendance \nand teachers to view and manage attendance records. The system includes user authentication \nwith separate roles for students and teachers, profile management, and password recovery features.\nStudents can log in to mark their attendance daily, while teachers can view attendance records \nand track student attendance patterns. The system provides a clean, intuitive interface for \nboth user types.\n\nEndpoints to specify:\n\n1. Endpoint: Get All Users With Roles\n   Method: GET\n   Path: /api/users\n   Description: Display a list of all users with their assigned roles\n   Used by pages: User Roles Management\n2. Endpoint: Assign Role To User\n   Method: POST\n   Path: /api/users/{userId}/roles\n   Description: Allow administrators to assign roles to users\n   Used by pages: User Roles Management\n3. Endpoint: Unassign Role From User\n   Method: DELETE\n   Path: /api/users/{userId}/roles/{roleId}\n   Description: Allow administrators to unassign roles from users\n   Used by pages: User Roles Management\n4. Endpoint: Get Paginated Users\n   Method: GET\n   Path: /api/users/paginated\n   Description: Implement pagination for large lists of users\n   Used by pages: User Roles Management\n5. Endpoint: Get Users By Role\n   Method: GET\n   Path: /api/users/by-role/{roleId}\n   Description: Allow administrators to filter users by role\n   Used by pages: User Roles Management\n6. Endpoint: Get Sorted Users\n   Method: GET\n   Path: /api/users/sorted\n   Description: Allow administrators to sort users by name, role, or other relevant criteria\n   Used by pages: User Roles Management\n\nReturn a JSON array with specifications for each endpoint in order:\n[\n  {\"request_body\": \"describe parameters/body for endpoint 1\", \"response\": \"describe response structure for endpoint 1\"},\n  {\"request_body\": \"describe parameters/body for endpoint 2\", \"response\": \"describe response structure for endpoint 2\"},\n  ...\n]\n\nJSON array only:",
+      "response": "[\n  {\n    \"request_body\": \"None\",\n    \"response\": {\n      \"status_code\": 200,\n      \"data\": [\n        {\n          \"id\": \"integer\",\n          \"username\": \"string\",\n          \"email\": \"string\",\n          \"roles\": [\n            {\n              \"id\": \"integer\",\n              \"name\": \"string\"\n            }\n          ]\n        }\n      ]\n    }\n  },\n  {\n    \"request_body\": {\n      \"roleId\": \"integer\"\n    },\n    \"response\": {\n      \"status_code\": 201,\n      \"data\": {\n        \"id\": \"integer\",\n        \"username\": \"string\",\n        \"email\": \"string\",\n        \"roles\": [\n          {\n            \"id\": \"integer\",\n            \"name\": \"string\"\n          }\n        ]\n      }\n    }\n  },\n  {\n    \"request_body\": \"None\",\n    \"response\": {\n      \"status_code\": 204,\n      \"data\": {\n        \"id\": \"integer\",\n        \"username\": \"string\",\n        \"email\": \"string\",\n        \"roles\": [\n          {\n            \"id\": \"integer\",\n            \"name\": \"string\"\n          }\n        ]\n      }\n    }\n  },\n  {\n    \"request_body\": {\n      \"page\": \"integer\",\n      \"size\": \"integer\"\n    },\n    \"response\": {\n      \"status_code\": 200,\n      \"data\": {\n        \"content\": [\n          {\n            \"id\": \"integer\",\n            \"username\": \"string\",\n            \"email\": \"string\",\n            \"roles\": [\n              {\n                \"id\": \"integer\",\n                \"name\": \"string\"\n              }\n            ]\n          }\n        ],\n        \"pageable\": {\n          \"pageNumber\": \"integer\",\n          \"pageSize\": \"integer\",\n          \"pageTotal\": \"integer\",\n          \"totalElements\": \"integer\",\n          \"totalPages\": \"integer\"\n        }\n      }\n    }\n  },\n  {\n    \"request_body\": \"None\",\n    \"response\": {\n      \"status_code\": 200,\n      \"data\": [\n        {\n          \"id\": \"integer\",\n          \"username\": \"string\",\n          \"email\": \"string\",\n          \"roles\": [\n            {\n              \"id\": \"integer\",\n              \"name\": \"string\"\n            }\n          ]\n        }\n      ]\n    }\n  },\n  {\n    \"request_body\": {\n      \"sort\": \"string\",\n      \"order\": \"string\"\n    },\n    \"response\": {\n      \"status_code\": 200,\n      \"data\": [\n        {\n          \"id\": \"integer\",\n          \"username\": \"string\",\n          \"email\": \"string\",\n          \"roles\": [\n            {\n              \"id\": \"integer\",\n              \"name\": \"string\"\n            }\n          ]\n        }\n      ]\n    }\n  }\n]",
+      "success": true
+    },
+    {
+      "resource": "search",
+      "endpoints_count": 1,
+      "request": "Create full API specifications for ALL endpoints in the /search resource.\n\nApplication Context: A Student Attendance Management System that allows students to mark their daily attendance \nand teachers to view and manage attendance records. The system includes user authentication \nwith separate roles for students and teachers, profile management, and password recovery features.\nStudents can log in to mark their attendance daily, while teachers can view attendance records \nand track student attendance patterns. The system provides a clean, intuitive interface for \nboth user types.\n\nEndpoints to specify:\n\n1. Endpoint: Search Users Or Roles\n   Method: GET\n   Path: /api/search\n   Description: Provide a search function to find specific users or roles\n   Used by pages: User Roles Management, Error 404 Page\n\nReturn a JSON array with specifications for each endpoint in order:\n[\n  {\"request_body\": \"describe parameters/body for endpoint 1\", \"response\": \"describe response structure for endpoint 1\"},\n  {\"request_body\": \"describe parameters/body for endpoint 2\", \"response\": \"describe response structure for endpoint 2\"},\n  ...\n]\n\nJSON array only:",
+      "response": "[\n  {\n    \"request_body\": \"Query Parameters: { 'query': search query string, 'type': 'user' or 'role' to specify search type, 'limit': number of results to return, 'offset': pagination offset }\",\n    \"response\": \"JSON array of objects containing 'id', 'name', 'email', 'role' (if type is 'user') or 'role_name' and 'description' (if type is 'role')\"\n  }\n]",
+      "success": true
+    },
+    {
+      "resource": "stats",
+      "endpoints_count": 1,
+      "request": "Create full API specifications for ALL endpoints in the /stats resource.\n\nApplication Context: A Student Attendance Management System that allows students to mark their daily attendance \nand teachers to view and manage attendance records. The system includes user authentication \nwith separate roles for students and teachers, profile management, and password recovery features.\nStudents can log in to mark their attendance daily, while teachers can view attendance records \nand track student attendance patterns. The system provides a clean, intuitive interface for \nboth user types.\n\nEndpoints to specify:\n\n1. Endpoint: Get User Count And Role Count\n   Method: GET\n   Path: /api/stats\n   Description: Display the total number of users and roles\n   Used by pages: User Roles Management\n\nReturn a JSON array with specifications for each endpoint in order:\n[\n  {\"request_body\": \"describe parameters/body for endpoint 1\", \"response\": \"describe response structure for endpoint 1\"},\n  {\"request_body\": \"describe parameters/body for endpoint 2\", \"response\": \"describe response structure for endpoint 2\"},\n  ...\n]\n\nJSON array only:",
+      "response": "[\n  {\n    \"request_body\": \"No request body required. Query parameters: None\",\n    \"response\": {\n      \"status_code\": 200,\n      \"description\": \"A JSON object containing user count and role count\",\n      \"structure\": {\n        \"user_count\": \"The total number of users in the system\",\n        \"role_count\": {\n          \"student\": \"The total number of students\",\n          \"teacher\": \"The total number of teachers\"\n        }\n      },\n      \"example\": {\n        \"user_count\": 100,\n        \"role_count\": {\n          \"student\": 80,\n          \"teacher\": 20\n        }\n      }\n    }\n  }\n]",
+      "success": true
+    },
+    {
+      "resource": "homepage",
+      "endpoints_count": 1,
+      "request": "Create full API specifications for ALL endpoints in the /homepage resource.\n\nApplication Context: A Student Attendance Management System that allows students to mark their daily attendance \nand teachers to view and manage attendance records. The system includes user authentication \nwith separate roles for students and teachers, profile management, and password recovery features.\nStudents can log in to mark their attendance daily, while teachers can view attendance records \nand track student attendance patterns. The system provides a clean, intuitive interface for \nboth user types.\n\nEndpoints to specify:\n\n1. Endpoint: Get Homepage Link\n   Method: GET\n   Path: /api/homepage\n   Description: Retrieve the link to the homepage\n   Used by pages: Error 404 Page\n\nReturn a JSON array with specifications for each endpoint in order:\n[\n  {\"request_body\": \"describe parameters/body for endpoint 1\", \"response\": \"describe response structure for endpoint 1\"},\n  {\"request_body\": \"describe parameters/body for endpoint 2\", \"response\": \"describe response structure for endpoint 2\"},\n  ...\n]\n\nJSON array only:",
+      "response": "[\n  {\n    \"request_body\": \"None, this endpoint does not require any parameters or request body\",\n    \"response\": \"JSON object containing a single property 'homepageLink' with a string value representing the URL of the homepage, e.g. { 'homepageLink': 'https://example.com/home' }\"\n  }\n]",
+      "success": true
+    },
+    {
+      "resource": "dashboard",
+      "endpoints_count": 1,
+      "request": "Create full API specifications for ALL endpoints in the /dashboard resource.\n\nApplication Context: A Student Attendance Management System that allows students to mark their daily attendance \nand teachers to view and manage attendance records. The system includes user authentication \nwith separate roles for students and teachers, profile management, and password recovery features.\nStudents can log in to mark their attendance daily, while teachers can view attendance records \nand track student attendance patterns. The system provides a clean, intuitive interface for \nboth user types.\n\nEndpoints to specify:\n\n1. Endpoint: Get Dashboard Link\n   Method: GET\n   Path: /api/dashboard\n   Description: Retrieve the link to the dashboard\n   Used by pages: Error 404 Page\n\nReturn a JSON array with specifications for each endpoint in order:\n[\n  {\"request_body\": \"describe parameters/body for endpoint 1\", \"response\": \"describe response structure for endpoint 1\"},\n  {\"request_body\": \"describe parameters/body for endpoint 2\", \"response\": \"describe response structure for endpoint 2\"},\n  ...\n]\n\nJSON array only:",
+      "response": "[\n  {\n    \"request_body\": \"No request body is required for this endpoint. It only needs the GET method and the path /api/dashboard to retrieve the link to the dashboard.\",\n    \"response\": \"The response will be a JSON object containing the link to the dashboard, for example: {\\\"link\\\": \\\"/dashboard\\\"}\"\n  }\n]",
+      "success": true
+    },
+    {
+      "resource": "previous-page",
+      "endpoints_count": 1,
+      "request": "Create full API specifications for ALL endpoints in the /previous-page resource.\n\nApplication Context: A Student Attendance Management System that allows students to mark their daily attendance \nand teachers to view and manage attendance records. The system includes user authentication \nwith separate roles for students and teachers, profile management, and password recovery features.\nStudents can log in to mark their attendance daily, while teachers can view attendance records \nand track student attendance patterns. The system provides a clean, intuitive interface for \nboth user types.\n\nEndpoints to specify:\n\n1. Endpoint: Get Previous Page\n   Method: GET\n   Path: /api/previous-page\n   Description: Retrieve the link to the previous page\n   Used by pages: Error 404 Page\n\nReturn a JSON array with specifications for each endpoint in order:\n[\n  {\"request_body\": \"describe parameters/body for endpoint 1\", \"response\": \"describe response structure for endpoint 1\"},\n  {\"request_body\": \"describe parameters/body for endpoint 2\", \"response\": \"describe response structure for endpoint 2\"},\n  ...\n]\n\nJSON array only:",
+      "response": "[\n  {\n    \"request_body\": \"None. This endpoint does not require any parameters or request body.\",\n    \"response\": {\n      \"status_code\": 200,\n      \"structure\": {\n        \"previous_page_link\": \"string\"\n      },\n      \"description\": \"Returns a JSON object containing the link to the previous page.\"\n    }\n  }\n]",
+      "success": true
+    },
+    {
+      "resource": "contact",
+      "endpoints_count": 1,
+      "request": "Create full API specifications for ALL endpoints in the /contact resource.\n\nApplication Context: A Student Attendance Management System that allows students to mark their daily attendance \nand teachers to view and manage attendance records. The system includes user authentication \nwith separate roles for students and teachers, profile management, and password recovery features.\nStudents can log in to mark their attendance daily, while teachers can view attendance records \nand track student attendance patterns. The system provides a clean, intuitive interface for \nboth user types.\n\nEndpoints to specify:\n\n1. Endpoint: Get Contact Link\n   Method: GET\n   Path: /api/contact\n   Description: Retrieve the link to the contact or support page\n   Used by pages: Error 404 Page\n\nReturn a JSON array with specifications for each endpoint in order:\n[\n  {\"request_body\": \"describe parameters/body for endpoint 1\", \"response\": \"describe response structure for endpoint 1\"},\n  {\"request_body\": \"describe parameters/body for endpoint 2\", \"response\": \"describe response structure for endpoint 2\"},\n  ...\n]\n\nJSON array only:",
+      "response": "[\n  {\n    \"request_body\": \"None, no parameters or request body required\",\n    \"response\": {\n      \"status_code\": 200,\n      \"data\": {\n        \"contact_link\": \"string, URL to the contact or support page\"\n      }\n    }\n  }\n]",
+      "success": true
+    },
+    {
+      "resource": "report-issue",
+      "endpoints_count": 1,
+      "request": "Create full API specifications for ALL endpoints in the /report-issue resource.\n\nApplication Context: A Student Attendance Management System that allows students to mark their daily attendance \nand teachers to view and manage attendance records. The system includes user authentication \nwith separate roles for students and teachers, profile management, and password recovery features.\nStudents can log in to mark their attendance daily, while teachers can view attendance records \nand track student attendance patterns. The system provides a clean, intuitive interface for \nboth user types.\n\nEndpoints to specify:\n\n1. Endpoint: Report Issue\n   Method: POST\n   Path: /api/report-issue\n   Description: Allow users to report issues or request help\n   Used by pages: Error 404 Page\n\nReturn a JSON array with specifications for each endpoint in order:\n[\n  {\"request_body\": \"describe parameters/body for endpoint 1\", \"response\": \"describe response structure for endpoint 1\"},\n  {\"request_body\": \"describe parameters/body for endpoint 2\", \"response\": \"describe response structure for endpoint 2\"},\n  ...\n]\n\nJSON array only:",
+      "response": "[\n  {\n    \"request_body\": {\n      \"issue_type\": \"string (required, e.g., 'technical', 'attendance', 'other')\",\n      \"description\": \"string (required, detailed description of the issue)\",\n      \"user_id\": \"integer (optional, ID of the user reporting the issue)\",\n      \"page_url\": \"string (optional, URL of the page where the issue occurred)\"\n    },\n    \"response\": {\n      \"issue_id\": \"integer (unique ID of the reported issue)\",\n      \"status\": \"string (initial status of the issue, e.g., 'open', 'pending', 'resolved')\",\n      \"message\": \"string (success or error message)\"\n    }\n  }\n]",
+      "success": true
+    },
+    {
+      "resource": "errors",
+      "endpoints_count": 3,
+      "request": "Create full API specifications for ALL endpoints in the /errors resource.\n\nApplication Context: A Student Attendance Management System that allows students to mark their daily attendance \nand teachers to view and manage attendance records. The system includes user authentication \nwith separate roles for students and teachers, profile management, and password recovery features.\nStudents can log in to mark their attendance daily, while teachers can view attendance records \nand track student attendance patterns. The system provides a clean, intuitive interface for \nboth user types.\n\nEndpoints to specify:\n\n1. Endpoint: Log Error\n   Method: POST\n   Path: /api/errors\n   Description: Log the error on the server-side for further investigation and debugging\n   Used by pages: Error 500 Page\n2. Endpoint: Get Error Details\n   Method: GET\n   Path: /api/errors/{errorId}\n   Description: Retrieve error details including a unique error code or identifier\n   Used by pages: Error 500 Page\n3. Endpoint: Report Issue\n   Method: POST\n   Path: /api/errors/{errorId}/report\n   Description: Send a report of the issue to the system administrators\n   Used by pages: Error 500 Page\n\nReturn a JSON array with specifications for each endpoint in order:\n[\n  {\"request_body\": \"describe parameters/body for endpoint 1\", \"response\": \"describe response structure for endpoint 1\"},\n  {\"request_body\": \"describe parameters/body for endpoint 2\", \"response\": \"describe response structure for endpoint 2\"},\n  ...\n]\n\nJSON array only:",
+      "response": "[\n  {\n    \"request_body\": {\n      \"error_code\": \"string, unique error code or identifier\",\n      \"error_message\": \"string, detailed error message\",\n      \"error_stack\": \"string, error stack trace\"\n    },\n    \"response\": {\n      \"error_id\": \"integer, unique identifier for the logged error\",\n      \"message\": \"string, success message\"\n    }\n  },\n  {\n    \"request_body\": null,\n    \"response\": {\n      \"error_id\": \"integer, unique identifier for the error\",\n      \"error_code\": \"string, unique error code or identifier\",\n      \"error_message\": \"string, detailed error message\",\n      \"error_stack\": \"string, error stack trace\",\n      \"reported\": \"boolean, whether the issue has been reported\"\n    }\n  },\n  {\n    \"request_body\": {\n      \"description\": \"string, detailed description of the issue\",\n      \"steps_to_reproduce\": \"string, steps to reproduce the issue\"\n    },\n    \"response\": {\n      \"message\": \"string, success message\",\n      \"reported\": \"boolean, whether the issue has been reported\"\n    }\n  }\n]",
+      "success": true
+    }
+  ],
+  "endpoints": [
+    {
+      "endpoint_name": "login",
+      "description": "Authenticate user credentials",
+      "method": "POST",
+      "path": "/api/auth/login",
+      "request_body": {
+        "username": "string, required",
+        "password": "string, required"
+      },
+      "response": {
+        "token": "string, authentication token",
+        "role": "string, user role (student/teacher)",
+        "user_id": "integer, unique user identifier"
+      },
+      "page_context": "Login Page"
+    },
+    {
+      "endpoint_name": "forgot_password",
+      "description": "Send password reset link to user",
+      "method": "POST",
+      "path": "/api/auth/forgot-password",
+      "request_body": {
+        "email": "string, required, user email address"
+      },
+      "response": {
+        "message": "string, password reset link sent successfully or error message"
+      },
+      "page_context": "Login Page"
+    },
+    {
+      "endpoint_name": "register",
+      "description": "Create new user account",
+      "method": "POST",
+      "path": "/api/auth/register",
+      "request_body": {
+        "username": "string, required, unique username",
+        "email": "string, required, user email address",
+        "password": "string, required, user password",
+        "role": "string, required, user role (student/teacher)"
+      },
+      "response": {
+        "message": "string, user created successfully or error message",
+        "user_id": "integer, unique user identifier"
+      },
+      "page_context": "Login Page"
+    },
+    {
+      "endpoint_name": "validate_username",
+      "description": "Check if username is available",
+      "method": "GET",
+      "path": "/api/auth/validate-username",
+      "request_body": {},
+      "response": {
+        "available": "boolean, true if username is available, false otherwise"
+      },
+      "page_context": "Login Page"
+    },
+    {
+      "endpoint_name": "validate_password",
+      "description": "Check if password meets requirements",
+      "method": "POST",
+      "path": "/api/auth/validate-password",
+      "request_body": {
+        "password": "string, required, password to validate"
+      },
+      "response": {
+        "valid": "boolean, true if password meets requirements, false otherwise",
+        "message": "string, password validation message"
+      },
+      "page_context": "Login Page"
+    },
+    {
+      "endpoint_name": "get_user_role",
+      "description": "Retrieve user role",
+      "method": "GET",
+      "path": "/api/auth/user-role",
+      "request_body": {},
+      "response": {
+        "role": "string, user role (student/teacher)"
+      },
+      "page_context": "Login Page"
+    },
+    {
+      "endpoint_name": "login_attempt",
+      "description": "Track login attempts and enforce login failure limit and timeout",
+      "method": "POST",
+      "path": "/api/auth/login-attempt",
+      "request_body": {
+        "username": "string, required",
+        "password": "string, required"
+      },
+      "response": {
+        "attempt": "integer, number of login attempts",
+        "locked": "boolean, true if account is locked due to excessive login attempts, false otherwise",
+        "message": "string, login attempt message"
+      },
+      "page_context": "Login Page"
+    },
+    {
+      "endpoint_name": "Register User",
+      "description": "Handles user registration",
+      "method": "POST",
+      "path": "/api/register",
+      "request_body": {
+        "username": "string, required, unique username chosen by the user",
+        "email": "string, required, unique email address of the user",
+        "password": "string, required, password for the user account",
+        "role": "string, required, either 'student' or 'teacher' to determine user role",
+        "name": "string, required, full name of the user"
+      },
+      "response": {
+        "token": "string, JWT token for authenticated user",
+        "user": {
+          "id": "integer, unique user ID",
+          "username": "string, username chosen by the user",
+          "email": "string, email address of the user",
+          "role": "string, user role, either 'student' or 'teacher'"
+        }
+      },
+      "page_context": "Registration Page"
+    },
+    {
+      "endpoint_name": "Validate Email",
+      "description": "Checks if an email is already in use",
+      "method": "GET",
+      "path": "/api/validate-email",
+      "request_body": "The request body should contain a JSON object with a single property 'email' which is the email to be validated. Example: {\"email\": \"example@example.com\"}",
+      "response": "The response will be a JSON object with a boolean property 'isAvailable' indicating whether the email is available or not, and a string property 'message' with a descriptive message. Example: {\"isAvailable\": true, \"message\": \"Email is available\"} or {\"isAvailable\": false, \"message\": \"Email is already in use\"}",
+      "page_context": "Registration Page"
+    },
+    {
+      "endpoint_name": "Validate Username",
+      "description": "Checks if a username is already in use",
+      "method": "GET",
+      "path": "/api/validate-username",
+      "request_body": "The endpoint accepts a query parameter 'username' which is the username to be validated. For example: GET /api/validate-username?username=johndoe",
+      "response": "The endpoint returns a JSON object with a boolean property 'isAvailable' indicating whether the username is available or not. For example: { 'isAvailable': true } or { 'isAvailable': false }",
+      "page_context": "Registration Page"
+    },
+    {
+      "endpoint_name": "Get Roles",
+      "description": "Retrieves available roles for registration",
+      "method": "GET",
+      "path": "/api/roles",
+      "request_body": "None, no parameters or body required",
+      "response": "JSON array of role objects, each containing 'id' and 'name' properties, e.g. [{\"id\": 1, \"name\": \"Student\"}, {\"id\": 2, \"name\": \"Teacher\"}]",
+      "page_context": "Registration Page"
+    },
+    {
+      "endpoint_name": "Get Terms and Conditions",
+      "description": "Retrieves terms and conditions for registration",
+      "method": "GET",
+      "path": "/api/terms-and-conditions",
+      "request_body": "None, no parameters or body required for this endpoint",
+      "response": {
+        "status_code": 200,
+        "data": {
+          "terms_and_conditions": "string, contains the terms and conditions for registration"
+        }
+      },
+      "page_context": "Registration Page"
+    },
+    {
+      "endpoint_name": "Check Password Strength",
+      "description": "Evaluates the strength of a given password",
+      "method": "POST",
+      "path": "/api/check-password-strength",
+      "request_body": {
+        "password": "string (required) - the password to be evaluated"
+      },
+      "response": {
+        "strength": "string (required) - the strength of the password (e.g. weak, medium, strong)",
+        "score": "integer (required) - a numerical score representing the password strength (e.g. 0-100)",
+        "feedback": "array of strings (optional) - suggestions for improving the password strength"
+      },
+      "page_context": "Registration Page"
+    },
+    {
+      "endpoint_name": "Get User Details",
+      "description": "Retrieve user's role and name",
+      "method": "GET",
+      "path": "/api/user/details",
+      "request_body": "No request body required. Authentication token must be provided in the headers for authorization.",
+      "response": "JSON object containing user's role and name, e.g., {\"role\": \"student\" or \"teacher\", \"name\": \"John Doe\"}",
+      "page_context": "Dashboard"
+    },
+    {
+      "endpoint_name": "Mark Attendance",
+      "description": "Mark attendance for a student",
+      "method": "POST",
+      "path": "/api/attendance/mark",
+      "request_body": {
+        "student_id": "integer, required",
+        "date": "date, required",
+        "attendance_status": "string (present/absent), required"
+      },
+      "response": {
+        "status": "boolean, indicating success or failure",
+        "message": "string, describing the outcome of the request"
+      },
+      "page_context": "Dashboard, Attendance Marking"
+    },
+    {
+      "endpoint_name": "Get Attendance Records",
+      "description": "Retrieve attendance records for a teacher",
+      "method": "GET",
+      "path": "/api/attendance/records",
+      "request_body": {},
+      "response": {
+        "attendance_records": [
+          {
+            "student_id": "integer",
+            "date": "date",
+            "attendance_status": "string (present/absent)"
+          }
+        ]
+      },
+      "page_context": "Dashboard"
+    },
+    {
+      "endpoint_name": "Get Attendance History",
+      "description": "Retrieve attendance history for a student or class",
+      "method": "GET",
+      "path": "/api/attendance/history",
+      "request_body": {
+        "student_id": "integer, optional",
+        "class_id": "integer, optional",
+        "start_date": "date, optional",
+        "end_date": "date, optional"
+      },
+      "response": {
+        "attendance_history": [
+          {
+            "date": "date",
+            "attendance_status": "string (present/absent)"
+          }
+        ]
+      },
+      "page_context": "Dashboard, Attendance Marking"
+    },
+    {
+      "endpoint_name": "Get Attendance Patterns",
+      "description": "Retrieve attendance patterns for a student or class",
+      "method": "GET",
+      "path": "/api/attendance/patterns",
+      "request_body": {
+        "student_id": "integer, optional",
+        "class_id": "integer, optional",
+        "start_date": "date, optional",
+        "end_date": "date, optional"
+      },
+      "response": {
+        "attendance_patterns": {
+          "present_count": "integer",
+          "absent_count": "integer",
+          "percentage": "float"
+        }
+      },
+      "page_context": "Dashboard, Attendance Analytics"
+    },
+    {
+      "endpoint_name": "Get Navigation Menu",
+      "description": "Retrieve navigation menu items",
+      "method": "GET",
+      "path": "/api/menu/items",
+      "request_body": "No request body required. Query parameters: none",
+      "response": "JSON array of navigation menu items. Each item contains: id (integer), name (string), url (string), icon (string), roles (array of strings), parentId (integer), order (integer)",
+      "page_context": "Dashboard"
+    },
+    {
+      "endpoint_name": "Get Calendar",
+      "description": "Retrieve calendar data",
+      "method": "GET",
+      "path": "/api/calendar/data",
+      "request_body": "No request body required. Query parameters: start_date (string, format: YYYY-MM-DD), end_date (string, format: YYYY-MM-DD), Optional: student_id (integer) if teacher wants to view specific student's calendar",
+      "response": "JSON object containing calendar data: { 'dates': [array of date strings in YYYY-MM-DD format], 'attendance_records': [array of objects with student_id, date, attendance_status (present/absent)] }",
+      "page_context": "Dashboard"
+    },
+    {
+      "endpoint_name": "Filter Attendance Records",
+      "description": "Filter attendance records by date, student, or class",
+      "method": "GET",
+      "path": "/api/attendance/records/filter",
+      "request_body": {
+        "date": "date, optional",
+        "student_id": "integer, optional",
+        "class_id": "integer, optional"
+      },
+      "response": {
+        "filtered_records": [
+          {
+            "student_id": "integer",
+            "date": "date",
+            "attendance_status": "string (present/absent)"
+          }
+        ]
+      },
+      "page_context": "Dashboard"
+    },
+    {
+      "endpoint_name": "Get Notifications",
+      "description": "Retrieve notifications for a teacher",
+      "method": "GET",
+      "path": "/api/notifications",
+      "request_body": "No request body required. Authentication token must be provided in the Authorization header.",
+      "response": "A JSON array of notification objects. Each object contains the following properties: id (unique identifier), title, message, timestamp (date and time the notification was created), and read (boolean indicating whether the notification has been read). Example: [{id: 1, title: 'New Attendance Record', message: 'A new attendance record has been submitted.', timestamp: '2024-09-16T10:00:00.000Z', read: false}]",
+      "page_context": "Dashboard"
+    },
+    {
+      "endpoint_name": "Get Attendance Statistics",
+      "description": "Retrieve attendance statistics",
+      "method": "GET",
+      "path": "/api/attendance/statistics",
+      "request_body": {},
+      "response": {
+        "attendance_statistics": {
+          "total_students": "integer",
+          "present_count": "integer",
+          "absent_count": "integer",
+          "percentage": "float"
+        }
+      },
+      "page_context": "Dashboard, Attendance Analytics"
+    },
+    {
+      "endpoint_name": "Search Attendance Records",
+      "description": "Search attendance records for a specific student",
+      "method": "GET",
+      "path": "/api/attendance/records/search",
+      "request_body": {
+        "student_id": "integer, required"
+      },
+      "response": {
+        "attendance_records": [
+          {
+            "date": "date",
+            "attendance_status": "string (present/absent)"
+          }
+        ]
+      },
+      "page_context": "Dashboard"
+    },
+    {
+      "endpoint_name": "Get User Profile",
+      "description": "Retrieve user profile information",
+      "method": "GET",
+      "path": "/api/profile",
+      "request_body": "No request body required. Authentication token must be provided in the Authorization header.",
+      "response": {
+        "status_code": 200,
+        "structure": {
+          "id": "integer",
+          "name": "string",
+          "email": "string",
+          "role": "string",
+          "picture": "string (URL of the profile picture)"
+        }
+      },
+      "page_context": "Profile Management"
+    },
+    {
+      "endpoint_name": "Update User Profile",
+      "description": "Update user profile details",
+      "method": "PUT",
+      "path": "/api/profile",
+      "request_body": {
+        "name": "string",
+        "email": "string"
+      },
+      "response": {
+        "status_code": 200,
+        "structure": {
+          "message": "string (success message)",
+          "updated_profile": {
+            "id": "integer",
+            "name": "string",
+            "email": "string",
+            "role": "string",
+            "picture": "string (URL of the profile picture)"
+          }
+        }
+      },
+      "page_context": "Profile Management"
+    },
+    {
+      "endpoint_name": "Upload Profile Picture",
+      "description": "Upload a new profile picture",
+      "method": "POST",
+      "path": "/api/profile/picture",
+      "request_body": "multipart/form-data with a 'picture' field containing the profile picture file",
+      "response": {
+        "status_code": 200,
+        "structure": {
+          "message": "string (success message)",
+          "picture_url": "string (URL of the uploaded profile picture)"
+        }
+      },
+      "page_context": "Profile Management"
+    },
+    {
+      "endpoint_name": "Change Password",
+      "description": "Change user password",
+      "method": "POST",
+      "path": "/api/profile/password",
+      "request_body": {
+        "old_password": "string",
+        "new_password": "string",
+        "confirm_password": "string"
+      },
+      "response": {
+        "status_code": 200,
+        "structure": {
+          "message": "string (success message)"
+        }
+      },
+      "page_context": "Profile Management"
+    },
+    {
+      "endpoint_name": "Validate Profile Updates",
+      "description": "Validate user input for profile updates",
+      "method": "POST",
+      "path": "/api/profile/validate",
+      "request_body": {
+        "name": "string",
+        "email": "string"
+      },
+      "response": {
+        "status_code": 200,
+        "structure": {
+          "valid": "boolean",
+          "errors": {
+            "name": "string (error message)",
+            "email": "string (error message)"
+          }
+        }
+      },
+      "page_context": "Profile Management"
+    },
+    {
+      "endpoint_name": "Send Password Recovery Email",
+      "description": "Sends a password recovery email to the user",
+      "method": "POST",
+      "path": "/api/password-recovery/send-email",
+      "request_body": {
+        "username_or_email": "string (required) - The username or email address of the user",
+        "client_url": "string (required) - The URL of the client application to redirect the user after password recovery"
+      },
+      "response": {
+        "success": "boolean (required) - Indicates whether the password recovery email was sent successfully",
+        "message": "string (optional) - A message describing the result of the operation",
+        "token": "string (optional) - The password recovery token"
+      },
+      "page_context": "Password Recovery"
+    },
+    {
+      "endpoint_name": "Validate Username or Email",
+      "description": "Validates if the username or email address exists in the database",
+      "method": "POST",
+      "path": "/api/password-recovery/validate-credentials",
+      "request_body": {
+        "username_or_email": "string (required) - The username or email address to validate"
+      },
+      "response": {
+        "valid": "boolean (required) - Indicates whether the username or email address exists in the database",
+        "message": "string (optional) - A message describing the result of the operation"
+      },
+      "page_context": "Password Recovery"
+    },
+    {
+      "endpoint_name": "Resend Password Recovery Email",
+      "description": "Resends the password recovery email if the user does not receive it",
+      "method": "POST",
+      "path": "/api/password-recovery/resend-email",
+      "request_body": {
+        "username_or_email": "string (required) - The username or email address of the user",
+        "client_url": "string (required) - The URL of the client application to redirect the user after password recovery"
+      },
+      "response": {
+        "success": "boolean (required) - Indicates whether the password recovery email was resent successfully",
+        "message": "string (optional) - A message describing the result of the operation"
+      },
+      "page_context": "Password Recovery"
+    },
+    {
+      "endpoint_name": "Reset Password",
+      "description": "Resets the user's password",
+      "method": "PUT",
+      "path": "/api/password-recovery/reset-password",
+      "request_body": {
+        "token": "string (required) - The password recovery token",
+        "new_password": "string (required) - The new password for the user",
+        "confirm_password": "string (required) - The confirmation of the new password"
+      },
+      "response": {
+        "success": "boolean (required) - Indicates whether the password was reset successfully",
+        "message": "string (optional) - A message describing the result of the operation"
+      },
+      "page_context": "Password Recovery"
+    },
+    {
+      "endpoint_name": "Verify Password Recovery Token",
+      "description": "Verifies the password recovery token sent in the email",
+      "method": "GET",
+      "path": "/api/password-recovery/verify-token",
+      "request_body": "N/A",
+      "response": {
+        "valid": "boolean (required) - Indicates whether the password recovery token is valid",
+        "message": "string (optional) - A message describing the result of the operation",
+        "user_id": "integer (optional) - The ID of the user associated with the token"
+      },
+      "page_context": "Password Recovery"
+    },
+    {
+      "endpoint_name": "Get Student Details",
+      "description": "Retrieve student details to confirm identity",
+      "method": "GET",
+      "path": "/api/student/details",
+      "request_body": "No request body required. Authentication token must be provided in the Authorization header.",
+      "response": {
+        "status_code": 200,
+        "structure": {
+          "student_id": "integer",
+          "name": "string",
+          "email": "string",
+          "role": "string"
+        },
+        "description": "Returns student details in JSON format"
+      },
+      "page_context": "Attendance Marking"
+    },
+    {
+      "endpoint_name": "Get Attendance Calendar",
+      "description": "Fetch calendar data for attendance marking",
+      "method": "GET",
+      "path": "/api/attendance/calendar",
+      "request_body": {},
+      "response": {
+        "calendar_data": [
+          {
+            "date": "date",
+            "is_holiday": "boolean"
+          }
+        ]
+      },
+      "page_context": "Attendance Marking"
+    },
+    {
+      "endpoint_name": "Add Attendance Comment",
+      "description": "Add comments or reasons for absence",
+      "method": "POST",
+      "path": "/api/attendance/comment",
+      "request_body": {
+        "student_id": "integer, required",
+        "date": "date, required",
+        "comment": "string, required"
+      },
+      "response": {
+        "status": "boolean, indicating success or failure",
+        "message": "string, describing the outcome of the request"
+      },
+      "page_context": "Attendance Marking"
+    },
+    {
+      "endpoint_name": "Check Attendance Status",
+      "description": "Check if attendance is already marked for the day",
+      "method": "GET",
+      "path": "/api/attendance/status",
+      "request_body": {},
+      "response": {
+        "attendance_status": "boolean, indicating if attendance is already marked"
+      },
+      "page_context": "Attendance Marking"
+    },
+    {
+      "endpoint_name": "Validate Attendance Time Frame",
+      "description": "Check if attendance marking is within the allowed time frame",
+      "method": "GET",
+      "path": "/api/attendance/timeframe",
+      "request_body": {},
+      "response": {
+        "is_within_timeframe": "boolean, indicating if attendance marking is within the allowed time frame"
+      },
+      "page_context": "Attendance Marking"
+    },
+    {
+      "endpoint_name": "Authenticate Student",
+      "description": "Validate user authentication to ensure only authorized students can mark their attendance",
+      "method": "POST",
+      "path": "/api/authenticate/student",
+      "request_body": "The request body for this endpoint should contain the student's username and password in JSON format, e.g., {\"username\": \"student123\", \"password\": \"password123\"}.",
+      "response": "The response will be a JSON object containing a token for authenticated students, e.g., {\"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c\", \"role\": \"student\"}. If authentication fails, it will return a JSON object with an error message, e.g., {\"error\": \"Invalid username or password\"}.",
+      "page_context": "Attendance Marking"
+    },
+    {
+      "endpoint_name": "Get All Students",
+      "description": "Retrieve a list of all students",
+      "method": "GET",
+      "path": "/api/students",
+      "request_body": "None",
+      "response": {
+        "status_code": 200,
+        "data": [
+          {
+            "id": "integer",
+            "name": "string",
+            "email": "string"
+          }
+        ]
+      },
+      "page_context": "Attendance Records"
+    },
+    {
+      "endpoint_name": "Get Student Attendance Records",
+      "description": "Retrieve attendance records for a specific student",
+      "method": "GET",
+      "path": "/api/students/{studentId}/attendance",
+      "request_body": "None",
+      "response": {
+        "status_code": 200,
+        "data": [
+          {
+            "date": "date",
+            "status": "string"
+          }
+        ]
+      },
+      "page_context": "Attendance Records, Student Information"
+    },
+    {
+      "endpoint_name": "Filter Attendance Records By Date Range",
+      "description": "Retrieve attendance records for a specific date range",
+      "method": "GET",
+      "path": "/api/students/{studentId}/attendance?startDate={startDate}&endDate={endDate}",
+      "request_body": "None",
+      "response": {
+        "status_code": 200,
+        "data": [
+          {
+            "date": "date",
+            "status": "string"
+          }
+        ]
+      },
+      "page_context": "Attendance Records"
+    },
+    {
+      "endpoint_name": "Search Students",
+      "description": "Search for specific students by name or ID",
+      "method": "GET",
+      "path": "/api/students/search?q={query}",
+      "request_body": "None",
+      "response": {
+        "status_code": 200,
+        "data": [
+          {
+            "id": "integer",
+            "name": "string",
+            "email": "string"
+          }
+        ]
+      },
+      "page_context": "Attendance Records"
+    },
+    {
+      "endpoint_name": "Get Detailed Attendance History",
+      "description": "Retrieve detailed attendance history for a specific student",
+      "method": "GET",
+      "path": "/api/students/{studentId}/attendance/history",
+      "request_body": "None",
+      "response": {
+        "status_code": 200,
+        "data": [
+          {
+            "date": "date",
+            "status": "string"
+          }
+        ]
+      },
+      "page_context": "Attendance Records, Attendance History, Student Information"
+    },
+    {
+      "endpoint_name": "Export Attendance Records To CSV",
+      "description": "Export attendance records to CSV",
+      "method": "GET",
+      "path": "/api/students/attendance/export/csv",
+      "request_body": "None",
+      "response": {
+        "status_code": 200,
+        "data": "csv file"
+      },
+      "page_context": "Attendance Records"
+    },
+    {
+      "endpoint_name": "Export Attendance Records To Excel",
+      "description": "Export attendance records to Excel",
+      "method": "GET",
+      "path": "/api/students/attendance/export/excel",
+      "request_body": "None",
+      "response": {
+        "status_code": 200,
+        "data": "excel file"
+      },
+      "page_context": "Attendance Records"
+    },
+    {
+      "endpoint_name": "Get Paginated Students List",
+      "description": "Retrieve a paginated list of students",
+      "method": "GET",
+      "path": "/api/students?page={page}&size={size}",
+      "request_body": "Query Parameters: page (integer, required) - the page number to retrieve, size (integer, required) - the number of students per page",
+      "response": "JSON Object with properties: content (array of student objects), pageNumber (integer), pageSize (integer), totalPages (integer), totalElements (integer). Student object properties: id (integer), name (string), email (string), role (string)",
+      "page_context": "Attendance Records"
+    },
+    {
+      "endpoint_name": "Get Student Profile",
+      "description": "Retrieve student's profile information",
+      "method": "GET",
+      "path": "/api/students/{studentId}/profile",
+      "request_body": "None",
+      "response": {
+        "status_code": 200,
+        "data": {
+          "id": "integer",
+          "name": "string",
+          "email": "string"
+        }
+      },
+      "page_context": "Attendance History, Student Information"
+    },
+    {
+      "endpoint_name": "Get Attendance History By Date Range",
+      "description": "Retrieve student's attendance history for a specific date range",
+      "method": "GET",
+      "path": "/api/students/{studentId}/attendance/history/byDateRange",
+      "request_body": "None",
+      "response": {
+        "status_code": 200,
+        "data": [
+          {
+            "date": "date",
+            "status": "string"
+          }
+        ]
+      },
+      "page_context": "Attendance History"
+    },
+    {
+      "endpoint_name": "Search Attendance Records",
+      "description": "Search for specific attendance records",
+      "method": "GET",
+      "path": "/api/students/{studentId}/attendance/history/search",
+      "request_body": "None",
+      "response": {
+        "status_code": 200,
+        "data": [
+          {
+            "date": "date",
+            "status": "string"
+          }
+        ]
+      },
+      "page_context": "Attendance History"
+    },
+    {
+      "endpoint_name": "Export Attendance History",
+      "description": "Export student's attendance history in CSV or PDF format",
+      "method": "GET",
+      "path": "/api/students/{studentId}/attendance/history/export",
+      "request_body": "None",
+      "response": {
+        "status_code": 200,
+        "data": "csv or pdf file"
+      },
+      "page_context": "Attendance History"
+    },
+    {
+      "endpoint_name": "Get Attendance Summary",
+      "description": "Retrieve student's attendance summary (total days present, absent, percentage)",
+      "method": "GET",
+      "path": "/api/students/{studentId}/attendance/summary",
+      "request_body": "None",
+      "response": {
+        "status_code": 200,
+        "data": {
+          "totalDaysPresent": "integer",
+          "totalDaysAbsent": "integer",
+          "attendancePercentage": "float"
+        }
+      },
+      "page_context": "Attendance History"
+    },
+    {
+      "endpoint_name": "Get Application Info",
+      "description": "Retrieve application name and logo",
+      "method": "GET",
+      "path": "/api/app-info",
+      "request_body": "None. This endpoint does not require any parameters or request body.",
+      "response": {
+        "application_name": "string",
+        "application_logo": "string (URL)"
+      },
+      "page_context": "Settings"
+    },
+    {
+      "endpoint_name": "Get Navigation Menu",
+      "description": "Retrieve navigation menu with settings option",
+      "method": "GET",
+      "path": "/api/navigation-menu",
+      "request_body": "None, this endpoint does not require any parameters in the request body",
+      "response": {
+        "status_code": 200,
+        "data": {
+          "menu_items": [
+            {
+              "id": "integer, unique identifier for the menu item",
+              "name": "string, name of the menu item",
+              "url": "string, URL linked to the menu item",
+              "icon": "string, icon for the menu item",
+              "role": "string, role required to access the menu item (e.g. student, teacher)"
+            }
+          ]
+        }
+      },
+      "page_context": "Settings"
+    },
+    {
+      "endpoint_name": "Search Settings",
+      "description": "Search for settings options",
+      "method": "GET",
+      "path": "/api/settings/search",
+      "request_body": "Optional query parameters: { 'key': string, 'value': string }. Example: GET /api/settings/search?key=attendance&value=daily",
+      "response": "JSON object with settings options: { 'settings': [ { 'key': string, 'value': string, 'description': string } ] }",
+      "page_context": "Settings"
+    },
+    {
+      "endpoint_name": "Get User Profile",
+      "description": "Retrieve user profile information",
+      "method": "GET",
+      "path": "/api/user-profile",
+      "request_body": "None, authentication token required in headers for authorization",
+      "response": {
+        "status_code": 200,
+        "data": {
+          "id": "integer, unique user identifier",
+          "name": "string, user name",
+          "email": "string, user email",
+          "role": "string, user role (student/teacher)",
+          "created_at": "timestamp, user account creation date"
+        }
+      },
+      "page_context": "Settings"
+    },
+    {
+      "endpoint_name": "Update User Profile",
+      "description": "Update user profile information",
+      "method": "PUT",
+      "path": "/api/user-profile",
+      "request_body": {
+        "name": "string, updated user name",
+        "email": "string, updated user email"
+      },
+      "response": {
+        "status_code": 200,
+        "data": {
+          "id": "integer, unique user identifier",
+          "name": "string, updated user name",
+          "email": "string, updated user email",
+          "role": "string, user role (student/teacher)",
+          "created_at": "timestamp, user account creation date"
+        }
+      },
+      "page_context": "Settings"
+    },
+    {
+      "endpoint_name": "Change Password",
+      "description": "Change user password",
+      "method": "PUT",
+      "path": "/api/user-profile/password",
+      "request_body": {
+        "current_password": "string, current user password",
+        "new_password": "string, new user password",
+        "confirm_password": "string, confirmation of new user password"
+      },
+      "response": {
+        "status_code": 200,
+        "message": "string, password updated successfully"
+      },
+      "page_context": "Settings"
+    },
+    {
+      "endpoint_name": "Get Account Settings",
+      "description": "Retrieve account settings",
+      "method": "GET",
+      "path": "/api/account-settings",
+      "request_body": "None, no parameters required in the request body",
+      "response": {
+        "status_code": 200,
+        "data": {
+          "account_settings": {
+            "notification_preferences": {
+              "email_notifications": "boolean",
+              "sms_notifications": "boolean"
+            },
+            "theme": "string",
+            "language": "string"
+          }
+        }
+      },
+      "page_context": "Settings"
+    },
+    {
+      "endpoint_name": "Update Account Settings",
+      "description": "Update account settings",
+      "method": "PUT",
+      "path": "/api/account-settings",
+      "request_body": {
+        "notification_preferences": {
+          "email_notifications": "boolean",
+          "sms_notifications": "boolean"
+        },
+        "theme": "string",
+        "language": "string"
+      },
+      "response": {
+        "status_code": 200,
+        "data": {
+          "message": "Account settings updated successfully"
+        }
+      },
+      "page_context": "Settings"
+    },
+    {
+      "endpoint_name": "Get Notification Preferences",
+      "description": "Retrieve notification preferences",
+      "method": "GET",
+      "path": "/api/notification-preferences",
+      "request_body": "None, no parameters or body required",
+      "response": {
+        "status_code": 200,
+        "structure": {
+          "notification_preferences": {
+            "attendance_reminders": "boolean",
+            "low_attendance_warnings": "boolean",
+            "absence_notifications": "boolean"
+          }
+        },
+        "description": "Retrieve notification preferences for the current user"
+      },
+      "page_context": "Settings"
+    },
+    {
+      "endpoint_name": "Update Notification Preferences",
+      "description": "Update notification preferences",
+      "method": "PUT",
+      "path": "/api/notification-preferences",
+      "request_body": {
+        "structure": {
+          "attendance_reminders": "boolean",
+          "low_attendance_warnings": "boolean",
+          "absence_notifications": "boolean"
+        },
+        "description": "Update notification preferences for the current user"
+      },
+      "response": {
+        "status_code": 200,
+        "structure": {
+          "message": "string",
+          "notification_preferences": {
+            "attendance_reminders": "boolean",
+            "low_attendance_warnings": "boolean",
+            "absence_notifications": "boolean"
+          }
+        },
+        "description": "Update notification preferences successfully"
+      },
+      "page_context": "Settings"
+    },
+    {
+      "endpoint_name": "Get User Roles and Permissions",
+      "description": "Retrieve user roles and permissions",
+      "method": "GET",
+      "path": "/api/user-roles",
+      "request_body": "None",
+      "response": {
+        "status_code": 200,
+        "data": [
+          {
+            "roleId": "integer",
+            "roleName": "string",
+            "permissions": [
+              {
+                "permissionId": "integer",
+                "permissionName": "string"
+              }
+            ]
+          }
+        ]
+      },
+      "page_context": "Settings, User Roles Management"
+    },
+    {
+      "endpoint_name": "Update User Roles and Permissions",
+      "description": "Update user roles and permissions",
+      "method": "PUT",
+      "path": "/api/user-roles",
+      "request_body": {
+        "roleId": "integer",
+        "roleName": "string",
+        "permissions": [
+          {
+            "permissionId": "integer",
+            "permissionName": "string"
+          }
+        ]
+      },
+      "response": {
+        "status_code": 200,
+        "message": "User roles and permissions updated successfully"
+      },
+      "page_context": "Settings"
+    },
+    {
+      "endpoint_name": "Get Attendance Settings",
+      "description": "Retrieve attendance settings",
+      "method": "GET",
+      "path": "/api/attendance-settings",
+      "request_body": "None, this endpoint does not require a request body",
+      "response": {
+        "status_code": 200,
+        "description": "Attendance settings retrieved successfully",
+        "structure": {
+          "attendance_settings": {
+            "id": "integer, unique identifier for attendance settings",
+            "mark_attendance_time_limit": "integer, time limit in minutes for marking attendance",
+            "attendance_grace_period": "integer, grace period in minutes for marking attendance",
+            "max_allowed_absences": "integer, maximum allowed absences per semester"
+          }
+        }
+      },
+      "page_context": "Settings"
+    },
+    {
+      "endpoint_name": "Update Attendance Settings",
+      "description": "Update attendance settings",
+      "method": "PUT",
+      "path": "/api/attendance-settings",
+      "request_body": {
+        "attendance_settings": {
+          "mark_attendance_time_limit": "integer, time limit in minutes for marking attendance",
+          "attendance_grace_period": "integer, grace period in minutes for marking attendance",
+          "max_allowed_absences": "integer, maximum allowed absences per semester"
+        }
+      },
+      "response": {
+        "status_code": 200,
+        "description": "Attendance settings updated successfully",
+        "structure": {
+          "message": "string, success message",
+          "attendance_settings": {
+            "id": "integer, unique identifier for attendance settings",
+            "mark_attendance_time_limit": "integer, time limit in minutes for marking attendance",
+            "attendance_grace_period": "integer, grace period in minutes for marking attendance",
+            "max_allowed_absences": "integer, maximum allowed absences per semester"
+          }
+        }
+      },
+      "page_context": "Settings"
+    },
+    {
+      "endpoint_name": "Get System Defaults",
+      "description": "Retrieve system default settings",
+      "method": "GET",
+      "path": "/api/system-defaults",
+      "request_body": "None, this endpoint does not require a request body",
+      "response": {
+        "status_code": 200,
+        "data": {
+          "default_attendance_marking_time": "string",
+          "default_attendance_marking_days": "array of strings",
+          "default_attendance_grace_period": "integer",
+          "default_attendance_notification_frequency": "string",
+          "default_attendance_notification_recipients": "array of strings"
+        }
+      },
+      "page_context": "Settings"
+    },
+    {
+      "endpoint_name": "Update System Defaults",
+      "description": "Update system default settings",
+      "method": "PUT",
+      "path": "/api/system-defaults",
+      "request_body": {
+        "default_attendance_marking_time": "string",
+        "default_attendance_marking_days": "array of strings",
+        "default_attendance_grace_period": "integer",
+        "default_attendance_notification_frequency": "string",
+        "default_attendance_notification_recipients": "array of strings"
+      },
+      "response": {
+        "status_code": 200,
+        "message": "System defaults updated successfully"
+      },
+      "page_context": "Settings"
+    },
+    {
+      "endpoint_name": "Reset Settings to Default",
+      "description": "Reset settings to default values",
+      "method": "POST",
+      "path": "/api/settings/reset",
+      "request_body": "No request body required. Resets all settings to default values.",
+      "response": "JSON object with success message: { 'message': 'Settings reset to default values' }",
+      "page_context": "Settings"
+    },
+    {
+      "endpoint_name": "Save Settings Changes",
+      "description": "Save settings changes",
+      "method": "POST",
+      "path": "/api/settings/save",
+      "request_body": "JSON object with updated settings: { 'settings': [ { 'key': string, 'value': string } ] }. Example: { 'settings': [ { 'key': 'attendance', 'value': 'daily' } ] }",
+      "response": "JSON object with success message: { 'message': 'Settings updated successfully' }",
+      "page_context": "Settings"
+    },
+    {
+      "endpoint_name": "Validate Settings Changes",
+      "description": "Validate settings changes",
+      "method": "POST",
+      "path": "/api/settings/validate",
+      "request_body": "JSON object with updated settings: { 'settings': [ { 'key': string, 'value': string } ] }. Example: { 'settings': [ { 'key': 'attendance', 'value': 'daily' } ] }",
+      "response": "JSON object with validation result: { 'valid': boolean, 'errors': [ { 'key': string, 'message': string } ] }",
+      "page_context": "Settings"
+    },
+    {
+      "endpoint_name": "Initiate Password Recovery",
+      "description": "Initiate password recovery process by sending a recovery email to the user's registered email address",
+      "method": "POST",
+      "path": "/api/forgot-password",
+      "request_body": {
+        "email": "string (required) - the email address of the user who wants to recover their password"
+      },
+      "response": {
+        "status": "string - success or error",
+        "message": "string - a message indicating whether the password recovery email was sent successfully",
+        "data": "object (optional) - additional data, such as a recovery token"
+      },
+      "page_context": "Forgot Password"
+    },
+    {
+      "endpoint_name": "Validate User Credentials",
+      "description": "Validate user input to ensure it matches the username or email in the system",
+      "method": "POST",
+      "path": "/api/validate-credentials",
+      "request_body": {
+        "username_or_email": "string (required) - the username or email to validate",
+        "password": "string (required) - the password to validate"
+      },
+      "response": {
+        "status": "boolean (required) - whether the credentials are valid",
+        "message": "string (optional) - error message if credentials are invalid",
+        "user_id": "integer (optional) - the ID of the user if credentials are valid"
+      },
+      "page_context": "Forgot Password"
+    },
+    {
+      "endpoint_name": "Send Recovery Email",
+      "description": "Send a password recovery email to the user's registered email address",
+      "method": "POST",
+      "path": "/api/send-recovery-email",
+      "request_body": {
+        "email": "The email address of the user who forgot their password (string, required)"
+      },
+      "response": {
+        "status": "The status of the request (string, e.g. 'success' or 'error')",
+        "message": "A message describing the outcome of the request (string, e.g. 'Recovery email sent successfully' or 'User not found')",
+        "data": "Optional data returned with the response, e.g. a token or a link (object or null)"
+      },
+      "page_context": "Forgot Password"
+    },
+    {
+      "endpoint_name": "Check Username or Email Availability",
+      "description": "Check if the username or email exists in the system",
+      "method": "GET",
+      "path": "/api/check-username-email",
+      "request_body": "The GET request should include two query parameters: 'username' and 'email'. The 'username' parameter checks if the username is available, and the 'email' parameter checks if the email is available. Both parameters are optional, but at least one of them should be provided.",
+      "response": "The response will be a JSON object with two properties: 'usernameAvailable' and 'emailAvailable'. The 'usernameAvailable' property will be a boolean indicating whether the username is available, and the 'emailAvailable' property will be a boolean indicating whether the email is available. If the 'username' or 'email' parameter is not provided, the corresponding property in the response will be null.",
+      "page_context": "Forgot Password"
+    },
+    {
+      "endpoint_name": "Create New User Role",
+      "description": "Allow administrators to add new user roles",
+      "method": "POST",
+      "path": "/api/user-roles",
+      "request_body": {
+        "roleName": "string",
+        "permissions": [
+          {
+            "permissionId": "integer",
+            "permissionName": "string"
+          }
+        ]
+      },
+      "response": {
+        "status_code": 201,
+        "data": {
+          "roleId": "integer",
+          "roleName": "string",
+          "permissions": [
+            {
+              "permissionId": "integer",
+              "permissionName": "string"
+            }
+          ]
+        }
+      },
+      "page_context": "User Roles Management"
+    },
+    {
+      "endpoint_name": "Get User Role By ID",
+      "description": "Retrieve a specific user role by ID for editing",
+      "method": "GET",
+      "path": "/api/user-roles/{roleId}",
+      "request_body": "None",
+      "response": {
+        "status_code": 200,
+        "data": {
+          "roleId": "integer",
+          "roleName": "string",
+          "permissions": [
+            {
+              "permissionId": "integer",
+              "permissionName": "string"
+            }
+          ]
+        }
+      },
+      "page_context": "User Roles Management"
+    },
+    {
+      "endpoint_name": "Update User Role",
+      "description": "Allow administrators to edit existing user roles",
+      "method": "PUT",
+      "path": "/api/user-roles/{roleId}",
+      "request_body": {
+        "roleName": "string",
+        "permissions": [
+          {
+            "permissionId": "integer",
+            "permissionName": "string"
+          }
+        ]
+      },
+      "response": {
+        "status_code": 200,
+        "message": "User role updated successfully"
+      },
+      "page_context": "User Roles Management"
+    },
+    {
+      "endpoint_name": "Delete User Role",
+      "description": "Allow administrators to delete existing user roles",
+      "method": "DELETE",
+      "path": "/api/user-roles/{roleId}",
+      "request_body": "None",
+      "response": {
+        "status_code": 200,
+        "message": "User role deleted successfully"
+      },
+      "page_context": "User Roles Management"
+    },
+    {
+      "endpoint_name": "Get All Users With Roles",
+      "description": "Display a list of all users with their assigned roles",
+      "method": "GET",
+      "path": "/api/users",
+      "request_body": "None",
+      "response": {
+        "status_code": 200,
+        "data": [
+          {
+            "id": "integer",
+            "username": "string",
+            "email": "string",
+            "roles": [
+              {
+                "id": "integer",
+                "name": "string"
+              }
+            ]
+          }
+        ]
+      },
+      "page_context": "User Roles Management"
+    },
+    {
+      "endpoint_name": "Assign Role To User",
+      "description": "Allow administrators to assign roles to users",
+      "method": "POST",
+      "path": "/api/users/{userId}/roles",
+      "request_body": {
+        "roleId": "integer"
+      },
+      "response": {
+        "status_code": 201,
+        "data": {
+          "id": "integer",
+          "username": "string",
+          "email": "string",
+          "roles": [
+            {
+              "id": "integer",
+              "name": "string"
+            }
+          ]
+        }
+      },
+      "page_context": "User Roles Management"
+    },
+    {
+      "endpoint_name": "Unassign Role From User",
+      "description": "Allow administrators to unassign roles from users",
+      "method": "DELETE",
+      "path": "/api/users/{userId}/roles/{roleId}",
+      "request_body": "None",
+      "response": {
+        "status_code": 204,
+        "data": {
+          "id": "integer",
+          "username": "string",
+          "email": "string",
+          "roles": [
+            {
+              "id": "integer",
+              "name": "string"
+            }
+          ]
+        }
+      },
+      "page_context": "User Roles Management"
+    },
+    {
+      "endpoint_name": "Search Users Or Roles",
+      "description": "Provide a search function to find specific users or roles",
+      "method": "GET",
+      "path": "/api/search",
+      "request_body": "Query Parameters: { 'query': search query string, 'type': 'user' or 'role' to specify search type, 'limit': number of results to return, 'offset': pagination offset }",
+      "response": "JSON array of objects containing 'id', 'name', 'email', 'role' (if type is 'user') or 'role_name' and 'description' (if type is 'role')",
+      "page_context": "User Roles Management, Error 404 Page"
+    },
+    {
+      "endpoint_name": "Get Paginated Users",
+      "description": "Implement pagination for large lists of users",
+      "method": "GET",
+      "path": "/api/users/paginated",
+      "request_body": {
+        "page": "integer",
+        "size": "integer"
+      },
+      "response": {
+        "status_code": 200,
+        "data": {
+          "content": [
+            {
+              "id": "integer",
+              "username": "string",
+              "email": "string",
+              "roles": [
+                {
+                  "id": "integer",
+                  "name": "string"
+                }
+              ]
+            }
+          ],
+          "pageable": {
+            "pageNumber": "integer",
+            "pageSize": "integer",
+            "pageTotal": "integer",
+            "totalElements": "integer",
+            "totalPages": "integer"
+          }
+        }
+      },
+      "page_context": "User Roles Management"
+    },
+    {
+      "endpoint_name": "Get Paginated User Roles",
+      "description": "Implement pagination for large lists of user roles",
+      "method": "GET",
+      "path": "/api/user-roles/paginated",
+      "request_body": {
+        "pageNumber": "integer",
+        "pageSize": "integer"
+      },
+      "response": {
+        "status_code": 200,
+        "data": {
+          "totalPages": "integer",
+          "totalRecords": "integer",
+          "userRoles": [
+            {
+              "roleId": "integer",
+              "roleName": "string",
+              "permissions": [
+                {
+                  "permissionId": "integer",
+                  "permissionName": "string"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "page_context": "User Roles Management"
+    },
+    {
+      "endpoint_name": "Get User Count And Role Count",
+      "description": "Display the total number of users and roles",
+      "method": "GET",
+      "path": "/api/stats",
+      "request_body": "No request body required. Query parameters: None",
+      "response": {
+        "status_code": 200,
+        "description": "A JSON object containing user count and role count",
+        "structure": {
+          "user_count": "The total number of users in the system",
+          "role_count": {
+            "student": "The total number of students",
+            "teacher": "The total number of teachers"
+          }
+        },
+        "example": {
+          "user_count": 100,
+          "role_count": {
+            "student": 80,
+            "teacher": 20
+          }
+        }
+      },
+      "page_context": "User Roles Management"
+    },
+    {
+      "endpoint_name": "Get Users By Role",
+      "description": "Allow administrators to filter users by role",
+      "method": "GET",
+      "path": "/api/users/by-role/{roleId}",
+      "request_body": "None",
+      "response": {
+        "status_code": 200,
+        "data": [
+          {
+            "id": "integer",
+            "username": "string",
+            "email": "string",
+            "roles": [
+              {
+                "id": "integer",
+                "name": "string"
+              }
+            ]
+          }
+        ]
+      },
+      "page_context": "User Roles Management"
+    },
+    {
+      "endpoint_name": "Get Sorted Users",
+      "description": "Allow administrators to sort users by name, role, or other relevant criteria",
+      "method": "GET",
+      "path": "/api/users/sorted",
+      "request_body": {
+        "sort": "string",
+        "order": "string"
+      },
+      "response": {
+        "status_code": 200,
+        "data": [
+          {
+            "id": "integer",
+            "username": "string",
+            "email": "string",
+            "roles": [
+              {
+                "id": "integer",
+                "name": "string"
+              }
+            ]
+          }
+        ]
+      },
+      "page_context": "User Roles Management"
+    },
+    {
+      "endpoint_name": "Get Homepage Link",
+      "description": "Retrieve the link to the homepage",
+      "method": "GET",
+      "path": "/api/homepage",
+      "request_body": "None, this endpoint does not require any parameters or request body",
+      "response": "JSON object containing a single property 'homepageLink' with a string value representing the URL of the homepage, e.g. { 'homepageLink': 'https://example.com/home' }",
+      "page_context": "Error 404 Page"
+    },
+    {
+      "endpoint_name": "Get Dashboard Link",
+      "description": "Retrieve the link to the dashboard",
+      "method": "GET",
+      "path": "/api/dashboard",
+      "request_body": "No request body is required for this endpoint. It only needs the GET method and the path /api/dashboard to retrieve the link to the dashboard.",
+      "response": "The response will be a JSON object containing the link to the dashboard, for example: {\"link\": \"/dashboard\"}",
+      "page_context": "Error 404 Page"
+    },
+    {
+      "endpoint_name": "Get Previous Page",
+      "description": "Retrieve the link to the previous page",
+      "method": "GET",
+      "path": "/api/previous-page",
+      "request_body": "None. This endpoint does not require any parameters or request body.",
+      "response": {
+        "status_code": 200,
+        "structure": {
+          "previous_page_link": "string"
+        },
+        "description": "Returns a JSON object containing the link to the previous page."
+      },
+      "page_context": "Error 404 Page"
+    },
+    {
+      "endpoint_name": "Get Contact Link",
+      "description": "Retrieve the link to the contact or support page",
+      "method": "GET",
+      "path": "/api/contact",
+      "request_body": "None, no parameters or request body required",
+      "response": {
+        "status_code": 200,
+        "data": {
+          "contact_link": "string, URL to the contact or support page"
+        }
+      },
+      "page_context": "Error 404 Page"
+    },
+    {
+      "endpoint_name": "Report Issue",
+      "description": "Allow users to report issues or request help",
+      "method": "POST",
+      "path": "/api/report-issue",
+      "request_body": {
+        "issue_type": "string (required, e.g., 'technical', 'attendance', 'other')",
+        "description": "string (required, detailed description of the issue)",
+        "user_id": "integer (optional, ID of the user reporting the issue)",
+        "page_url": "string (optional, URL of the page where the issue occurred)"
+      },
+      "response": {
+        "issue_id": "integer (unique ID of the reported issue)",
+        "status": "string (initial status of the issue, e.g., 'open', 'pending', 'resolved')",
+        "message": "string (success or error message)"
+      },
+      "page_context": "Error 404 Page"
+    },
+    {
+      "endpoint_name": "Log Error",
+      "description": "Log the error on the server-side for further investigation and debugging",
+      "method": "POST",
+      "path": "/api/errors",
+      "request_body": {
+        "error_code": "string, unique error code or identifier",
+        "error_message": "string, detailed error message",
+        "error_stack": "string, error stack trace"
+      },
+      "response": {
+        "error_id": "integer, unique identifier for the logged error",
+        "message": "string, success message"
+      },
+      "page_context": "Error 500 Page"
+    },
+    {
+      "endpoint_name": "Get Error Details",
+      "description": "Retrieve error details including a unique error code or identifier",
+      "method": "GET",
+      "path": "/api/errors/{errorId}",
+      "request_body": null,
+      "response": {
+        "error_id": "integer, unique identifier for the error",
+        "error_code": "string, unique error code or identifier",
+        "error_message": "string, detailed error message",
+        "error_stack": "string, error stack trace",
+        "reported": "boolean, whether the issue has been reported"
+      },
+      "page_context": "Error 500 Page"
+    },
+    {
+      "endpoint_name": "Report Issue",
+      "description": "Send a report of the issue to the system administrators",
+      "method": "POST",
+      "path": "/api/errors/{errorId}/report",
+      "request_body": {
+        "description": "string, detailed description of the issue",
+        "steps_to_reproduce": "string, steps to reproduce the issue"
+      },
+      "response": {
+        "message": "string, success message",
+        "reported": "boolean, whether the issue has been reported"
+      },
+      "page_context": "Error 500 Page"
+    },
+    {
+      "endpoint_name": "Get Student Attendance Records",
+      "description": "Retrieve attendance records for an individual student",
+      "method": "GET",
+      "path": "/api/attendance/records/:studentId",
+      "request_body": {},
+      "response": {
+        "attendance_records": [
+          {
+            "date": "date",
+            "attendance_status": "string (present/absent)"
+          }
+        ]
+      },
+      "page_context": "Attendance Analytics"
+    },
+    {
+      "endpoint_name": "Get Class Attendance Statistics",
+      "description": "Retrieve overall class attendance statistics",
+      "method": "GET",
+      "path": "/api/attendance/class-statistics",
+      "request_body": {},
+      "response": {
+        "class_statistics": {
+          "total_students": "integer",
+          "present_count": "integer",
+          "absent_count": "integer",
+          "percentage": "float"
+        }
+      },
+      "page_context": "Attendance Analytics"
+    },
+    {
+      "endpoint_name": "Search Students",
+      "description": "Search for students by name",
+      "method": "GET",
+      "path": "/api/students/search",
+      "request_body": "None",
+      "response": {
+        "status_code": 200,
+        "data": [
+          {
+            "id": "integer",
+            "name": "string",
+            "email": "string"
+          }
+        ]
+      },
+      "page_context": "Attendance Analytics, Student Information"
+    },
+    {
+      "endpoint_name": "Get Attendance Data",
+      "description": "Retrieve attendance data with filters and sorting",
+      "method": "GET",
+      "path": "/api/attendance/data",
+      "request_body": {
+        "filter_by": "string (date/student/class), optional",
+        "sort_by": "string (date/attendance_status), optional"
+      },
+      "response": {
+        "attendance_data": [
+          {
+            "student_id": "integer",
+            "date": "date",
+            "attendance_status": "string (present/absent)"
+          }
+        ]
+      },
+      "page_context": "Attendance Analytics"
+    },
+    {
+      "endpoint_name": "Get Attendance Visualization Data",
+      "description": "Retrieve data for visualizing attendance patterns",
+      "method": "GET",
+      "path": "/api/attendance/visualization-data",
+      "request_body": {},
+      "response": {
+        "visualization_data": {
+          "labels": [
+            "string"
+          ],
+          "data": [
+            "integer"
+          ]
+        }
+      },
+      "page_context": "Attendance Analytics"
+    },
+    {
+      "endpoint_name": "Get Student Attendance Percentage",
+      "description": "Retrieve attendance percentage for an individual student",
+      "method": "GET",
+      "path": "/api/attendance/percentage/:studentId",
+      "request_body": {},
+      "response": {
+        "attendance_percentage": "float"
+      },
+      "page_context": "Attendance Analytics"
+    },
+    {
+      "endpoint_name": "Filter Students",
+      "description": "Filter students by class or attendance status",
+      "method": "GET",
+      "path": "/api/students/filter",
+      "request_body": "None",
+      "response": {
+        "status_code": 200,
+        "data": [
+          {
+            "id": "integer",
+            "name": "string",
+            "email": "string"
+          }
+        ]
+      },
+      "page_context": "Student Information"
+    },
+    {
+      "endpoint_name": "Get Student Dashboard",
+      "description": "Retrieve dashboard view for teachers to overview student attendance",
+      "method": "GET",
+      "path": "/api/students/dashboard",
+      "request_body": "None",
+      "response": {
+        "status_code": 200,
+        "data": {
+          "students": [
+            {
+              "id": "integer",
+              "name": "string",
+              "email": "string"
+            }
+          ]
+        }
+      },
+      "page_context": "Student Information"
+    },
+    {
+      "endpoint_name": "Get Student Profile Picture",
+      "description": "Retrieve student profile picture",
+      "method": "GET",
+      "path": "/api/students/{studentId}/profile-picture",
+      "request_body": "None",
+      "response": {
+        "status_code": 200,
+        "data": "image file"
+      },
+      "page_context": "Student Information"
+    },
+    {
+      "endpoint_name": "Get Student Contact Information",
+      "description": "Retrieve student contact information",
+      "method": "GET",
+      "path": "/api/students/{studentId}/contact-info",
+      "request_body": "None",
+      "response": {
+        "status_code": 200,
+        "data": {
+          "phone": "string",
+          "email": "string"
+        }
+      },
+      "page_context": "Student Information"
+    },
+    {
+      "endpoint_name": "Get Detailed Attendance Records",
+      "description": "Retrieve detailed attendance records for a student",
+      "method": "GET",
+      "path": "/api/students/{studentId}/attendance/details",
+      "request_body": "None",
+      "response": {
+        "status_code": 200,
+        "data": [
+          {
+            "date": "date",
+            "status": "string"
+          }
+        ]
+      },
+      "page_context": "Student Information"
+    },
+    {
+      "endpoint_name": "Authenticate Teacher",
+      "description": "Authenticate teacher and authorize access to student information",
+      "method": "POST",
+      "path": "/api/auth/teacher/login",
+      "request_body": {
+        "teacher_id": "integer, required, unique teacher identifier",
+        "password": "string, required, teacher password"
+      },
+      "response": {
+        "token": "string, authentication token",
+        "authorized": "boolean, true if teacher is authorized, false otherwise",
+        "message": "string, authentication message"
+      },
+      "page_context": "Student Information"
+    }
+  ]
+}

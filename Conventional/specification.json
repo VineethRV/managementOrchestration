@@ -1,0 +1,87 @@
+{
+    "detailed_description": "A minimal Attendance Management System using REST APIs. The system supports students and teachers with role-based access control. Architecture is RESTful API with JSON. Authentication uses token-based JWT. Roles are STUDENT and TEACHER. Features include secure password hashing, proper HTTP status codes, input validation and error handling, and role-based authorization on all endpoints.",
+    "features": [
+        "Authentication - Login users and issue access tokens via POST /auth/login",
+        "Authentication - Register new users with role assignment via POST /auth/register",
+        "Student Dashboard - View daily and historical attendance via GET /student/attendance/summary and GET /student/attendance/history",
+        "Attendance Marking - Students can mark attendance once per day via POST /student/attendance/mark with duplicate prevention",
+        "Teacher Dashboard - View attendance overview and filter by date or student via GET /teacher/dashboard and GET /teacher/attendance",
+        "Attendance Record Management - Teachers can view and update attendance records via PUT /teacher/attendance/{attendanceId}",
+        "Profile Management - Fetch and update user profile details via GET /user/profile and PUT /user/profile",
+        "Authorization middleware on all protected routes",
+        "Rate limiting on authentication endpoints"
+    ],
+    "endpoints": [
+        {
+            "method": "POST",
+            "path": "/auth/login",
+            "description": "Login users and issue access tokens"
+        },
+        {
+            "method": "POST",
+            "path": "/auth/register",
+            "description": "Register new users with role assignment"
+        },
+        {
+            "method": "GET",
+            "path": "/student/attendance/summary",
+            "description": "View attendance summary and percentage"
+        },
+        {
+            "method": "GET",
+            "path": "/student/attendance/history",
+            "description": "View historical attendance"
+        },
+        {
+            "method": "POST",
+            "path": "/student/attendance/mark",
+            "description": "Mark attendance once per day"
+        },
+        {
+            "method": "GET",
+            "path": "/teacher/dashboard",
+            "description": "View attendance overview"
+        },
+        {
+            "method": "GET",
+            "path": "/teacher/attendance",
+            "description": "Filter attendance by date or student"
+        },
+        {
+            "method": "PUT",
+            "path": "/teacher/attendance/{attendanceId}",
+            "description": "Update attendance records"
+        },
+        {
+            "method": "GET",
+            "path": "/user/profile",
+            "description": "Fetch user profile details"
+        },
+        {
+            "method": "PUT",
+            "path": "/user/profile",
+            "description": "Update user profile details"
+        }
+    ],
+    "data_models": {
+        "User": [
+            "id",
+            "name",
+            "email",
+            "password_hash",
+            "role"
+        ],
+        "Attendance": [
+            "id",
+            "student_id",
+            "date",
+            "status",
+            "marked_at"
+        ]
+    },
+    "non_functional_requirements": [
+        "Authorization middleware on all protected routes",
+        "Rate limiting on authentication endpoints",
+        "Timezone-aware date handling"
+    ]
+}

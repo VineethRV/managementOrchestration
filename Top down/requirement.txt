@@ -1,0 +1,80 @@
+Design a minimal Attendance Management System using REST APIs.
+The system supports students and teachers with role-based access control.
+
+GENERAL CONSTRAINTS
+- Architecture: RESTful API (JSON)
+- Authentication: Token-based (JWT or equivalent)
+- Roles: STUDENT, TEACHER
+- Secure password hashing
+- Proper HTTP status codes
+- Input validation and error handling
+- Role-based authorization on all endpoints
+
+MODULES & API RESPONSIBILITIES
+
+1. AUTHENTICATION
+- Login users and issue access tokens
+- Register new users with role assignment
+
+Endpoints:
+- POST /auth/login
+- POST /auth/register
+
+2. STUDENT DASHBOARD
+- View daily and historical attendance
+- Attendance summary and percentage
+
+Endpoints:
+- GET /student/attendance/summary
+- GET /student/attendance/history
+
+3. ATTENDANCE MARKING (STUDENT)
+- Mark attendance once per day
+- Prevent duplicate entries
+
+Endpoints:
+- POST /student/attendance/mark
+
+4. TEACHER DASHBOARD
+- View attendance overview
+- Filter by date or student
+
+Endpoints:
+- GET /teacher/dashboard
+- GET /teacher/attendance
+
+5. ATTENDANCE RECORD MANAGEMENT (TEACHER)
+- View and update attendance records if permitted
+
+Endpoints:
+- PUT /teacher/attendance/{attendanceId}
+
+6. PROFILE MANAGEMENT
+- Fetch and update user profile details
+
+Endpoints:
+- GET /user/profile
+- PUT /user/profile
+
+DATA MODELS (MINIMAL)
+
+User:
+- id
+- name
+- email
+- password_hash
+- role
+
+Attendance:
+- id
+- student_id
+- date
+- status
+- marked_at
+
+NON-FUNCTIONAL REQUIREMENTS
+- Authorization middleware on all protected routes
+- Rate limiting on authentication endpoints
+- Timezone-aware date handling
+
+CREATE NOTHING MORE, NOTHIGN LESSS

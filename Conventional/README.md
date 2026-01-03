@@ -116,15 +116,46 @@ The script will:
 
 ### Metrics Tracked
 
-The baseline tracks the following metrics (as specified in the paper):
+The baseline tracks the following metrics (matching the paper format):
 
-- **Total Tokens Consumed**: Total LLM tokens used during execution
-- **Bugs Encountered**: Number of errors/issues encountered
-- **Features Implemented**: Number of features successfully implemented
-- **Lines of Code Generated**: Total lines of code produced
+- **Tokens consumed during conversation**: LLM tokens for requirements/design phases
+- **Tokens consumed during coding**: LLM tokens for code generation
+- **Total Tokens**: Sum of conversation + coding tokens
+- **Features implemented**: Number of features successfully implemented (out of requested)
+- **False interpretations**: Features incorrectly interpreted
+- **Total bugs encountered**:
+  - **Logical errors**: Errors in program logic
+  - **Syntactic errors**: Code syntax errors
+- **Lines of code modified during debugging**: Lines changed to fix bugs
+- **Lines of code generated**: Total lines produced
 - **Duration**: Total execution time
 
 Metrics are saved to `logs/conventional_metrics_<timestamp>.json`
+
+### Experiment Mode (Non-Interactive)
+
+For reproducible experiments with a fixed specification:
+
+```python
+from single_agent import run_experiment
+
+# Run with a specification file
+run_experiment("specification.json")
+
+# Or run with direct parameters
+run_experiment(
+    description="A username management application that allows users to...",
+    features=["Add new usernames", "Check availability", "List all usernames"]
+)
+```
+
+The specification JSON file should have this format:
+```json
+{
+    "detailed_description": "Full description of the application...",
+    "features": ["Feature 1", "Feature 2", "Feature 3"]
+}
+```
 
 ## Comparison with Other Approaches
 
